@@ -588,42 +588,75 @@ function simulateDeposit() {
 document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
 document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
 
-async function loginUser() {
-  if (typeof window.ethereum !== 'undefined') {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const accounts = await provider.send("eth_requestAccounts", []);
-      isLoggedIn = true;
-      const shortAddress = accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4);
-      
-      const btn = document.getElementById('accountBtn');
-      btn.innerHTML = `🟢 ${shortAddress}`;
-      btn.classList.replace('bg-cyan-500/10', 'bg-emerald-500/10');
-      btn.classList.replace('border-cyan-500/30', 'border-emerald-500/30');
-      btn.classList.replace('text-cyan-400', 'text-emerald-400');
-      
-      document.getElementById('protectedMenu').classList.remove('hidden');
-      document.getElementById('logoutBtn').classList.remove('hidden');
-      document.getElementById('refLinkInput').value = "https://nexavault.io/?ref=" + accounts[0];
-      
-      toast('🦊', 'Wallet Connected Successfully!');
-      updateDynamicTierAndROI();
-      gp('dashboard');
-      
-    } catch (error) { toast('⚠️', 'Connection request was rejected.'); }
-  } else { 
-    toast('⚠️', 'No wallet found. Simulating login...');
-    setTimeout(() => {
-        isLoggedIn = true;
-        document.getElementById('accountBtn').innerHTML = `🟢 0xDemo...`;
-        document.getElementById('protectedMenu').classList.remove('hidden');
-      document.getElementById('logoutBtn').classList.remove('hidden');
-        updateDynamicTierAndROI();
-        gp('dashboard');
-    }, 1000);
+ async function loginUser() {
+  // Check if MetaMask is installed and accessible
+  if (typeof window.ethereum === 'undefined') {
+    toast('⚠️', 'MetaMask not found! Please install or unlock MetaMask extension.');
+    return; // Ye code yahan ruk jayega, aagay dummy par nahi jayega
+  }
+
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    
+    // Force user to connect to BNB Smart Chain Testnet (Chain ID 97)
+    const network = await provider.getNetwork();
+    if (network.chainId !== 97) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x61' }], // 0x61 is 97 in hex
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainId: '0x61',
+                  chainName: 'BNB Smart Chain Testnet',
+                  nativeCurrency: { name: 'tBNB', symbol: 'tBNB', decimals: 18 },
+                  rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+                  blockExplorerUrls: ['https://testnet.bscscan.com/']
+                }
+              ]
+            });
+          } catch (addError) {
+             toast('⚠️', 'Failed to add BSC Testnet to wallet.');
+             return;
+          }
+        } else {
+           toast('⚠️', 'Please switch to BSC Testnet to use this app.');
+           return;
+        }
+      }
+    }
+    
+    // Wallet Connection Request
+    const accounts = await provider.send("eth_requestAccounts", []);
+    isLoggedIn = true;
+    const shortAddress = accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4);
+    
+    // Update UI
+    const btn = document.getElementById('accountBtn');
+    btn.innerHTML = `🟢 ${shortAddress}`;
+    btn.classList.replace('bg-cyan-500/10', 'bg-emerald-500/10');
+    btn.classList.replace('border-cyan-500/30', 'border-emerald-500/30');
+    btn.classList.replace('text-cyan-400', 'text-emerald-400');
+    
+    document.getElementById('protectedMenu').classList.remove('hidden');
+    document.getElementById('logoutBtn').classList.remove('hidden');
+    document.getElementById('refLinkInput').value = "https://nexavault.io/?ref=" + accounts[0];
+    
+    toast('🦊', 'Wallet Connected on BSC Testnet!');
+    updateDynamicTierAndROI();
+    gp('dashboard');
+    
+  } catch (error) { 
+    console.error(error);
+    toast('⚠️', 'Connection request was rejected or failed.'); 
   }
 }
-
 function logoutUser(isAutoLogout = false) {
     if (isLoggedIn) {
         isLoggedIn = false;
