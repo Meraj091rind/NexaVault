@@ -49,10 +49,6 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
           Deposit
         </button>
-        <button onclick="gp('withdraw',this)" id="nav-withdraw" class="nav-item flex items-center gap-3 w-full text-left px-5 py-3 rounded-xl text-zinc-400 hover:bg-white/5 hover:text-white transition-all text-sm font-medium">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m8-8l-8 8 8 8"></path></svg>
-          Withdraw
-        </button>
         <button onclick="gp('profit',this)" id="nav-profit" class="nav-item flex items-center gap-3 w-full text-left px-5 py-3 rounded-xl text-zinc-400 hover:bg-white/5 hover:text-white transition-all text-sm font-medium">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
           Claim Yield
@@ -60,14 +56,10 @@
       </div>
     </nav>
 
-    <div class="p-6 border-t border-zinc-800/60 flex flex-col gap-2">
+    <div class="p-6 border-t border-zinc-800/60">
       <button onclick="loginUser()" id="accountBtn" class="w-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold py-3.5 rounded-xl transition-all text-sm flex items-center justify-center gap-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
         Connect Wallet
-      </button>
-      <button onclick="logoutUser()" id="logoutBtn" class="hidden w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 font-semibold py-2.5 rounded-xl transition-all text-sm flex items-center justify-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-        Logout / Change Wallet
       </button>
     </div>
   </div>
@@ -226,7 +218,7 @@
                   <div>
                     <label class="block text-zinc-400 text-sm mb-2">Amount to Withdraw (USDT)</label>
                     <input type="number" id="withdrawAmountInput" placeholder="e.g. 100" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 font-mono">
-                    <p class="text-[10px] text-zinc-500 mt-2">Available to withdraw: <span id="maxWithdrawDisplay" class="text-emerald-400 font-bold">$0.00</span> (Min: $30)</p>
+                    <p class="text-[10px] text-zinc-500 mt-2">Available to withdraw: <span id="maxWithdrawDisplay" class="text-emerald-400 font-bold">$0.00</span></p>
                   </div>
                   <button onclick="requestWithdraw()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3.5 rounded-xl transition-all text-sm border border-zinc-700">Request Withdrawal</button>
                 </div>
@@ -340,7 +332,7 @@ function copyRefLink() {
 }
 
 function gp(page, element) {
-  const titles = { 'landing': 'Welcome to NexaVault', 'dashboard': 'My Dashboard', 'deposit': 'Deposit Assets', 'withdraw': 'Withdraw Funds', 'profit': 'Claim Yield'};
+  const titles = { 'landing': 'Welcome to NexaVault', 'dashboard': 'My Dashboard', 'deposit': 'Deposit Assets', 'profit': 'Claim Yield'};
   document.getElementById('tbtitle').textContent = titles[page] || page;
   
   document.querySelectorAll('.page-view').forEach(view => view.classList.add('hidden'));
@@ -418,17 +410,13 @@ function updateDynamicTierAndROI() {
 }
 
 // ==========================================
-// WITHDRAW LOGIC
+// LOCAL MIDNIGHT CYCLE LOGIC (WITH AUTO-RESTART)
 // ==========================================
 
 function requestWithdraw() {
   const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
-  if (isNaN(amt) || amt < 30) {
-    toast('⚠️', 'Minimum withdrawal amount is $30.');
-    return;
-  }
-  if (amt > userBalance) {
-    toast('⚠️', 'Insufficient balance.');
+  if (isNaN(amt) || amt <= 0 || amt > userBalance) {
+    toast('⚠️', 'Invalid amount or insufficient balance.');
     return;
   }
   // Show Step 2
@@ -480,10 +468,6 @@ gp = function(page, element) {
         document.getElementById('maxWithdrawDisplay').textContent = `$${userBalance.toFixed(2)}`;
     }
 }
-
-// ==========================================
-// LOCAL MIDNIGHT CYCLE LOGIC (WITH AUTO-RESTART)
-// ==========================================
 
 function getLocalMidnight() {
   const now = new Date();
@@ -588,56 +572,35 @@ function simulateDeposit() {
 document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
 document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
 
- async function loginUser() {
-  // Check if MetaMask is installed and accessible
+async function loginUser() {
   if (typeof window.ethereum === 'undefined') {
-    toast('⚠️', 'MetaMask not found! Please install or unlock MetaMask extension.');
-    return; // Ye code yahan ruk jayega, aagay dummy par nahi jayega
+    toast('⚠️', 'MetaMask not found! Please install or enable the extension.');
+    return;
+  }
+  
+  if (typeof ethers === 'undefined') {
+    toast('⚠️', 'Web3 Engine is still loading or blocked by AdBlocker. Please try again.');
+    return;
   }
 
   try {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     
-    // Force user to connect to BNB Smart Chain Testnet (Chain ID 97)
+    // Check network
     const network = await provider.getNetwork();
     if (network.chainId !== 97) {
       try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x61' }], // 0x61 is 97 in hex
-        });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          try {
-            await window.ethereum.request({
-              method: 'wallet_addEthereumChain',
-              params: [
-                {
-                  chainId: '0x61',
-                  chainName: 'BNB Smart Chain Testnet',
-                  nativeCurrency: { name: 'tBNB', symbol: 'tBNB', decimals: 18 },
-                  rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-                  blockExplorerUrls: ['https://testnet.bscscan.com/']
-                }
-              ]
-            });
-          } catch (addError) {
-             toast('⚠️', 'Failed to add BSC Testnet to wallet.');
-             return;
-          }
-        } else {
-           toast('⚠️', 'Please switch to BSC Testnet to use this app.');
-           return;
-        }
+        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x61' }] });
+      } catch (e) {
+        toast('⚠️', 'Please manually switch your wallet to BNB Smart Chain Testnet.');
+        return;
       }
     }
     
-    // Wallet Connection Request
     const accounts = await provider.send("eth_requestAccounts", []);
     isLoggedIn = true;
     const shortAddress = accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4);
     
-    // Update UI
     const btn = document.getElementById('accountBtn');
     btn.innerHTML = `🟢 ${shortAddress}`;
     btn.classList.replace('bg-cyan-500/10', 'bg-emerald-500/10');
@@ -645,51 +608,43 @@ document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(t
     btn.classList.replace('text-cyan-400', 'text-emerald-400');
     
     document.getElementById('protectedMenu').classList.remove('hidden');
-    document.getElementById('logoutBtn').classList.remove('hidden');
+    // document.getElementById('logoutBtn').classList.remove('hidden');
     document.getElementById('refLinkInput').value = "https://nexavault.io/?ref=" + accounts[0];
     
-    toast('🦊', 'Wallet Connected on BSC Testnet!');
+    toast('🦊', 'Wallet Connected Successfully!');
     updateDynamicTierAndROI();
     gp('dashboard');
     
   } catch (error) { 
-    console.error(error);
     toast('⚠️', 'Connection request was rejected or failed.'); 
+    console.error(error);
   }
-}
-function logoutUser(isAutoLogout = false) {
-    if (isLoggedIn) {
-        isLoggedIn = false;
-        const btn = document.getElementById('accountBtn');
-        btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg> Connect Wallet`;
-        btn.className = "w-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold py-3.5 rounded-xl transition-all text-sm flex items-center justify-center gap-2";
-        
-        document.getElementById('protectedMenu').classList.add('hidden');
-        document.getElementById('logoutBtn').classList.add('hidden');
-        
-        userBalance = 0;
-        totalYieldEarned = 0;
-        if(timerInterval) clearInterval(timerInterval);
-        cycleActive = false;
-        hasClaimedToday = false;
-        
-        updateDynamicTierAndROI();
-        
-        if (isAutoLogout === true) {
-            toast('🔒', 'Session expired due to inactivity. Logged out securely.');
-        } else {
-            toast('👋', 'Wallet disconnected successfully.');
-        }
-        gp('landing');
-    }
 }
 
 const inactivityTime = function () {
     let time; const logoutTimeLimit = 10 * 60 * 1000; 
     window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeydown = resetTimer; document.onclick = resetTimer; document.onscroll = resetTimer;
 
-
-    function resetTimer() { clearTimeout(time); if (isLoggedIn) { time = setTimeout(() => logoutUser(true), logoutTimeLimit); } }
+    function logoutUser() {
+        if (isLoggedIn) {
+            isLoggedIn = false;
+            const btn = document.getElementById('accountBtn');
+            btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg> Connect Wallet`;
+            btn.className = "w-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold py-3.5 rounded-xl transition-all text-sm flex items-center justify-center gap-2";
+            document.getElementById('protectedMenu').classList.add('hidden');
+            
+            userBalance = 0;
+            totalYieldEarned = 0;
+            if(timerInterval) clearInterval(timerInterval);
+            cycleActive = false;
+            hasClaimedToday = false;
+            
+            updateDynamicTierAndROI();
+            toast('🔒', 'Session expired due to inactivity. Logged out securely.');
+            gp('landing');
+        }
+    }
+    function resetTimer() { clearTimeout(time); if (isLoggedIn) { time = setTimeout(logoutUser, logoutTimeLimit); } }
 };
 inactivityTime();
 </script>
