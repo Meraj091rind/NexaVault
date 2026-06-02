@@ -577,27 +577,38 @@ async function loginUser() {
     toast('⚠️', 'MetaMask not found! Please install or enable the extension.');
     return;
   }
-  
-  if (typeof ethers === 'undefined') {
-    toast('⚠️', 'Web3 Engine is still loading or blocked by AdBlocker. Please try again.');
-    return;
-  }
 
   try {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     
-    // Check network
+    // STEP 1: PEHLE LOGIN / CONNECT KAREIN (Taa ke MetaMask auto-reject na kare)
+    const accounts = await provider.send("eth_requestAccounts", []);
+    
+    // STEP 2: USKE BAAD NETWORK CHECK KAREIN (BNB Smart Chain Testnet)
     const network = await provider.getNetwork();
     if (network.chainId !== 97) {
       try {
         await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x61' }] });
-      } catch (e) {
-        toast('⚠️', 'Please manually switch your wallet to BNB Smart Chain Testnet.');
-        return;
+      } catch (switchError) {
+        if (switchError.code === 4902) { // Agar network add nahi hai toh add karega
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: '0x61',
+              chainName: 'BNB Smart Chain Testnet',
+              nativeCurrency: { name: 'tBNB', symbol: 'tBNB', decimals: 18 },
+              rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+              blockExplorerUrls: ['https://testnet.bscscan.com/']
+            }]
+          });
+        } else {
+          toast('⚠️', 'Please manually switch your wallet to BNB Smart Chain Testnet.');
+          return;
+        }
       }
     }
     
-    const accounts = await provider.send("eth_requestAccounts", []);
+    // SUCCESS: UI UPDATE
     isLoggedIn = true;
     const shortAddress = accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4);
     
@@ -608,7 +619,7 @@ async function loginUser() {
     btn.classList.replace('text-cyan-400', 'text-emerald-400');
     
     document.getElementById('protectedMenu').classList.remove('hidden');
-    // document.getElementById('logoutBtn').classList.remove('hidden');
+    document.getElementById('logoutBtn').classList.remove('hidden');
     document.getElementById('refLinkInput').value = "https://nexavault.io/?ref=" + accounts[0];
     
     toast('🦊', 'Wallet Connected Successfully!');
@@ -616,11 +627,11 @@ async function loginUser() {
     gp('dashboard');
     
   } catch (error) { 
-    toast('⚠️', 'Connection request was rejected or failed.'); 
     console.error(error);
+    // AB EXACT ERROR SCREEN PAR DIKHAYEGA
+    toast('⚠️', 'Error: ' + (error.message || 'Connection Rejected')); 
   }
 }
-
 const inactivityTime = function () {
     let time; const logoutTimeLimit = 10 * 60 * 1000; 
     window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeydown = resetTimer; document.onclick = resetTimer; document.onscroll = resetTimer;
