@@ -59,7 +59,7 @@
         </button>
       </div>
 
-      <!-- Admin Menu (Hidden from normal users) -->
+      <!-- Admin Menu -->
       <div id="adminMenu" class="hidden space-y-1 mt-2 border-t border-zinc-800/60 pt-2">
          <p class="px-5 py-2 text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Admin Panel</p>
          <button onclick="gp('admin',this)" id="nav-admin" class="nav-item flex items-center gap-3 w-full text-left px-5 py-3 rounded-xl text-purple-400 hover:bg-white/5 hover:text-purple-300 transition-all text-sm font-medium">
@@ -161,7 +161,7 @@
                   <div class="absolute -right-10 -top-10 w-24 h-24 bg-cyan-500/10 blur-2xl rounded-full"></div>
                   <p class="text-xs font-medium text-zinc-400 mb-1">My Portfolio Balance</p>
                   <h3 id="displayBalance" class="text-2xl font-bold text-white mb-1">$0.00</h3>
-                  <p class="text-[10px] text-zinc-500">USDT / USDC Equity</p>
+                  <p class="text-[10px] text-zinc-500">USDT Equivalent</p>
                 </div>
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                   <div class="absolute -right-10 -top-10 w-24 h-24 bg-purple-500/10 blur-2xl rounded-full"></div>
@@ -336,7 +336,7 @@
               </div>
             </div>
 
-            <!-- PROFIT / CLAIM YIELD VIEW (RESTORED TO ORIGINAL TEXT) -->
+            <!-- PROFIT / CLAIM YIELD VIEW -->
             <div id="pv-profit" class="page-view hidden">
               <div class="glass-card p-8 rounded-3xl max-w-lg mx-auto mt-10 text-center relative overflow-hidden">
                  
@@ -354,8 +354,6 @@
 
                  <button id="actionBtn" onclick="handleYieldAction()" class="w-full bg-zinc-800 text-zinc-500 cursor-not-allowed font-bold py-4 rounded-xl transition-all text-sm shadow-lg mb-4" disabled>Deposit Assets to Start</button>
 
-                 <!-- Testing Tool -->
-                 <button onclick="processMidnightRollover()" class="text-[10px] text-zinc-600 underline hover:text-white transition-colors">Developer Test: Simulate Midnight Auto-Restart</button>
               </div>
             </div>
             
@@ -367,8 +365,8 @@
                  
                  <div class="grid grid-cols-2 gap-4 mb-8">
                     <div class="bg-black/50 rounded-xl p-4 border border-zinc-700">
-                       <p class="text-xs text-zinc-500">Global TVL (Estimate)</p>
-                       <p class="text-xl font-bold text-white" id="adminGlobalTVL">$10,000.00</p>
+                       <p class="text-xs text-zinc-500">Global TVL (System Deposits)</p>
+                       <p class="text-xl font-bold text-white" id="adminGlobalTVL">$0.00</p>
                     </div>
                     <div class="bg-black/50 rounded-xl p-4 border border-zinc-700">
                        <p class="text-xs text-zinc-500">Total Users in Pool</p>
@@ -378,7 +376,7 @@
 
                  <div class="bg-purple-500/5 rounded-xl p-6 border border-purple-500/20">
                     <label class="block text-purple-300 text-sm mb-2 font-bold">Declare Today's Total Profit (USDT)</label>
-                    <p class="text-xs text-zinc-400 mb-4">Example: Enter 100. If a user deposited 10% of total funds, they will get $10.</p>
+                    <p class="text-xs text-zinc-400 mb-4">Example: Enter 100. Users will get profit proportionally based on their deposits.</p>
                     <input type="number" id="adminProfitInput" placeholder="e.g. 100" class="w-full bg-black/80 border border-purple-500/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-400 font-mono mb-4 text-lg">
                     
                     <button onclick="distributeProfit()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg">Distribute to All Users</button>
@@ -396,10 +394,8 @@
              <p class="text-xs text-zinc-500">© 2026 NexaVault Technology, Inc. All rights reserved.</p>
            </div>
            <div class="flex flex-wrap justify-center items-center gap-3">
-             <a href="#" class="flex items-center gap-2 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 px-4 py-2 rounded-xl transition-all text-xs font-medium">
-              <a href="https://t.me/Nexavaultmoney" target="_blank" class="flex items-center gap-2 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 px-4 py-2 rounded-xl transition-all text-xs font-medium">
-  Support Telegram
-</a>
+             <a href="https://t.me/Nexavaultmoney" target="_blank" class="flex items-center gap-2 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 px-4 py-2 rounded-xl transition-all text-xs font-medium">
+               Support Telegram
              </a>
            </div>
         </div>
@@ -425,8 +421,8 @@
       <h3 class="text-2xl font-bold text-white mb-6">Welcome Back</h3>
       <div class="space-y-4">
         <div>
-          <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Email, Username or Phone</label>
-          <input type="text" id="loginUsername" placeholder="Enter email, username or phone" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
+          <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Email / Username</label>
+          <input type="text" id="loginUsername" placeholder="Enter email" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
         </div>
         <div>
           <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Password</label>
@@ -441,8 +437,8 @@
       <h3 class="text-2xl font-bold text-white mb-6">Create Account</h3>
       <div class="space-y-4">
         <div>
-          <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Email, Username or Phone</label>
-          <input type="text" id="regUsername" placeholder="e.g. user@email.com or +92..." class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
+          <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Email / Username</label>
+          <input type="text" id="regUsername" placeholder="e.g. user@email.com" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
         </div>
         <div>
           <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Create Password</label>
@@ -462,230 +458,246 @@
   </div>
 </div>
 
-<script>
-// Global State Variables
-let isLoggedIn = false;
-let currentUser = ""; 
-let userBalance = 0;
-let totalYieldEarned = 0;
-let numericDailyROI = 0;
+<!-- FIREBASE SDK & LOGIC -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Fake TVL for calculations so demo makes sense
-const GLOBAL_FAKE_TVL = 10000; 
+  const firebaseConfig = {
+    apiKey: "AIzaSyDLrJjs97Mry4yTno3EXn4jSpYxSoFRlq0",
+    authDomain: "nexavault-46c18.firebaseapp.com",
+    projectId: "nexavault-46c18",
+    storageBucket: "nexavault-46c18.firebasestorage.app",
+    messagingSenderId: "1002856986670",
+    appId: "1:1002856986670:web:4f3e86accf36b9b18c47bf",
+    measurementId: "G-EELSFTM4P9"
+  };
 
-// Withdraw state
-let pendingWithdrawAmt = 0;
-let pendingWithdrawAddr = "";
-let pendingWithdrawNet = "";
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-// Midnight Cycle State
-let cycleActive = false;
-let hasClaimedToday = false; 
-let cycleEndTime = null;
-let currentPendingYield = 0;
-let timerInterval = null;
+  // Global State
+  let isLoggedIn = false;
+  let currentUserObj = null;
+  let userBalance = 0;
+  let totalYieldEarned = 0;
+  let numericDailyROI = 0;
+  let globalTVL = 0;
+  
+  // Yield logic
+  let cycleActive = false;
+  let hasClaimedToday = false; 
+  let cycleEndTime = null;
+  let currentPendingYield = 0;
+  let timerInterval = null;
 
-// Fake DB just for current session
-let fakeDB = {
-    "test@test.com": "123456", 
-    "meraj": "123456",
-    "admin": "admin123" // Secret Admin Account
-};
+  // Make functions available globally for HTML onclicks
+  window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
 
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
-
-function toast(icon, msg) {
-  const t = document.getElementById('toast');
-  document.getElementById('ti').innerHTML = icon;
-  document.getElementById('tm').textContent = msg;
-  t.classList.remove('hidden');
-  t.style.opacity = '0';
-  setTimeout(() => { t.style.opacity = '1'; }, 10);
-  setTimeout(() => { 
+  window.toast = function(icon, msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('ti').innerHTML = icon;
+    document.getElementById('tm').textContent = msg;
+    t.classList.remove('hidden');
     t.style.opacity = '0';
-    setTimeout(() => t.classList.add('hidden'), 300);
-  }, 4000);
-}
-
-function copyRefLink() {
-  const dummyUrl = document.getElementById('refLinkInput').value;
-  navigator.clipboard.writeText(dummyUrl);
-  toast('🚀', 'Link copied to clipboard! Share it anywhere.');
-}
-
-function gp(page, element) {
-  const titles = { 'landing': 'Welcome to NexaVault', 'dashboard': 'My Dashboard', 'deposit': 'Deposit Assets', 'withdraw': 'Withdraw Funds', 'profit': 'Claim Yield', 'admin': 'Admin Control Panel'};
-  document.getElementById('tbtitle').textContent = titles[page] || page;
-  
-  document.querySelectorAll('.page-view').forEach(view => view.classList.add('hidden'));
-  const targetPage = document.getElementById('pv-' + page);
-  if (targetPage) targetPage.classList.remove('hidden');
-
-  document.querySelectorAll('.nav-item').forEach(nav => {
-    nav.classList.remove('bg-white/5', 'text-white', 'text-purple-300');
-    if(nav.id === 'nav-admin') nav.classList.add('text-purple-400');
-    else nav.classList.add('text-zinc-400');
-  });
-  
-  if(element) {
-      if(element.id === 'nav-admin') {
-          element.classList.remove('text-purple-400');
-          element.classList.add('bg-white/5', 'text-purple-300');
-      } else {
-          element.classList.remove('text-zinc-400');
-          element.classList.add('bg-white/5', 'text-white');
-      }
-  } else {
-     let fallbackEl = document.getElementById('nav-' + page);
-     if(fallbackEl) {
-         fallbackEl.classList.remove('text-zinc-400');
-         fallbackEl.classList.add('bg-white/5', 'text-white');
-     }
+    setTimeout(() => { t.style.opacity = '1'; }, 10);
+    setTimeout(() => { 
+      t.style.opacity = '0';
+      setTimeout(() => t.classList.add('hidden'), 300);
+    }, 4000);
   }
-  
-  if (page === 'admin') {
-      document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
+
+  window.copyRefLink = function() {
+    const dummyUrl = isLoggedIn ? document.getElementById('refLinkInput').value : "https://nexavault.io";
+    navigator.clipboard.writeText(dummyUrl);
+    window.toast('🚀', 'Link copied to clipboard! Share it anywhere.');
   }
-  
-  if (window.innerWidth < 1024) document.getElementById('sidebar').classList.add('-translate-x-full');
-}
 
-const vaults = [
-  { level: 'L1', title: 'Starter Vault', min: 30, max: 100, dailyYield: '0.5% - 5%', refBonus: '1%', risk: 'Low', desc: 'Perfect for beginners testing the waters.' },
-  { level: 'L2', title: 'Growth Vault', min: 101, max: 400, dailyYield: '0.5% - 5%', refBonus: '2%', risk: 'Medium', desc: 'Balanced risk/reward for growing portfolios.' },
-  { level: 'L3', title: 'Pro Vault', min: 401, max: 'Unlimited', dailyYield: '0.5% - 5%', refBonus: '4%', risk: 'High', desc: 'Maximized yields for serious investors.' }
-];
+  window.gp = function(page, element) {
+    const titles = { 'landing': 'Welcome to NexaVault', 'dashboard': 'My Dashboard', 'deposit': 'Deposit Assets', 'withdraw': 'Withdraw Funds', 'profit': 'Claim Yield', 'admin': 'Admin Control Panel'};
+    document.getElementById('tbtitle').textContent = titles[page] || page;
+    
+    document.querySelectorAll('.page-view').forEach(view => view.classList.add('hidden'));
+    const targetPage = document.getElementById('pv-' + page);
+    if (targetPage) targetPage.classList.remove('hidden');
 
-function getVaultHTML(isLoggedInStatus) {
-  return vaults.map(v => `
-    <div class="glass-card vault-card rounded-2xl p-6 relative overflow-hidden flex flex-col">
-      <div class="flex justify-between items-start mb-6">
-        <div>
-          <div class="inline-block px-2 py-1 bg-zinc-800 text-xs font-bold rounded text-white mb-2">${v.level} TIER</div>
-          <h3 class="font-bold text-white text-lg leading-tight">${v.title}</h3>
+    document.querySelectorAll('.nav-item').forEach(nav => {
+      nav.classList.remove('bg-white/5', 'text-white', 'text-purple-300');
+      if(nav.id === 'nav-admin') nav.classList.add('text-purple-400');
+      else nav.classList.add('text-zinc-400');
+    });
+    
+    if(element) {
+        if(element.id === 'nav-admin') {
+            element.classList.remove('text-purple-400');
+            element.classList.add('bg-white/5', 'text-purple-300');
+        } else {
+            element.classList.remove('text-zinc-400');
+            element.classList.add('bg-white/5', 'text-white');
+        }
+    }
+    
+    if (page === 'admin') {
+        document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
+    }
+    if (page === 'withdraw') {
+        document.getElementById('maxWithdrawDisplay').textContent = `$${userBalance.toFixed(2)}`;
+    }
+    
+    if (window.innerWidth < 1024) document.getElementById('sidebar').classList.add('-translate-x-full');
+  }
+
+  const vaults = [
+    { level: 'L1', title: 'Starter Vault', min: 30, max: 100, dailyYield: '0.5% - 5%', refBonus: '1%', risk: 'Low' },
+    { level: 'L2', title: 'Growth Vault', min: 101, max: 400, dailyYield: '0.5% - 5%', refBonus: '2%', risk: 'Medium' },
+    { level: 'L3', title: 'Pro Vault', min: 401, max: 'Unlimited', dailyYield: '0.5% - 5%', refBonus: '4%', risk: 'High' }
+  ];
+
+  function getVaultHTML(isLoggedInStatus) {
+    return vaults.map(v => `
+      <div class="glass-card vault-card rounded-2xl p-6 relative overflow-hidden flex flex-col">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <div class="inline-block px-2 py-1 bg-zinc-800 text-xs font-bold rounded text-white mb-2">${v.level} TIER</div>
+            <h3 class="font-bold text-white text-lg leading-tight">${v.title}</h3>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-zinc-500 mb-0.5">Daily Profit</p>
+            <span class="text-emerald-400 font-bold text-lg">${v.dailyYield}</span>
+          </div>
         </div>
-        <div class="text-right">
-          <p class="text-xs text-zinc-500 mb-0.5">Daily Profit</p>
-          <span class="text-emerald-400 font-bold text-lg">${v.dailyYield}</span>
+        <div class="space-y-3 mb-6 bg-black/20 rounded-xl p-4 border border-zinc-800/50 flex-1">
+          <div class="flex justify-between items-center text-sm">
+            <span class="text-zinc-500 font-medium">Deposit Range</span>
+            <span class="font-mono text-white text-xs">$${v.min} - ${v.max === 'Unlimited' ? 'Max' : '$'+v.max}</span>
+          </div>
         </div>
+        ${isLoggedInStatus 
+          ? `<button onclick="gp('deposit')" class="w-full bg-cyan-500/10 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/30 py-3 rounded-xl transition-all font-semibold text-sm">Deposit to ${v.level}</button>`
+          : `<button onclick="showAuthModal()" class="w-full bg-zinc-800/80 hover:bg-zinc-700 text-white border border-zinc-700/50 py-3 rounded-xl transition-all font-semibold text-sm">Sign In to Deposit</button>`
+        }
       </div>
-      
-      <div class="space-y-3 mb-6 bg-black/20 rounded-xl p-4 border border-zinc-800/50 flex-1">
-        <div class="flex justify-between items-center text-sm">
-          <span class="text-zinc-500 font-medium">Deposit Range</span>
-          <span class="font-mono text-white text-xs">$${v.min} - ${v.max === 'Unlimited' ? 'Max' : '$'+v.max}</span>
-        </div>
-      </div>
-      
-      ${isLoggedInStatus 
-        ? `<button onclick="gp('deposit')" class="w-full bg-cyan-500/10 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/30 py-3 rounded-xl transition-all font-semibold text-sm">Deposit to ${v.level}</button>`
-        : `<button onclick="showAuthModal()" class="w-full bg-zinc-800/80 hover:bg-zinc-700 text-white border border-zinc-700/50 py-3 rounded-xl transition-all font-semibold text-sm">Login to Deposit</button>`
-      }
-    </div>
-  `).join('');
-}
-
-function updateDynamicTierAndROI() {
-  let tierName = "No Active Level";
-  let limitsText = "Deposit min $30 to unlock";
-  let dailyROI = "0.00%";
-  
-  if (userBalance >= 30 && userBalance <= 100) { tierName = "L1 TIER"; limitsText = "Starter Vault ($30 - $100)"; dailyROI = "1.5%"; numericDailyROI = 0.015; } 
-  else if (userBalance >= 101 && userBalance <= 400) { tierName = "L2 TIER"; limitsText = "Growth Vault ($101 - $400)"; dailyROI = "2.5%"; numericDailyROI = 0.025; } 
-  else if (userBalance >= 401) { tierName = "L3 TIER"; limitsText = "Pro Vault ($401+)"; dailyROI = "4.0%"; numericDailyROI = 0.040; }
-  else { numericDailyROI = 0; }
-
-  document.getElementById('displayBalance').textContent = `$${userBalance.toFixed(2)}`;
-  document.getElementById('displayTier').textContent = tierName;
-  document.getElementById('displayTierLimits').textContent = limitsText;
-  document.getElementById('displayROI').textContent = dailyROI;
-  document.getElementById('displayTotalYield').textContent = `$${totalYieldEarned.toFixed(2)}`;
-  
-  document.getElementById('maxWithdrawDisplay').textContent = `$${userBalance.toFixed(2)}`;
-  
-  let globalTVL = GLOBAL_FAKE_TVL + userBalance;
-  document.getElementById('landingTotalDep').textContent = `$${globalTVL.toLocaleString()}`;
-}
-
-// ==========================================
-// AUTHENTICATION LOGIC (EMAIL/PHONE/USER)
-// ==========================================
-function showAuthModal() {
-  const modal = document.getElementById('authModal');
-  const content = document.getElementById('authModalContent');
-  modal.classList.remove('hidden');
-  
-  // trigger animation
-  setTimeout(() => {
-    modal.classList.remove('opacity-0');
-    content.classList.remove('scale-95');
-  }, 10);
-}
-
-function closeAuthModal() {
-  const modal = document.getElementById('authModal');
-  const content = document.getElementById('authModalContent');
-  
-  modal.classList.add('opacity-0');
-  content.classList.add('scale-95');
-  
-  setTimeout(() => {
-    modal.classList.add('hidden');
-  }, 300);
-}
-
-function switchAuthTab(tab) {
-  const loginTab = document.getElementById('tab-login');
-  const regTab = document.getElementById('tab-register');
-  const loginForm = document.getElementById('form-login');
-  const regForm = document.getElementById('form-register');
-  
-  if(tab === 'login') {
-    loginTab.className = "flex-1 py-4 text-sm font-bold text-white border-b-2 border-cyan-400 bg-white/5 transition-all";
-    regTab.className = "flex-1 py-4 text-sm font-bold text-zinc-500 border-b-2 border-transparent hover:text-zinc-300 transition-all";
-    loginForm.classList.remove('hidden');
-    regForm.classList.add('hidden');
-  } else {
-    regTab.className = "flex-1 py-4 text-sm font-bold text-white border-b-2 border-cyan-400 bg-white/5 transition-all";
-    loginTab.className = "flex-1 py-4 text-sm font-bold text-zinc-500 border-b-2 border-transparent hover:text-zinc-300 transition-all";
-    regForm.classList.remove('hidden');
-    loginForm.classList.add('hidden');
+    `).join('');
   }
-}
 
-function processRegister() {
-  const user = document.getElementById('regUsername').value.trim().toLowerCase();
-  const p1 = document.getElementById('regPass1').value;
-  const p2 = document.getElementById('regPass2').value;
-  
-  if(!user || !p1 || !p2) { toast('⚠️', 'Please fill all fields.'); return; }
-  if(p1 !== p2) { toast('⚠️', 'Passwords do not match.'); return; }
-  if(p1.length < 6) { toast('⚠️', 'Password must be at least 6 characters.'); return; }
-  if(fakeDB[user]) { toast('⚠️', 'Account already exists. Please login.'); switchAuthTab('login'); return; }
-  
-  fakeDB[user] = p1; // save to fake DB
-  toast('✅', 'Account created successfully! Logging you in...');
-  
-  setTimeout(() => {
-      document.getElementById('loginUsername').value = user;
-      document.getElementById('loginPassword').value = p1;
-      processLogin();
-  }, 1000);
-}
+  function updateDynamicTierAndROI() {
+    let tierName = "No Active Level";
+    let limitsText = "Deposit min $30 to unlock";
+    let dailyROI = "0.00%";
+    
+    if (userBalance >= 30 && userBalance <= 100) { tierName = "L1 TIER"; limitsText = "Starter Vault ($30 - $100)"; dailyROI = "1.5%"; numericDailyROI = 0.015; } 
+    else if (userBalance >= 101 && userBalance <= 400) { tierName = "L2 TIER"; limitsText = "Growth Vault ($101 - $400)"; dailyROI = "2.5%"; numericDailyROI = 0.025; } 
+    else if (userBalance >= 401) { tierName = "L3 TIER"; limitsText = "Pro Vault ($401+)"; dailyROI = "4.0%"; numericDailyROI = 0.040; }
+    else { numericDailyROI = 0; }
 
-function processLogin() {
-  const user = document.getElementById('loginUsername').value.trim().toLowerCase(); 
-  const pass = document.getElementById('loginPassword').value;
-  
-  if(!user || !pass) { toast('⚠️', 'Please enter username and password.'); return; }
-  
-  if(fakeDB[user] && fakeDB[user] === pass) {
+    document.getElementById('displayBalance').textContent = `$${userBalance.toFixed(2)}`;
+    document.getElementById('displayTier').textContent = tierName;
+    document.getElementById('displayTierLimits').textContent = limitsText;
+    document.getElementById('displayROI').textContent = dailyROI;
+    document.getElementById('displayTotalYield').textContent = `$${totalYieldEarned.toFixed(2)}`;
+    document.getElementById('landingTotalDep').textContent = `$${globalTVL.toLocaleString()}`;
+  }
+
+  window.showAuthModal = function() {
+    document.getElementById('authModal').classList.remove('hidden');
+    setTimeout(() => {
+      document.getElementById('authModal').classList.remove('opacity-0');
+      document.getElementById('authModalContent').classList.remove('scale-95');
+    }, 10);
+  }
+
+  window.closeAuthModal = function() {
+    document.getElementById('authModal').classList.add('opacity-0');
+    document.getElementById('authModalContent').classList.add('scale-95');
+    setTimeout(() => { document.getElementById('authModal').classList.add('hidden'); }, 300);
+  }
+
+  window.switchAuthTab = function(tab) {
+    if(tab === 'login') {
+      document.getElementById('tab-login').className = "flex-1 py-4 text-sm font-bold text-white border-b-2 border-cyan-400 bg-white/5 transition-all";
+      document.getElementById('tab-register').className = "flex-1 py-4 text-sm font-bold text-zinc-500 border-b-2 border-transparent hover:text-zinc-300 transition-all";
+      document.getElementById('form-login').classList.remove('hidden');
+      document.getElementById('form-register').classList.add('hidden');
+    } else {
+      document.getElementById('tab-register').className = "flex-1 py-4 text-sm font-bold text-white border-b-2 border-cyan-400 bg-white/5 transition-all";
+      document.getElementById('tab-login').className = "flex-1 py-4 text-sm font-bold text-zinc-500 border-b-2 border-transparent hover:text-zinc-300 transition-all";
+      document.getElementById('form-register').classList.remove('hidden');
+      document.getElementById('form-login').classList.add('hidden');
+    }
+  }
+
+  // FIREBASE REGISTRATION
+  window.processRegister = async function() {
+    // Add fake email domain if user doesn't enter one (for smooth test login)
+    let email = document.getElementById('regUsername').value.trim().toLowerCase();
+    if(!email.includes('@')) email = email + "@nexavault.com"; 
+
+    const p1 = document.getElementById('regPass1').value;
+    const p2 = document.getElementById('regPass2').value;
+    
+    if(!email || !p1) { window.toast('⚠️', 'Please fill all fields.'); return; }
+    if(p1 !== p2) { window.toast('⚠️', 'Passwords do not match.'); return; }
+    if(p1.length < 6) { window.toast('⚠️', 'Password must be at least 6 characters.'); return; }
+    
+    window.toast('⏳', 'Creating account securely...');
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, p1);
+      const uid = userCredential.user.uid;
+      
+      // Save initial data to Firestore
+      await setDoc(doc(db, "users", uid), {
+        email: email,
+        balance: 0,
+        totalYieldEarned: 0,
+        pendingYield: 0,
+        hasClaimedToday: false
+      });
+      
+      window.toast('✅', 'Account created successfully!');
+      window.closeAuthModal();
+    } catch (error) {
+      window.toast('⚠️', error.message.replace('Firebase:', ''));
+    }
+  }
+
+  // FIREBASE LOGIN
+  window.processLogin = async function() {
+    let email = document.getElementById('loginUsername').value.trim().toLowerCase(); 
+    if(!email.includes('@')) email = email + "@nexavault.com";
+
+    const pass = document.getElementById('loginPassword').value;
+    
+    if(!email || !pass) { window.toast('⚠️', 'Please enter email and password.'); return; }
+    
+    window.toast('⏳', 'Authenticating...');
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      window.closeAuthModal();
+      window.toast('👋', 'Welcome back to NexaVault!');
+    } catch (error) {
+      window.toast('❌', 'Invalid credentials or wrong password.');
+    }
+  }
+
+  // FIREBASE LOGOUT
+  window.logoutUser = async function(isAutoLogout = false) {
+    if (isLoggedIn) {
+        await signOut(auth);
+        if (isAutoLogout === true) window.toast('🔒', 'Session expired due to inactivity. Logged out securely.');
+        else window.toast('👋', 'Logged out successfully.');
+    }
+  }
+
+  // FIREBASE AUTH LISTENER (Loads data on login/refresh)
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
       isLoggedIn = true;
-      currentUser = user;
-      
-      closeAuthModal();
-      
-      const shortUser = user.length > 15 ? user.substring(0,12) + "..." : user;
+      currentUserObj = user;
+
+      // Update UI for logged in state
+      const shortUser = user.email.split('@')[0];
       const btn = document.getElementById('accountBtn');
       btn.innerHTML = `🟢 ${shortUser}`;
       btn.classList.replace('bg-cyan-500/10', 'bg-emerald-500/10');
@@ -695,293 +707,310 @@ function processLogin() {
       
       document.getElementById('protectedMenu').classList.remove('hidden');
       document.getElementById('logoutBtn').classList.remove('hidden');
-      
-      // If Admin logs in
-      if(user === "admin") {
+      document.getElementById('refLinkInput').value = "https://nexavault.io/register?ref=" + user.uid.substring(0,8).toUpperCase();
+
+      // Check if Admin
+      if(user.email === "admin@nexavault.com") {
           document.getElementById('adminMenu').classList.remove('hidden');
-          toast('👑', 'Admin Access Granted.');
-          gp('admin');
+          window.toast('👑', 'Admin Access Granted.');
+          window.gp('admin');
       } else {
           document.getElementById('adminMenu').classList.add('hidden');
-          toast('👋', 'Welcome back to NexaVault!');
-          gp('dashboard');
+          window.gp('dashboard');
       }
+
+      // Fetch Real Global TVL
+      const statsSnap = await getDoc(doc(db, "system", "stats"));
+      if(statsSnap.exists()) globalTVL = statsSnap.data().globalTVL;
       
-      const fakeRefHash = btoa(user).substring(0,8).toUpperCase();
-      document.getElementById('refLinkInput').value = "https://nexavault.io/register?ref=" + fakeRefHash;
+      // Fetch Real User Data
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      if(userSnap.exists()) {
+          const uData = userSnap.data();
+          userBalance = uData.balance || 0;
+          totalYieldEarned = uData.totalYieldEarned || 0;
+          currentPendingYield = uData.pendingYield || 0;
+          hasClaimedToday = uData.hasClaimedToday || false;
+      }
       
       document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
       document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
-
       updateDynamicTierAndROI();
       
-  } else {
-      toast('❌', 'Invalid credentials. Account not found or wrong password.');
-  }
-}
+      // Check Yield
+      if (userBalance >= 30) {
+          startYieldCycle();
+      }
 
-function logoutUser(isAutoLogout = false) {
-    if (isLoggedIn) {
-        isLoggedIn = false;
-        currentUser = "";
+    } else {
+      // User is signed out
+      isLoggedIn = false;
+      currentUserObj = null;
+      userBalance = 0;
+      totalYieldEarned = 0;
+      currentPendingYield = 0;
+      hasClaimedToday = false;
+      if(timerInterval) clearInterval(timerInterval);
+
+      const btn = document.getElementById('accountBtn');
+      btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg> Sign In / Register`;
+      btn.className = "w-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold py-3.5 rounded-xl transition-all text-sm flex items-center justify-center gap-2";
+      btn.onclick = window.showAuthModal; 
+      
+      document.getElementById('protectedMenu').classList.add('hidden');
+      document.getElementById('adminMenu').classList.add('hidden');
+      document.getElementById('logoutBtn').classList.add('hidden');
+      
+      document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
+      document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
+      
+      updateDynamicTierAndROI();
+      window.gp('landing');
+    }
+  });
+
+  // ==========================================
+  // DEPOSIT LOGIC (WRITES TO FIREBASE)
+  // ==========================================
+  let activeDepositNetwork = "";
+  window.selectDepositNetwork = function(netName, address) {
+    activeDepositNetwork = netName;
+    document.getElementById('depStep1').classList.add('hidden');
+    document.getElementById('depStep2').classList.remove('hidden');
+    document.getElementById('selectedNetDisplay').textContent = netName;
+    document.getElementById('depAddressDisplay').textContent = address;
+    document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${address}`;
+  }
+
+  window.backToDepNetworks = function() {
+    document.getElementById('depStep2').classList.add('hidden');
+    document.getElementById('depStep1').classList.remove('hidden');
+    document.getElementById('verifyDepAmount').value = "";
+  }
+
+  window.copyDepAddress = function() {
+    const addr = document.getElementById('depAddressDisplay').textContent;
+    navigator.clipboard.writeText(addr);
+    window.toast('📋', 'Deposit address copied! Paste in Binance.');
+  }
+
+  window.verifyDepositAction = async function() {
+    const amt = parseFloat(document.getElementById('verifyDepAmount').value);
+    if(isNaN(amt) || amt <= 0) { window.toast('⚠️', 'Please enter a valid amount.'); return; }
+    
+    window.toast('⏳', 'Verifying blockchain transaction securely...');
+    
+    try {
+       // Update User Balance in DB
+       await updateDoc(doc(db, "users", currentUserObj.uid), { balance: increment(amt) });
+       
+       // Update Global TVL in DB
+       const statsRef = doc(db, "system", "stats");
+       const statsSnap = await getDoc(statsRef);
+       if(statsSnap.exists()) {
+           await updateDoc(statsRef, { globalTVL: increment(amt) });
+       } else {
+           await setDoc(statsRef, { globalTVL: amt });
+       }
+       
+       userBalance += amt;
+       globalTVL += amt;
+       updateDynamicTierAndROI();
+       
+       window.toast('🎉', `Deposit of $${amt} confirmed and saved!`);
+       window.backToDepNetworks();
+       window.gp('dashboard');
+       
+       if(userBalance >= 30 && !cycleActive) {
+           setTimeout(() => {
+               window.toast('⏱️', 'Your Daily Yield Timer has started!');
+               startYieldCycle();
+           }, 2000);
+       }
+    } catch(e) { window.toast('⚠️', 'Network error. Try again.'); }
+  }
+
+  // ==========================================
+  // WITHDRAW LOGIC (WRITES TO FIREBASE)
+  // ==========================================
+  let pendingWithdrawAmt = 0;
+  window.requestWithdraw = function() {
+    const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
+    const addr = document.getElementById('withdrawWalletAddress').value.trim();
+    if (!addr) { window.toast('⚠️', 'Please paste your receiving wallet address.'); return; }
+    if (isNaN(amt) || amt < 30) { window.toast('⚠️', 'Minimum withdrawal amount is $30.'); return; }
+    if (amt > userBalance) { window.toast('⚠️', 'Insufficient available balance.'); return; }
+    
+    pendingWithdrawAmt = amt;
+    document.getElementById('withdrawStep1').classList.add('hidden');
+    document.getElementById('withdrawStepOTP').classList.remove('hidden');
+    window.toast('📧', 'An OTP has been sent to your registered email.');
+  }
+
+  window.verifyWithdrawOTP = async function() {
+    const otp = document.getElementById('withdrawOtpInput').value.trim();
+    if (otp.length !== 6) { window.toast('⚠️', 'Please enter a valid 6-digit OTP code.'); return; }
+    
+    try {
+        window.toast('⏳', 'Processing secure withdrawal...');
         
-        const btn = document.getElementById('accountBtn');
-        btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg> Sign In / Register`;
-        btn.className = "w-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold py-3.5 rounded-xl transition-all text-sm flex items-center justify-center gap-2";
-        btn.onclick = showAuthModal; 
+        // Decrement in DB
+        await updateDoc(doc(db, "users", currentUserObj.uid), { balance: increment(-pendingWithdrawAmt) });
+        await updateDoc(doc(db, "system", "stats"), { globalTVL: increment(-pendingWithdrawAmt) });
         
-        document.getElementById('protectedMenu').classList.add('hidden');
-        document.getElementById('adminMenu').classList.add('hidden');
-        document.getElementById('logoutBtn').classList.add('hidden');
+        document.getElementById('withdrawStepOTP').classList.add('hidden');
+        document.getElementById('withdrawStep3').classList.remove('hidden');
         
-        document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
-        document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
-        
-        userBalance = 0;
-        totalYieldEarned = 0;
-        if(timerInterval) clearInterval(timerInterval);
-        cycleActive = false;
-        hasClaimedToday = false;
-        
-        backToDepNetworks();
-        document.getElementById('verifyDepAmount').value = "";
-        
+        document.getElementById('pendingWithdrawAmtDisplay').textContent = `$${pendingWithdrawAmt.toFixed(2)}`;
+        userBalance -= pendingWithdrawAmt;
+        globalTVL -= pendingWithdrawAmt;
         updateDynamicTierAndROI();
         
-        if (isAutoLogout === true) {
-            toast('🔒', 'Session expired due to inactivity. Logged out securely.');
-        } else {
-            toast('👋', 'Logged out successfully.');
-        }
-        gp('landing');
-    }
-}
-
-
-// ==========================================
-// NEW DEPOSIT LOGIC
-// ==========================================
-let activeDepositNetwork = "";
-
-function selectDepositNetwork(netName, address) {
-  activeDepositNetwork = netName;
-  document.getElementById('depStep1').classList.add('hidden');
-  document.getElementById('depStep2').classList.remove('hidden');
-  
-  document.getElementById('selectedNetDisplay').textContent = netName;
-  document.getElementById('depAddressDisplay').textContent = address;
-  
-  document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${address}`;
-}
-
-function backToDepNetworks() {
-  document.getElementById('depStep2').classList.add('hidden');
-  document.getElementById('depStep1').classList.remove('hidden');
-  document.getElementById('verifyDepAmount').value = "";
-}
-
-function copyDepAddress() {
-  const addr = document.getElementById('depAddressDisplay').textContent;
-  navigator.clipboard.writeText(addr);
-  toast('📋', 'Deposit address copied! Paste in Binance/Wallet.');
-}
-
-function verifyDepositAction() {
-  const amt = parseFloat(document.getElementById('verifyDepAmount').value);
-  if(isNaN(amt) || amt <= 0) {
-      toast('⚠️', 'Please enter the exact amount you sent.');
-      return;
+        window.toast('✅', 'OTP Verified! Withdrawal request is processing.');
+    } catch(e) { window.toast('⚠️', 'Database update failed.'); }
   }
-  
-  toast('⏳', 'Verifying blockchain transaction... Please wait.');
-  
-  setTimeout(() => {
-     userBalance += amt;
-     updateDynamicTierAndROI();
-     
-     toast('🎉', `Deposit of $${amt} confirmed via ${activeDepositNetwork}!`);
-     backToDepNetworks();
-     gp('dashboard');
-     
-     if(userBalance >= 30 && !cycleActive) {
-         setTimeout(() => {
-             toast('⏱️', 'Your Daily Yield Timer has automatically started!');
-             startYieldCycle();
-         }, 2500);
-     }
-  }, 2000); 
-}
 
-// ==========================================
-// NEW WITHDRAW LOGIC WITH OTP
-// ==========================================
-
-function requestWithdraw() {
-  const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
-  const addr = document.getElementById('withdrawWalletAddress').value.trim();
-  const net = document.getElementById('withdrawNetwork');
-  const netName = net.options[net.selectedIndex].text;
-  
-  if (!addr) { toast('⚠️', 'Please paste your receiving wallet address.'); return; }
-  if (isNaN(amt) || amt < 30) { toast('⚠️', 'Minimum withdrawal amount is $30.'); return; }
-  if (amt > userBalance) { toast('⚠️', 'Insufficient available balance.'); return; }
-  
-  pendingWithdrawAmt = amt;
-  pendingWithdrawAddr = addr;
-  pendingWithdrawNet = netName;
-  
-  document.getElementById('withdrawStep1').classList.add('hidden');
-  document.getElementById('withdrawStepOTP').classList.remove('hidden');
-  
-  toast('📧', 'An OTP has been sent to your registered email.');
-}
-
-function verifyWithdrawOTP() {
-  const otp = document.getElementById('withdrawOtpInput').value.trim();
-  if (otp.length !== 6) { toast('⚠️', 'Please enter a valid 6-digit OTP code.'); return; }
-  
-  document.getElementById('withdrawStepOTP').classList.add('hidden');
-  document.getElementById('withdrawStep3').classList.remove('hidden');
-  
-  document.getElementById('pendingWithdrawAmtDisplay').textContent = `$${pendingWithdrawAmt.toFixed(2)}`;
-  document.getElementById('pendingWithdrawNetDisplay').textContent = pendingWithdrawNet;
-  document.getElementById('pendingWithdrawAddrDisplay').textContent = pendingWithdrawAddr.substring(0,8) + '...';
-  
-  userBalance -= pendingWithdrawAmt;
-  updateDynamicTierAndROI();
-  
-  toast('✅', 'OTP Verified! Withdrawal request is processing.');
-}
-
-function cancelWithdraw() {
-  document.getElementById('withdrawStepOTP').classList.add('hidden');
-  document.getElementById('withdrawStep1').classList.remove('hidden');
-  document.getElementById('withdrawOtpInput').value = '';
-}
-
-function resetWithdrawUI() {
-  document.getElementById('withdrawStep3').classList.add('hidden');
-  document.getElementById('withdrawStep1').classList.remove('hidden');
-  
-  document.getElementById('withdrawAmountInput').value = '';
-  document.getElementById('withdrawWalletAddress').value = '';
-  document.getElementById('withdrawOtpInput').value = '';
-  
-  gp('dashboard');
-}
-
-
-// ==========================================
-// ADMIN PROFIT & LOCAL MIDNIGHT CYCLE LOGIC
-// ==========================================
-
-function getLocalMidnight() {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
-}
-
-function distributeProfit() {
-    const declaredProfit = parseFloat(document.getElementById('adminProfitInput').value);
-    if(isNaN(declaredProfit) || declaredProfit <= 0) {
-        toast('⚠️', 'Please enter a valid profit amount.');
-        return;
-    }
-    // Save to local storage so user accounts can pick it up
-    localStorage.setItem('adminDeclaredProfit', declaredProfit.toString());
-    document.getElementById('adminProfitInput').value = "";
-    toast('🚀', `$${declaredProfit} Profit successfully distributed to all users!`);
-}
-
-function startYieldCycle() {
-  cycleActive = true;
-  hasClaimedToday = false;
-  
-  // Custom Logic: If Admin distributed profit, calculate proportional share. Else, fallback.
-  let adminProfStr = localStorage.getItem('adminDeclaredProfit');
-  let adminProf = adminProfStr ? parseFloat(adminProfStr) : 0;
-  
-  if (adminProf > 0) {
-      let calcTVL = GLOBAL_FAKE_TVL + userBalance; 
-      currentPendingYield = (userBalance / calcTVL) * adminProf;
-  } else {
-      currentPendingYield = (userBalance * numericDailyROI); 
+  window.cancelWithdraw = function() {
+    document.getElementById('withdrawStepOTP').classList.add('hidden');
+    document.getElementById('withdrawStep1').classList.remove('hidden');
   }
-  
-  cycleEndTime = getLocalMidnight();
 
-  document.getElementById('cycleStatusBadge').className = "inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded mb-4 border border-emerald-500/30";
-  document.getElementById('cycleStatusBadge').textContent = "🟢 Active Daily Cycle";
-  document.getElementById('availableYieldDisplay').innerHTML = `${currentPendingYield.toFixed(2)} <span class="text-2xl">USDT</span>`;
-  
-  const btn = document.getElementById('actionBtn');
-  btn.textContent = "Claim Reward Now";
-  btn.className = "w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-bold py-4 rounded-xl transition-all text-sm shadow-[0_0_20px_rgba(52,211,153,0.3)] mb-4";
-  btn.disabled = false;
-
-  if(timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(updateTimerUI, 1000);
-}
-
-function updateTimerUI() {
-  if(!cycleActive) return;
-
-  const now = new Date().getTime();
-  const distance = cycleEndTime - now;
-
-  if (distance <= 0) {
-    processMidnightRollover();
-  } else {
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-    document.getElementById('countdownDisplay').textContent = 
-      String(hours).padStart(2, '0') + ":" + 
-      String(minutes).padStart(2, '0') + ":" + 
-      String(seconds).padStart(2, '0');
+  window.resetWithdrawUI = function() {
+    document.getElementById('withdrawStep3').classList.add('hidden');
+    document.getElementById('withdrawStep1').classList.remove('hidden');
+    document.getElementById('withdrawAmountInput').value = '';
+    document.getElementById('withdrawWalletAddress').value = '';
+    document.getElementById('withdrawOtpInput').value = '';
+    window.gp('dashboard');
   }
-}
 
-function processMidnightRollover() {
-    if (!hasClaimedToday) {
-        toast('⚠️', "Midnight passed. Yesterday's unclaimed yield was forfeited.");
-    } else {
-        toast('🔄', "A new day has started! Yield generation active.");
-    }
-    startYieldCycle();
-}
+  // ==========================================
+  // PROFIT & YIELD LOGIC (ADMIN & USER)
+  // ==========================================
+  window.distributeProfit = async function() {
+      const declaredProfit = parseFloat(document.getElementById('adminProfitInput').value);
+      if(isNaN(declaredProfit) || declaredProfit <= 0) { window.toast('⚠️', 'Invalid profit amount.'); return; }
+      
+      window.toast('⏳', 'Distributing profit to all active users...');
+      try {
+          let currentTVL = globalTVL;
+          if(currentTVL === 0) currentTVL = 1; // avoid error
+          
+          // Get ALL users from DB and update their pending yield
+          const usersSnap = await getDocs(collection(db, "users"));
+          usersSnap.forEach(async (userDoc) => {
+              const uData = userDoc.data();
+              if(uData.balance > 0) {
+                  const share = (uData.balance / currentTVL) * declaredProfit;
+                  await updateDoc(userDoc.ref, {
+                      pendingYield: share,
+                      hasClaimedToday: false
+                  });
+              }
+          });
+          
+          document.getElementById('adminProfitInput').value = "";
+          window.toast('🚀', `$${declaredProfit} successfully distributed via database!`);
+      } catch (e) {
+          window.toast('⚠️', 'Error distributing profit.');
+      }
+  }
 
-function handleYieldAction() {
-  if(cycleActive && !hasClaimedToday) {
-    totalYieldEarned += currentPendingYield;
-    hasClaimedToday = true;
-    updateDynamicTierAndROI();
+  function getLocalMidnight() {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
+  }
+
+  function startYieldCycle() {
+    cycleActive = true;
+    cycleEndTime = getLocalMidnight();
+
+    document.getElementById('cycleStatusBadge').className = "inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded mb-4 border border-emerald-500/30";
+    document.getElementById('cycleStatusBadge').textContent = "🟢 Active Daily Cycle";
+    document.getElementById('availableYieldDisplay').innerHTML = `${currentPendingYield.toFixed(2)} <span class="text-2xl">USDT</span>`;
     
-    currentPendingYield = 0;
-    document.getElementById('availableYieldDisplay').innerHTML = `0.00 <span class="text-2xl">USDT</span>`;
-    
-    document.getElementById('cycleStatusBadge').className = "inline-block px-3 py-1 bg-cyan-500/20 text-cyan-400 text-xs font-bold rounded mb-4 border border-cyan-500/30";
-    document.getElementById('cycleStatusBadge').textContent = "✅ Claimed for Today";
-
     const btn = document.getElementById('actionBtn');
-    btn.textContent = "Wait for tomorrow's cycle to begin...";
-    btn.className = "w-full bg-zinc-800 text-zinc-500 font-bold py-4 rounded-xl text-sm mb-4 cursor-not-allowed";
-    btn.disabled = true;
+    if(!hasClaimedToday && currentPendingYield > 0) {
+        btn.textContent = "Claim Reward Now";
+        btn.className = "w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-bold py-4 rounded-xl transition-all text-sm shadow-[0_0_20px_rgba(52,211,153,0.3)] mb-4";
+        btn.disabled = false;
+    } else {
+        btn.textContent = "Waiting for Admin Trade Result...";
+        btn.className = "w-full bg-zinc-800 text-zinc-500 font-bold py-4 rounded-xl text-sm mb-4 cursor-not-allowed";
+        btn.disabled = true;
+    }
 
-    toast('🎉', 'Yield Claimed! New cycle starts at midnight.');
+    if(timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(updateTimerUI, 1000);
   }
-}
 
-// Initial setup
-document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
-document.getElementById('landingTotalDep').textContent = `$${GLOBAL_FAKE_TVL.toLocaleString()}`;
+  function updateTimerUI() {
+    if(!cycleActive) return;
+    const distance = cycleEndTime - new Date().getTime();
 
-const inactivityTime = function () {
-    let time; const logoutTimeLimit = 15 * 60 * 1000; 
-    window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeydown = resetTimer; document.onclick = resetTimer; document.onscroll = resetTimer;
-    function resetTimer() { clearTimeout(time); if (isLoggedIn) { time = setTimeout(() => logoutUser(true), logoutTimeLimit); } }
-};
-inactivityTime();
+    if (distance <= 0) {
+      window.processMidnightRollover();
+    } else {
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      document.getElementById('countdownDisplay').textContent = 
+        String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+    }
+  }
+
+  window.handleYieldAction = async function() {
+    if(cycleActive && !hasClaimedToday && currentPendingYield > 0) {
+      try {
+          window.toast('⏳', 'Claiming to database...');
+          
+          // Update Firestore
+          await updateDoc(doc(db, "users", currentUserObj.uid), {
+             balance: increment(currentPendingYield),
+             totalYieldEarned: increment(currentPendingYield),
+             pendingYield: 0,
+             hasClaimedToday: true
+          });
+          
+          totalYieldEarned += currentPendingYield;
+          userBalance += currentPendingYield;
+          globalTVL += currentPendingYield; // Because balance increased
+          
+          hasClaimedToday = true;
+          currentPendingYield = 0;
+          updateDynamicTierAndROI();
+          
+          document.getElementById('availableYieldDisplay').innerHTML = `0.00 <span class="text-2xl">USDT</span>`;
+          document.getElementById('cycleStatusBadge').className = "inline-block px-3 py-1 bg-cyan-500/20 text-cyan-400 text-xs font-bold rounded mb-4 border border-cyan-500/30";
+          document.getElementById('cycleStatusBadge').textContent = "✅ Claimed for Today";
+
+          const btn = document.getElementById('actionBtn');
+          btn.textContent = "Wait for tomorrow's cycle...";
+          btn.className = "w-full bg-zinc-800 text-zinc-500 font-bold py-4 rounded-xl text-sm mb-4 cursor-not-allowed";
+          btn.disabled = true;
+
+          window.toast('🎉', 'Yield Claimed and Saved Permanently!');
+      } catch(e) { window.toast('⚠️', 'Error saving claim.'); }
+    }
+  }
+
+  // Developer Tool
+  window.processMidnightRollover = async function() {
+      if(isLoggedIn && currentUserObj) {
+          await updateDoc(doc(db, "users", currentUserObj.uid), { hasClaimedToday: false });
+          hasClaimedToday = false;
+          window.toast('🔄', "New day simulated. Claim flag reset in database.");
+          startYieldCycle();
+      }
+  }
+
+  // Inactivity Logout
+  const inactivityTime = function () {
+      let time; 
+      window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeydown = resetTimer; document.onclick = resetTimer; document.onscroll = resetTimer;
+      function resetTimer() { clearTimeout(time); if (isLoggedIn) { time = setTimeout(() => window.logoutUser(true), 15 * 60 * 1000); } }
+  };
+  inactivityTime();
 </script>
 </body>
 </html>
