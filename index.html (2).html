@@ -58,6 +58,16 @@
           Claim Yield
         </button>
       </div>
+
+      <!-- Admin Menu -->
+      <div id="adminMenu" class="hidden space-y-1 mt-2 border-t border-zinc-800/60 pt-2">
+         <p class="px-5 py-2 text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Admin Panel</p>
+         <button onclick="gp('admin',this)" id="nav-admin" class="nav-item flex items-center gap-3 w-full text-left px-5 py-3 rounded-xl text-purple-400 hover:bg-white/5 hover:text-purple-300 transition-all text-sm font-medium">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          Distribute Profit
+        </button>
+      </div>
+
     </nav>
 
     <div class="p-6 border-t border-zinc-800/60 flex flex-col gap-2">
@@ -348,6 +358,33 @@
                  <button onclick="processMidnightRollover()" class="text-[10px] text-zinc-600 underline hover:text-white transition-colors">Developer Test: Simulate Midnight Auto-Restart</button>
               </div>
             </div>
+            
+            <!-- ADMIN PANEL VIEW (SECRET) -->
+            <div id="pv-admin" class="page-view hidden">
+              <div class="glass-card p-8 rounded-3xl max-w-xl mx-auto mt-10 border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+                 <h2 class="text-2xl font-bold mb-2 text-purple-400">Admin Control Panel</h2>
+                 <p class="text-xs text-zinc-400 mb-8">Distribute manual profits to all users based on their deposit weight.</p>
+                 
+                 <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-black/50 rounded-xl p-4 border border-zinc-700">
+                       <p class="text-xs text-zinc-500">Global TVL (Estimate)</p>
+                       <p class="text-xl font-bold text-white" id="adminGlobalTVL">$10,000.00</p>
+                    </div>
+                    <div class="bg-black/50 rounded-xl p-4 border border-zinc-700">
+                       <p class="text-xs text-zinc-500">Total Users in Pool</p>
+                       <p class="text-xl font-bold text-white">Active</p>
+                    </div>
+                 </div>
+
+                 <div class="bg-purple-500/5 rounded-xl p-6 border border-purple-500/20">
+                    <label class="block text-purple-300 text-sm mb-2 font-bold">Declare Today's Total Profit (USDT)</label>
+                    <p class="text-xs text-zinc-400 mb-4">Example: Enter 100. If a user deposited 10% of total funds, they will get $10.</p>
+                    <input type="number" id="adminProfitInput" placeholder="e.g. 100" class="w-full bg-black/80 border border-purple-500/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-400 font-mono mb-4 text-lg">
+                    
+                    <button onclick="distributeProfit()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg">Distribute to All Users</button>
+                 </div>
+              </div>
+            </div>
 
           </div>
       </div>
@@ -426,10 +463,13 @@
 <script>
 // Global State Variables
 let isLoggedIn = false;
-let currentUser = ""; // stores email/phone
+let currentUser = ""; 
 let userBalance = 0;
 let totalYieldEarned = 0;
 let numericDailyROI = 0;
+
+// Fake TVL for calculations so demo makes sense
+const GLOBAL_FAKE_TVL = 10000; 
 
 // Withdraw state
 let pendingWithdrawAmt = 0;
@@ -445,8 +485,9 @@ let timerInterval = null;
 
 // Fake DB just for current session
 let fakeDB = {
-    "test@test.com": "123456", // Default test account
-    "meraj": "123456"
+    "test@test.com": "123456", 
+    "meraj": "123456",
+    "admin": "admin123" // Secret Admin Account
 };
 
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
@@ -464,8 +505,14 @@ function toast(icon, msg) {
   }, 4000);
 }
 
+function copyRefLink() {
+  const dummyUrl = document.getElementById('refLinkInput').value;
+  navigator.clipboard.writeText(dummyUrl);
+  toast('🚀', 'Link copied to clipboard! Share it anywhere.');
+}
+
 function gp(page, element) {
-  const titles = { 'landing': 'Welcome to NexaVault', 'dashboard': 'My Dashboard', 'deposit': 'Deposit Assets', 'withdraw': 'Withdraw Funds', 'profit': 'Claim Yield'};
+  const titles = { 'landing': 'Welcome to NexaVault', 'dashboard': 'My Dashboard', 'deposit': 'Deposit Assets', 'withdraw': 'Withdraw Funds', 'profit': 'Claim Yield', 'admin': 'Admin Control Panel'};
   document.getElementById('tbtitle').textContent = titles[page] || page;
   
   document.querySelectorAll('.page-view').forEach(view => view.classList.add('hidden'));
@@ -473,13 +520,19 @@ function gp(page, element) {
   if (targetPage) targetPage.classList.remove('hidden');
 
   document.querySelectorAll('.nav-item').forEach(nav => {
-    nav.classList.remove('bg-white/5', 'text-white');
-    nav.classList.add('text-zinc-400');
+    nav.classList.remove('bg-white/5', 'text-white', 'text-purple-300');
+    if(nav.id === 'nav-admin') nav.classList.add('text-purple-400');
+    else nav.classList.add('text-zinc-400');
   });
   
   if(element) {
-      element.classList.remove('text-zinc-400');
-      element.classList.add('bg-white/5', 'text-white');
+      if(element.id === 'nav-admin') {
+          element.classList.remove('text-purple-400');
+          element.classList.add('bg-white/5', 'text-purple-300');
+      } else {
+          element.classList.remove('text-zinc-400');
+          element.classList.add('bg-white/5', 'text-white');
+      }
   } else {
      let fallbackEl = document.getElementById('nav-' + page);
      if(fallbackEl) {
@@ -545,14 +598,13 @@ function updateDynamicTierAndROI() {
 }
 
 // ==========================================
-// AUTHENTICATION LOGIC (EMAIL/PHONE/USER)
+// AUTHENTICATION LOGIC
 // ==========================================
 function showAuthModal() {
   const modal = document.getElementById('authModal');
   const content = document.getElementById('authModalContent');
   modal.classList.remove('hidden');
   
-  // trigger animation
   setTimeout(() => {
     modal.classList.remove('opacity-0');
     content.classList.remove('scale-95');
@@ -591,7 +643,7 @@ function switchAuthTab(tab) {
 }
 
 function processRegister() {
-  const user = document.getElementById('regUsername').value.trim().toLowerCase(); // Convert to lowercase for consistency
+  const user = document.getElementById('regUsername').value.trim().toLowerCase(); 
   const p1 = document.getElementById('regPass1').value;
   const p2 = document.getElementById('regPass2').value;
   
@@ -600,10 +652,9 @@ function processRegister() {
   if(p1.length < 6) { toast('⚠️', 'Password must be at least 6 characters.'); return; }
   if(fakeDB[user]) { toast('⚠️', 'Account already exists. Please login.'); switchAuthTab('login'); return; }
   
-  fakeDB[user] = p1; // save to fake DB
+  fakeDB[user] = p1; 
   toast('✅', 'Account created successfully! Logging you in...');
   
-  // auto login after register
   setTimeout(() => {
       document.getElementById('loginUsername').value = user;
       document.getElementById('loginPassword').value = p1;
@@ -612,7 +663,7 @@ function processRegister() {
 }
 
 function processLogin() {
-  const user = document.getElementById('loginUsername').value.trim().toLowerCase(); // Convert to lowercase for consistency
+  const user = document.getElementById('loginUsername').value.trim().toLowerCase(); 
   const pass = document.getElementById('loginPassword').value;
   
   if(!user || !pass) { toast('⚠️', 'Please enter username and password.'); return; }
@@ -623,28 +674,35 @@ function processLogin() {
       
       closeAuthModal();
       
-      // Update UI elements
       const shortUser = user.length > 15 ? user.substring(0,12) + "..." : user;
       const btn = document.getElementById('accountBtn');
       btn.innerHTML = `🟢 ${shortUser}`;
       btn.classList.replace('bg-cyan-500/10', 'bg-emerald-500/10');
       btn.classList.replace('border-cyan-500/30', 'border-emerald-500/30');
       btn.classList.replace('text-cyan-400', 'text-emerald-400');
-      btn.onclick = null; // Remove modal popup trigger
+      btn.onclick = null; 
       
       document.getElementById('protectedMenu').classList.remove('hidden');
       document.getElementById('logoutBtn').classList.remove('hidden');
       
-      // Create a dummy referral code based on user string
+      // Admin Check
+      if(user === "admin") {
+          document.getElementById('adminMenu').classList.remove('hidden');
+          toast('👑', 'Admin Panel Unlocked.');
+          gp('admin');
+      } else {
+          document.getElementById('adminMenu').classList.add('hidden');
+          toast('👋', 'Welcome back to NexaVault!');
+          gp('dashboard');
+      }
+      
       const fakeRefHash = btoa(user).substring(0,8).toUpperCase();
       document.getElementById('refLinkInput').value = "https://nexavault.io/register?ref=" + fakeRefHash;
       
       document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
       document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
 
-      toast('👋', 'Welcome back to NexaVault!');
       updateDynamicTierAndROI();
-      gp('dashboard');
   } else {
       toast('❌', 'Invalid credentials. Account not found or wrong password.');
   }
@@ -658,22 +716,21 @@ function logoutUser(isAutoLogout = false) {
         const btn = document.getElementById('accountBtn');
         btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg> Sign In / Register`;
         btn.className = "w-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold py-3.5 rounded-xl transition-all text-sm flex items-center justify-center gap-2";
-        btn.onclick = showAuthModal; // Re-attach modal function
+        btn.onclick = showAuthModal; 
         
         document.getElementById('protectedMenu').classList.add('hidden');
+        document.getElementById('adminMenu').classList.add('hidden');
         document.getElementById('logoutBtn').classList.add('hidden');
         
         document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
         document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
         
-        // Reset balances on logout
         userBalance = 0;
         totalYieldEarned = 0;
         if(timerInterval) clearInterval(timerInterval);
         cycleActive = false;
         hasClaimedToday = false;
         
-        // Reset Deposit/Withdraw UIs
         backToDepNetworks();
         document.getElementById('verifyDepAmount').value = "";
         
@@ -690,7 +747,7 @@ function logoutUser(isAutoLogout = false) {
 
 
 // ==========================================
-// NEW DEPOSIT LOGIC (SCANNER / ADDRESS COPY)
+// NEW DEPOSIT LOGIC
 // ==========================================
 let activeDepositNetwork = "";
 
@@ -702,7 +759,6 @@ function selectDepositNetwork(netName, address) {
   document.getElementById('selectedNetDisplay').textContent = netName;
   document.getElementById('depAddressDisplay').textContent = address;
   
-  // Generate real QR code for the address
   document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${address}`;
 }
 
@@ -725,7 +781,6 @@ function verifyDepositAction() {
       return;
   }
   
-  // Simulate checking blockchain
   toast('⏳', 'Verifying blockchain transaction... Please wait.');
   
   setTimeout(() => {
@@ -742,11 +797,11 @@ function verifyDepositAction() {
              startYieldCycle();
          }, 2500);
      }
-  }, 2000); // 2 second fake delay
+  }, 2000); 
 }
 
 // ==========================================
-// NEW WITHDRAW LOGIC WITH OTP VERIFICATION
+// NEW WITHDRAW LOGIC WITH OTP
 // ==========================================
 
 function requestWithdraw() {
@@ -769,12 +824,10 @@ function requestWithdraw() {
     return;
   }
   
-  // Store values for later processing
   pendingWithdrawAmt = amt;
   pendingWithdrawAddr = addr;
   pendingWithdrawNet = netName;
   
-  // Open OTP Step
   document.getElementById('withdrawStep1').classList.add('hidden');
   document.getElementById('withdrawStepOTP').classList.remove('hidden');
   
@@ -788,7 +841,6 @@ function verifyWithdrawOTP() {
       return;
   }
   
-  // Proceed to Pending dashboard
   document.getElementById('withdrawStepOTP').classList.add('hidden');
   document.getElementById('withdrawStep3').classList.remove('hidden');
   
@@ -796,7 +848,6 @@ function verifyWithdrawOTP() {
   document.getElementById('pendingWithdrawNetDisplay').textContent = pendingWithdrawNet;
   document.getElementById('pendingWithdrawAddrDisplay').textContent = pendingWithdrawAddr.substring(0,8) + '...';
   
-  // Deduct from balance
   userBalance -= pendingWithdrawAmt;
   updateDynamicTierAndROI();
   
@@ -813,7 +864,6 @@ function resetWithdrawUI() {
   document.getElementById('withdrawStep3').classList.add('hidden');
   document.getElementById('withdrawStep1').classList.remove('hidden');
   
-  // clear forms
   document.getElementById('withdrawAmountInput').value = '';
   document.getElementById('withdrawWalletAddress').value = '';
   document.getElementById('withdrawOtpInput').value = '';
@@ -823,7 +873,7 @@ function resetWithdrawUI() {
 
 
 // ==========================================
-// LOCAL MIDNIGHT CYCLE LOGIC (WITH AUTO-RESTART)
+// ADMIN PROFIT & LOCAL MIDNIGHT CYCLE LOGIC
 // ==========================================
 
 function getLocalMidnight() {
@@ -831,10 +881,32 @@ function getLocalMidnight() {
   return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
 }
 
+function distributeProfit() {
+    const declaredProfit = parseFloat(document.getElementById('adminProfitInput').value);
+    if(isNaN(declaredProfit) || declaredProfit <= 0) {
+        toast('⚠️', 'Please enter a valid profit amount.');
+        return;
+    }
+    // Save to local storage so user accounts can pick it up
+    localStorage.setItem('adminDeclaredProfit', declaredProfit.toString());
+    document.getElementById('adminProfitInput').value = "";
+    toast('🚀', `$${declaredProfit} Profit successfully distributed to all users!`);
+}
+
 function startYieldCycle() {
   cycleActive = true;
   hasClaimedToday = false;
-  currentPendingYield = (userBalance * numericDailyROI); 
+  
+  // Custom Logic: If Admin distributed profit, calculate proportional share. Else, fallback.
+  let adminProfStr = localStorage.getItem('adminDeclaredProfit');
+  let adminProf = adminProfStr ? parseFloat(adminProfStr) : 0;
+  
+  if (adminProf > 0) {
+      let calcTVL = GLOBAL_FAKE_TVL + userBalance; 
+      currentPendingYield = (userBalance / calcTVL) * adminProf;
+  } else {
+      currentPendingYield = (userBalance * numericDailyROI); 
+  }
   
   cycleEndTime = getLocalMidnight();
 
@@ -858,7 +930,6 @@ function updateTimerUI() {
   const distance = cycleEndTime - now;
 
   if (distance <= 0) {
-    // Exactly Midnight crossed! Auto-restart logic triggers here
     processMidnightRollover();
   } else {
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -874,20 +945,15 @@ function updateTimerUI() {
 
 function processMidnightRollover() {
     if (!hasClaimedToday) {
-        // User forgot to claim. Profit forfeited.
         toast('⚠️', "Midnight passed. Yesterday's unclaimed yield was forfeited.");
     } else {
-        // User already claimed. New day starting.
         toast('🔄', "A new day has started! Yield generation active.");
     }
-    
-    // Auto-restart for the new day
     startYieldCycle();
 }
 
 function handleYieldAction() {
   if(cycleActive && !hasClaimedToday) {
-    // User claims before midnight
     totalYieldEarned += currentPendingYield;
     hasClaimedToday = true;
     updateDynamicTierAndROI();
@@ -907,18 +973,12 @@ function handleYieldAction() {
   }
 }
 
-function copyRefLink() {
-  const dummyUrl = document.getElementById('refLinkInput').value;
-  navigator.clipboard.writeText(dummyUrl);
-  toast('🚀', 'Link copied to clipboard! Share it anywhere.');
-}
-
 // Initial setup
 document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
 document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
 
 const inactivityTime = function () {
-    let time; const logoutTimeLimit = 15 * 60 * 1000; // Increased to 15 mins for standard UX
+    let time; const logoutTimeLimit = 15 * 60 * 1000; 
     window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeydown = resetTimer; document.onclick = resetTimer; document.onscroll = resetTimer;
 
     function resetTimer() { clearTimeout(time); if (isLoggedIn) { time = setTimeout(() => logoutUser(true), logoutTimeLimit); } }
