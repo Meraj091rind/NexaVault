@@ -13,12 +13,10 @@
   .vault-card { transition: all 0.3s ease; }
   .vault-card:hover { transform: translateY(-4px); border-color: rgba(34, 211, 238, 0.4); box-shadow: 0 10px 40px -10px rgba(34, 211, 238, 0.1); }
   .hidden { display: none !important; }
-  .input-field { w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 font-mono transition-colors }
 </style>
 </head>
 <body class="text-white flex flex-col min-h-screen">
 
-<!-- Toast Notification -->
 <div id="toast" class="hidden fixed bottom-6 right-6 flex items-center gap-3 bg-zinc-900 border border-cyan-400 text-cyan-400 px-6 py-4 rounded-2xl z-[100] transition-opacity shadow-[0_0_20px_rgba(34,211,238,0.2)]">
   <span id="ti" class="text-xl"></span>
   <span id="tm" class="font-medium"></span>
@@ -26,7 +24,6 @@
 
 <div class="flex flex-1 h-screen overflow-hidden relative">
 
-  <!-- SIDEBAR -->
   <div id="sidebar" class="w-72 bg-[#09090b] border-r border-zinc-800/60 flex flex-col fixed lg:relative h-full z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="logo-font text-3xl font-bold text-cyan-400 px-8 pt-8 pb-10 tracking-tighter flex justify-between items-center">
       <span>NEXAVAULT</span>
@@ -39,7 +36,6 @@
         Home
       </button>
       
-      <!-- Protected Menu -->
       <div id="protectedMenu" class="hidden space-y-1 mt-2 border-t border-zinc-800/60 pt-2">
         <button onclick="gp('dashboard',this)" id="nav-dashboard" class="nav-item flex items-center gap-3 w-full text-left px-5 py-3 rounded-xl text-zinc-400 hover:bg-white/5 hover:text-white transition-all text-sm font-medium">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
@@ -59,7 +55,6 @@
         </button>
       </div>
 
-      <!-- Admin Menu -->
       <div id="adminMenu" class="hidden space-y-1 mt-2 border-t border-zinc-800/60 pt-2">
          <p class="px-5 py-2 text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Admin Panel</p>
          <button onclick="gp('admin',this)" id="nav-admin" class="nav-item flex items-center gap-3 w-full text-left px-5 py-3 rounded-xl text-purple-400 hover:bg-white/5 hover:text-purple-300 transition-all text-sm font-medium">
@@ -82,10 +77,8 @@
     </div>
   </div>
 
-  <!-- MAIN AREA -->
   <div class="flex-1 flex flex-col relative w-full h-full overflow-hidden">
 
-    <!-- HEADER -->
     <header class="h-20 shrink-0 border-b border-zinc-800/60 px-6 lg:px-8 flex items-center justify-between sticky top-0 bg-[#09090b]/80 backdrop-blur-md z-40">
       <div class="flex items-center gap-4">
         <button onclick="toggleSidebar()" class="lg:hidden text-2xl text-zinc-400 hover:text-white transition-colors">☰</button>
@@ -98,12 +91,10 @@
       </div>
     </header>
 
-    <!-- CONTENT WRAPPER -->
     <div class="flex-1 overflow-auto p-0 relative flex flex-col">
       <div class="p-4 lg:p-10 flex-1">
           <div class="max-w-7xl mx-auto w-full">
             
-            <!-- 1. LANDING PAGE VIEW -->
             <div id="pv-landing" class="page-view">
               <div class="glass-card rounded-3xl p-6 md:p-16 mb-12 text-center relative overflow-hidden">
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-cyan-500/10 blur-[100px] rounded-full z-0 pointer-events-none"></div>
@@ -120,11 +111,11 @@
                   
                   <div class="grid grid-cols-3 gap-4 mt-16 pt-10 border-t border-zinc-800/50">
                     <div>
-                      <h4 class="text-xl md:text-3xl font-bold text-white">$42.5M+</h4>
+                      <h4 class="text-xl md:text-3xl font-bold text-white" id="landingTotalDep">$0.00</h4>
                       <p class="text-[10px] md:text-sm text-zinc-500">Total Deposits</p>
                     </div>
                     <div>
-                      <h4 class="text-xl md:text-3xl font-bold text-white">Up to 5%</h4>
+                      <h4 class="text-xl md:text-3xl font-bold text-white">Dynamic</h4>
                       <p class="text-[10px] md:text-sm text-zinc-500">Daily ROI</p>
                     </div>
                     <div>
@@ -154,12 +145,11 @@
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="vault-cards-container"></div>
             </div>
 
-            <!-- 2. DASHBOARD VIEW -->
             <div id="pv-dashboard" class="page-view hidden">
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                   <div class="absolute -right-10 -top-10 w-24 h-24 bg-cyan-500/10 blur-2xl rounded-full"></div>
-                  <p class="text-xs font-medium text-zinc-400 mb-1">My Portfolio Balance</p>
+                  <p class="text-xs font-medium text-zinc-400 mb-1">My Active Deposit</p>
                   <h3 id="displayBalance" class="text-2xl font-bold text-white mb-1">$0.00</h3>
                   <p class="text-[10px] text-zinc-500">USDT Equivalent</p>
                 </div>
@@ -171,9 +161,9 @@
                 </div>
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                   <div class="absolute -right-10 -top-10 w-24 h-24 bg-emerald-500/10 blur-2xl rounded-full"></div>
-                  <p class="text-xs font-medium text-zinc-400 mb-1">My Daily ROI</p>
+                  <p class="text-xs font-medium text-zinc-400 mb-1">My Pool Share</p>
                   <h3 id="displayROI" class="text-2xl font-bold text-emerald-400 mb-1">0.00%</h3>
-                  <p class="text-[10px] text-zinc-500">Based on your level</p>
+                  <p class="text-[10px] text-zinc-500">Of Global Profit</p>
                 </div>
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                   <div class="absolute -right-10 -top-10 w-24 h-24 bg-blue-500/10 blur-2xl rounded-full"></div>
@@ -183,7 +173,6 @@
                 </div>
               </div>
 
-              <!-- Referral Dashboard Section -->
               <div class="glass-card rounded-3xl p-6 mb-10 border border-zinc-800">
                 <h3 class="text-lg font-bold mb-2 flex items-center gap-2 text-cyan-400">
                   <span>🔗</span> Your Referral Portal
@@ -208,13 +197,11 @@
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="dashboard-vaults-container"></div>
             </div>
 
-            <!-- DEPOSIT VIEW -->
             <div id="pv-deposit" class="page-view hidden">
               <div class="glass-card p-6 md:p-8 rounded-3xl max-w-2xl mx-auto mt-10">
                 <h2 class="text-2xl font-semibold mb-2 text-center">Deposit via Crypto Network</h2>
                 <p class="text-xs text-zinc-400 text-center mb-8">Send USDT from Binance, Trust Wallet, or any exchange to fund your account.</p>
                 
-                <!-- Step 1: Select Network -->
                 <div id="depStep1">
                   <label class="block text-zinc-400 text-sm mb-3 font-medium">1. Select Network to Deposit USDT</label>
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -237,14 +224,12 @@
                   </div>
                 </div>
 
-                <!-- Step 2: Show Address & QR -->
                 <div id="depStep2" class="hidden">
                   <button onclick="backToDepNetworks()" class="text-xs text-zinc-500 hover:text-white mb-4">← Back to Networks</button>
                   
                   <div class="bg-black/60 border border-zinc-700 rounded-2xl p-6 text-center mb-6">
                     <p class="text-sm text-zinc-400 mb-2">Send <span class="text-white font-bold">USDT</span> to this <span id="selectedNetDisplay" class="text-cyan-400 font-bold">Network</span> Address</p>
                     
-                    <!-- Dummy QR Code placeholder -->
                     <div class="w-48 h-48 bg-white mx-auto my-6 rounded-lg p-2 flex items-center justify-center relative">
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=GenerateDummyAddress" id="qrImage" class="w-full h-full opacity-90">
                     </div>
@@ -255,7 +240,6 @@
                     </div>
                   </div>
 
-                  <!-- Verification Form -->
                   <div class="border-t border-zinc-800 pt-6">
                     <label class="block text-zinc-400 text-sm mb-2">2. After sending from Binance, enter the exact amount sent:</label>
                     <input type="number" id="verifyDepAmount" placeholder="e.g. 150" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 font-mono mb-4">
@@ -267,13 +251,11 @@
             </div>
             
             
-            <!-- WITHDRAW VIEW -->
             <div id="pv-withdraw" class="page-view hidden">
               <div class="glass-card p-6 md:p-8 rounded-3xl max-w-lg mx-auto mt-10">
                 <h2 class="text-2xl font-semibold mb-2 text-center">Withdraw Funds</h2>
                 <p class="text-xs text-zinc-400 text-center mb-6">Withdraw USDT directly to your Binance or Crypto Wallet.</p>
                 
-                <!-- Step 1: Request -->
                 <div id="withdrawStep1" class="space-y-5">
                   
                   <div>
@@ -303,7 +285,6 @@
                   <button onclick="requestWithdraw()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-4 rounded-xl transition-all text-sm border border-zinc-700 mt-2">Proceed to Withdrawal</button>
                 </div>
                 
-                <!-- Step 1.5: Email OTP Verification -->
                 <div id="withdrawStepOTP" class="space-y-4 hidden">
                   <div class="text-center mb-4">
                     <div class="inline-block p-3 bg-cyan-500/10 rounded-full mb-2"><span class="text-2xl">📧</span></div>
@@ -317,7 +298,6 @@
                   <button onclick="cancelWithdraw()" class="w-full bg-transparent text-zinc-500 hover:text-white text-xs py-2">Cancel Withdrawal</button>
                 </div>
 
-                <!-- Step 2: Pending Status -->
                 <div id="withdrawStep3" class="space-y-4 hidden text-center py-4">
                   <div class="inline-block p-4 bg-yellow-500/10 rounded-full mb-2 animate-pulse"><span class="text-3xl">⏳</span></div>
                   <h3 class="font-bold text-yellow-400 text-lg">Withdrawal Processing</h3>
@@ -336,30 +316,20 @@
               </div>
             </div>
 
-            <!-- PROFIT / CLAIM YIELD VIEW -->
             <div id="pv-profit" class="page-view hidden">
               <div class="glass-card p-8 rounded-3xl max-w-lg mx-auto mt-10 text-center relative overflow-hidden">
                  
-                 <div id="cycleStatusBadge" class="inline-block px-3 py-1 bg-zinc-800 text-xs font-bold rounded text-white mb-4">No Active Cycle</div>
+                 <div id="cycleStatusBadge" class="inline-block px-3 py-1 bg-zinc-800 text-xs font-bold rounded text-white mb-4">Profit Check</div>
                  
-                 <h2 class="text-2xl font-semibold mb-2">Daily Yield Reservation</h2>
+                 <h2 class="text-2xl font-semibold mb-2">My Distributed Yield</h2>
+                 <p class="text-xs text-zinc-400 mb-6">Based on your pool share & global performance.</p>
                  
                  <p class="text-5xl font-bold text-emerald-400 my-6" id="availableYieldDisplay">0.00 <span class="text-2xl">USDT</span></p>
-                 
-                 <div class="bg-black/40 border border-zinc-700 rounded-xl p-4 mb-6">
-                    <p class="text-xs text-zinc-400 mb-1">Time Remaining until Local Midnight</p>
-                    <p class="text-3xl font-mono text-white tracking-widest my-2" id="countdownDisplay">00:00:00</p>
-                    <p class="text-[10px] text-red-400 mt-2 font-medium">⚠️ Claim before 12:00 AM (your local time) or forfeit today's yield.</p>
-                 </div>
 
-                 <button id="actionBtn" onclick="handleYieldAction()" class="w-full bg-zinc-800 text-zinc-500 cursor-not-allowed font-bold py-4 rounded-xl transition-all text-sm shadow-lg mb-4" disabled>Deposit Assets to Start</button>
-
-                 <!-- Testing Tool -->
-                 <button onclick="processMidnightRollover()" class="text-[10px] text-zinc-600 underline hover:text-white transition-colors">Developer Test: Simulate Midnight Auto-Restart</button>
+                 <button id="actionBtn" onclick="handleYieldAction()" class="w-full bg-zinc-800 text-zinc-500 cursor-not-allowed font-bold py-4 rounded-xl transition-all text-sm shadow-lg mb-4" disabled>Deposit Assets to Qualify</button>
               </div>
             </div>
-            
-            <!-- ADMIN PANEL VIEW (SECRET) -->
+
             <div id="pv-admin" class="page-view hidden">
               <div class="glass-card p-8 rounded-3xl max-w-xl mx-auto mt-10 border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
                  <h2 class="text-2xl font-bold mb-2 text-purple-400">Admin Control Panel</h2>
@@ -389,7 +359,6 @@
           </div>
       </div>
       
-      <!-- FOOTER -->
       <footer class="bg-[#09090b] border-t border-zinc-800/60 py-8 shrink-0 mt-auto">
         <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
            <div class="text-center sm:text-left">
@@ -406,19 +375,14 @@
   </div>
 </div>
 
-<!-- ============================================== -->
-<!-- AUTHENTICATION MODAL (LOGIN / REGISTER) -->
-<!-- ============================================== -->
 <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
   <div class="glass-card w-full max-w-md rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.1)] transform scale-95 transition-transform duration-300" id="authModalContent">
     
-    <!-- Header tabs -->
     <div class="flex border-b border-zinc-800/60">
       <button onclick="switchAuthTab('login')" id="tab-login" class="flex-1 py-4 text-sm font-bold text-white border-b-2 border-cyan-400 bg-white/5 transition-all">Sign In</button>
       <button onclick="switchAuthTab('register')" id="tab-register" class="flex-1 py-4 text-sm font-bold text-zinc-500 border-b-2 border-transparent hover:text-zinc-300 transition-all">Register</button>
     </div>
 
-    <!-- Login Form -->
     <div id="form-login" class="p-8">
       <h3 class="text-2xl font-bold text-white mb-6">Welcome Back</h3>
       <div class="space-y-4">
@@ -434,7 +398,6 @@
       </div>
     </div>
 
-    <!-- Register Form -->
     <div id="form-register" class="p-8 hidden">
       <h3 class="text-2xl font-bold text-white mb-6">Create Account</h3>
       <div class="space-y-4">
@@ -540,13 +503,18 @@ function gp(page, element) {
          fallbackEl.classList.add('bg-white/5', 'text-white');
      }
   }
+  
+  if (page === 'admin') {
+      document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
+  }
+  
   if (window.innerWidth < 1024) document.getElementById('sidebar').classList.add('-translate-x-full');
 }
 
 const vaults = [
-  { level: 'L1', title: 'Starter Vault', min: 30, max: 100, dailyYield: '0.5% - 5%', refBonus: '1%', risk: 'Low', desc: 'Perfect for beginners testing the waters.' },
-  { level: 'L2', title: 'Growth Vault', min: 101, max: 400, dailyYield: '0.5% - 5%', refBonus: '2%', risk: 'Medium', desc: 'Balanced risk/reward for growing portfolios.' },
-  { level: 'L3', title: 'Pro Vault', min: 401, max: 'Unlimited', dailyYield: '0.5% - 5%', refBonus: '4%', risk: 'High', desc: 'Maximized yields for serious investors.' }
+  { level: 'L1', title: 'Starter Vault', min: 30, max: 100, dailyYield: 'Dynamic', refBonus: '1%', risk: 'Low', desc: 'Perfect for beginners testing the waters.' },
+  { level: 'L2', title: 'Growth Vault', min: 101, max: 400, dailyYield: 'Dynamic', refBonus: '2%', risk: 'Medium', desc: 'Balanced risk/reward for growing portfolios.' },
+  { level: 'L3', title: 'Pro Vault', min: 401, max: 'Unlimited', dailyYield: 'Dynamic', refBonus: '4%', risk: 'High', desc: 'Maximized yields for serious investors.' }
 ];
 
 function getVaultHTML(isLoggedInStatus) {
@@ -581,30 +549,37 @@ function getVaultHTML(isLoggedInStatus) {
 function updateDynamicTierAndROI() {
   let tierName = "No Active Level";
   let limitsText = "Deposit min $30 to unlock";
-  let dailyROI = "0.00%";
   
-  if (userBalance >= 30 && userBalance <= 100) { tierName = "L1 TIER"; limitsText = "Starter Vault ($30 - $100)"; dailyROI = "1.5%"; numericDailyROI = 0.015; } 
-  else if (userBalance >= 101 && userBalance <= 400) { tierName = "L2 TIER"; limitsText = "Growth Vault ($101 - $400)"; dailyROI = "2.5%"; numericDailyROI = 0.025; } 
-  else if (userBalance >= 401) { tierName = "L3 TIER"; limitsText = "Pro Vault ($401+)"; dailyROI = "4.0%"; numericDailyROI = 0.040; }
-  else { numericDailyROI = 0; }
+  if (userBalance >= 30 && userBalance <= 100) { tierName = "L1 TIER"; limitsText = "Starter Vault ($30 - $100)"; } 
+  else if (userBalance >= 101 && userBalance <= 400) { tierName = "L2 TIER"; limitsText = "Growth Vault ($101 - $400)"; } 
+  else if (userBalance >= 401) { tierName = "L3 TIER"; limitsText = "Pro Vault ($401+)"; }
+
+  // Calculate dynamic share
+  if(userBalance > 0) {
+      userSharePercentage = (userBalance / globalTVL) * 100;
+  } else {
+      userSharePercentage = 0;
+  }
 
   document.getElementById('displayBalance').textContent = `$${userBalance.toFixed(2)}`;
   document.getElementById('displayTier').textContent = tierName;
   document.getElementById('displayTierLimits').textContent = limitsText;
-  document.getElementById('displayROI').textContent = dailyROI;
+  document.getElementById('displayROI').textContent = `${userSharePercentage.toFixed(2)}%`;
   document.getElementById('displayTotalYield').textContent = `$${totalYieldEarned.toFixed(2)}`;
   
   document.getElementById('maxWithdrawDisplay').textContent = `$${userBalance.toFixed(2)}`;
+  document.getElementById('landingTotalDep').textContent = `$${globalTVL.toLocaleString()}`;
 }
 
 // ==========================================
-// AUTHENTICATION LOGIC
+// AUTHENTICATION LOGIC (EMAIL/PHONE/USER)
 // ==========================================
 function showAuthModal() {
   const modal = document.getElementById('authModal');
   const content = document.getElementById('authModalContent');
   modal.classList.remove('hidden');
   
+  // trigger animation
   setTimeout(() => {
     modal.classList.remove('opacity-0');
     content.classList.remove('scale-95');
@@ -643,7 +618,7 @@ function switchAuthTab(tab) {
 }
 
 function processRegister() {
-  const user = document.getElementById('regUsername').value.trim().toLowerCase(); 
+  const user = document.getElementById('regUsername').value.trim().toLowerCase();
   const p1 = document.getElementById('regPass1').value;
   const p2 = document.getElementById('regPass2').value;
   
@@ -652,7 +627,7 @@ function processRegister() {
   if(p1.length < 6) { toast('⚠️', 'Password must be at least 6 characters.'); return; }
   if(fakeDB[user]) { toast('⚠️', 'Account already exists. Please login.'); switchAuthTab('login'); return; }
   
-  fakeDB[user] = p1; 
+  fakeDB[user] = p1; // save to fake DB
   toast('✅', 'Account created successfully! Logging you in...');
   
   setTimeout(() => {
@@ -680,15 +655,15 @@ function processLogin() {
       btn.classList.replace('bg-cyan-500/10', 'bg-emerald-500/10');
       btn.classList.replace('border-cyan-500/30', 'border-emerald-500/30');
       btn.classList.replace('text-cyan-400', 'text-emerald-400');
-      btn.onclick = null; 
+      btn.onclick = null;
       
       document.getElementById('protectedMenu').classList.remove('hidden');
       document.getElementById('logoutBtn').classList.remove('hidden');
       
-      // Admin Check
+      // If Admin logs in
       if(user === "admin") {
           document.getElementById('adminMenu').classList.remove('hidden');
-          toast('👑', 'Admin Panel Unlocked.');
+          toast('👑', 'Admin Access Granted.');
           gp('admin');
       } else {
           document.getElementById('adminMenu').classList.add('hidden');
@@ -703,6 +678,7 @@ function processLogin() {
       document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
 
       updateDynamicTierAndROI();
+      
   } else {
       toast('❌', 'Invalid credentials. Account not found or wrong password.');
   }
@@ -727,8 +703,7 @@ function logoutUser(isAutoLogout = false) {
         
         userBalance = 0;
         totalYieldEarned = 0;
-        if(timerInterval) clearInterval(timerInterval);
-        cycleActive = false;
+        currentPendingYield = 0;
         hasClaimedToday = false;
         
         backToDepNetworks();
@@ -785,17 +760,15 @@ function verifyDepositAction() {
   
   setTimeout(() => {
      userBalance += amt;
+     globalTVL += amt; // Add to global pool
      updateDynamicTierAndROI();
      
      toast('🎉', `Deposit of $${amt} confirmed via ${activeDepositNetwork}!`);
      backToDepNetworks();
      gp('dashboard');
      
-     if(userBalance >= 30 && !cycleActive) {
-         setTimeout(() => {
-             toast('⏱️', 'Your Daily Yield Timer has automatically started!');
-             startYieldCycle();
-         }, 2500);
+     if(userBalance >= 30) {
+         activateProfitButton();
      }
   }, 2000); 
 }
@@ -810,19 +783,9 @@ function requestWithdraw() {
   const net = document.getElementById('withdrawNetwork');
   const netName = net.options[net.selectedIndex].text;
   
-  if (!addr) {
-      toast('⚠️', 'Please paste your receiving wallet address.');
-      return;
-  }
-  
-  if (isNaN(amt) || amt < 30) {
-    toast('⚠️', 'Minimum withdrawal amount is $30.');
-    return;
-  }
-  if (amt > userBalance) {
-    toast('⚠️', 'Insufficient available balance.');
-    return;
-  }
+  if (!addr) { toast('⚠️', 'Please paste your receiving wallet address.'); return; }
+  if (isNaN(amt) || amt < 30) { toast('⚠️', 'Minimum withdrawal amount is $30.'); return; }
+  if (amt > userBalance) { toast('⚠️', 'Insufficient available balance.'); return; }
   
   pendingWithdrawAmt = amt;
   pendingWithdrawAddr = addr;
@@ -836,10 +799,7 @@ function requestWithdraw() {
 
 function verifyWithdrawOTP() {
   const otp = document.getElementById('withdrawOtpInput').value.trim();
-  if (otp.length !== 6) {
-      toast('⚠️', 'Please enter a valid 6-digit OTP code.');
-      return;
-  }
+  if (otp.length !== 6) { toast('⚠️', 'Please enter a valid 6-digit OTP code.'); return; }
   
   document.getElementById('withdrawStepOTP').classList.add('hidden');
   document.getElementById('withdrawStep3').classList.remove('hidden');
@@ -849,6 +809,7 @@ function verifyWithdrawOTP() {
   document.getElementById('pendingWithdrawAddrDisplay').textContent = pendingWithdrawAddr.substring(0,8) + '...';
   
   userBalance -= pendingWithdrawAmt;
+  globalTVL -= pendingWithdrawAmt;
   updateDynamicTierAndROI();
   
   toast('✅', 'OTP Verified! Withdrawal request is processing.');
@@ -873,87 +834,46 @@ function resetWithdrawUI() {
 
 
 // ==========================================
-// ADMIN PROFIT & LOCAL MIDNIGHT CYCLE LOGIC
+// DYNAMIC PROFIT LOGIC (ADMIN & USER)
 // ==========================================
 
-function getLocalMidnight() {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
+function activateProfitButton() {
+    const btn = document.getElementById('actionBtn');
+    if(!hasClaimedToday && currentPendingYield > 0) {
+        btn.textContent = "Claim Your Share Now";
+        btn.className = "w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-bold py-4 rounded-xl transition-all text-sm shadow-[0_0_20px_rgba(52,211,153,0.3)] mb-4";
+        btn.disabled = false;
+        
+        document.getElementById('cycleStatusBadge').className = "inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded mb-4 border border-emerald-500/30";
+        document.getElementById('cycleStatusBadge').textContent = "🟢 Distribution Received";
+    } else if (!hasClaimedToday && currentPendingYield === 0) {
+        btn.textContent = "Waiting for Admin Trade Result...";
+        btn.className = "w-full bg-zinc-800 text-zinc-500 cursor-not-allowed font-bold py-4 rounded-xl transition-all text-sm mb-4";
+        btn.disabled = true;
+    }
 }
 
+// ADMIN FUNCTION
 function distributeProfit() {
     const declaredProfit = parseFloat(document.getElementById('adminProfitInput').value);
     if(isNaN(declaredProfit) || declaredProfit <= 0) {
         toast('⚠️', 'Please enter a valid profit amount.');
         return;
     }
-    // Save to local storage so user accounts can pick it up
-    localStorage.setItem('adminDeclaredProfit', declaredProfit.toString());
-    document.getElementById('adminProfitInput').value = "";
-    toast('🚀', `$${declaredProfit} Profit successfully distributed to all users!`);
-}
-
-function startYieldCycle() {
-  cycleActive = true;
-  hasClaimedToday = false;
-  
-  // Custom Logic: If Admin distributed profit, calculate proportional share. Else, fallback.
-  let adminProfStr = localStorage.getItem('adminDeclaredProfit');
-  let adminProf = adminProfStr ? parseFloat(adminProfStr) : 0;
-  
-  if (adminProf > 0) {
-      let calcTVL = GLOBAL_FAKE_TVL + userBalance; 
-      currentPendingYield = (userBalance / calcTVL) * adminProf;
-  } else {
-      currentPendingYield = (userBalance * numericDailyROI); 
-  }
-  
-  cycleEndTime = getLocalMidnight();
-
-  document.getElementById('cycleStatusBadge').className = "inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded mb-4 border border-emerald-500/30";
-  document.getElementById('cycleStatusBadge').textContent = "🟢 Active Daily Cycle";
-  document.getElementById('availableYieldDisplay').innerHTML = `${currentPendingYield.toFixed(2)} <span class="text-2xl">USDT</span>`;
-  
-  const btn = document.getElementById('actionBtn');
-  btn.textContent = "Claim Reward Now";
-  btn.className = "w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-bold py-4 rounded-xl transition-all text-sm shadow-[0_0_20px_rgba(52,211,153,0.3)] mb-4";
-  btn.disabled = false;
-
-  if(timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(updateTimerUI, 1000);
-}
-
-function updateTimerUI() {
-  if(!cycleActive) return;
-
-  const now = new Date().getTime();
-  const distance = cycleEndTime - now;
-
-  if (distance <= 0) {
-    processMidnightRollover();
-  } else {
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
     
-    document.getElementById('countdownDisplay').textContent = 
-      String(hours).padStart(2, '0') + ":" + 
-      String(minutes).padStart(2, '0') + ":" + 
-      String(seconds).padStart(2, '0');
-  }
-}
-
-function processMidnightRollover() {
-    if (!hasClaimedToday) {
-        toast('⚠️', "Midnight passed. Yesterday's unclaimed yield was forfeited.");
-    } else {
-        toast('🔄', "A new day has started! Yield generation active.");
+    if(userBalance > 0) {
+        const share = (userBalance / globalTVL) * declaredProfit;
+        currentPendingYield = share;
+        hasClaimedToday = false;
     }
-    startYieldCycle();
+    
+    document.getElementById('adminProfitInput').value = "";
+    toast('🚀', `$${declaredProfit} Profit successfully distributed to all users based on pool share!`);
 }
 
+// USER FUNCTION
 function handleYieldAction() {
-  if(cycleActive && !hasClaimedToday) {
+  if(!hasClaimedToday && currentPendingYield > 0) {
     totalYieldEarned += currentPendingYield;
     hasClaimedToday = true;
     updateDynamicTierAndROI();
@@ -962,28 +882,40 @@ function handleYieldAction() {
     document.getElementById('availableYieldDisplay').innerHTML = `0.00 <span class="text-2xl">USDT</span>`;
     
     document.getElementById('cycleStatusBadge').className = "inline-block px-3 py-1 bg-cyan-500/20 text-cyan-400 text-xs font-bold rounded mb-4 border border-cyan-500/30";
-    document.getElementById('cycleStatusBadge').textContent = "✅ Claimed for Today";
+    document.getElementById('cycleStatusBadge').textContent = "✅ Claimed";
 
     const btn = document.getElementById('actionBtn');
-    btn.textContent = "Wait for tomorrow's cycle to begin...";
+    btn.textContent = "Wait for next distribution...";
     btn.className = "w-full bg-zinc-800 text-zinc-500 font-bold py-4 rounded-xl text-sm mb-4 cursor-not-allowed";
     btn.disabled = true;
 
-    toast('🎉', 'Yield Claimed! New cycle starts at midnight.');
+    toast('🎉', 'Profit Share Claimed to balance!');
   }
+}
+
+const originalGp2 = gp;
+gp = function(page, element) {
+    originalGp2(page, element);
+    if(page === 'profit' && userBalance >= 30) {
+        document.getElementById('availableYieldDisplay').innerHTML = `${currentPendingYield.toFixed(2)} <span class="text-2xl">USDT</span>`;
+        activateProfitButton();
+    }
 }
 
 // Initial setup
 document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
-document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
+document.getElementById('landingTotalDep').textContent = `$${globalTVL.toLocaleString()}`;
 
 const inactivityTime = function () {
     let time; const logoutTimeLimit = 15 * 60 * 1000; 
     window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeydown = resetTimer; document.onclick = resetTimer; document.onscroll = resetTimer;
-
     function resetTimer() { clearTimeout(time); if (isLoggedIn) { time = setTimeout(() => logoutUser(true), logoutTimeLimit); } }
 };
 inactivityTime();
 </script>
 </body>
 </html>
+'''
+
+with open("NexaVault_Admin_Logic_Clean.html", "w", encoding='utf-8') as f:
+    f.write(html_content)}
