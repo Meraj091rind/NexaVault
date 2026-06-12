@@ -648,15 +648,15 @@
       
       // Save initial data to Firestore
       await setDoc(doc(db, "users", uid), {
-        email: email,
+        email: em
+          ail,
         balance: 0,
         totalYieldEarned: 0,
         pendingYield: 0,
         hasClaimedToday: false
       });
       
-      window.toast('✅', 'Account created successfully!');
-      window.closeAuthModal();
+      setTimeout(() => { window.gp('dashboard'); }, 400);
     } catch (error) {
       window.toast('⚠️', error.message.replace('Firebase:', ''));
     }
@@ -673,9 +673,7 @@
     
     window.toast('⏳', 'Authenticating...');
     try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      window.closeAuthModal();
-      window.toast('👋', 'Welcome back to NexaVault!');
+      setTimeout(() => { window.gp('dashboard'); }, 400);
     } catch (error) {
       window.toast('❌', 'Invalid credentials or wrong password.');
     }
