@@ -64,7 +64,7 @@
          <p class="px-5 py-2 text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Admin Panel</p>
          <button onclick="gp('admin',this)" id="nav-admin" class="nav-item flex items-center gap-3 w-full text-left px-5 py-3 rounded-xl text-purple-400 hover:bg-white/5 hover:text-purple-300 transition-all text-sm font-medium">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-          Distribute Profit
+          Platform Stats & Approvals
         </button>
       </div>
 
@@ -218,19 +218,19 @@
                 <div id="depStep1">
                   <label class="block text-zinc-400 text-sm mb-3 font-medium">1. Select Network to Deposit USDT</label>
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                    <button onclick="selectDepositNetwork('Solana', 'FYXzBBvh9Ro641Q68JiHLbLmiLTGWgaowb892wLybRba')" class="border border-zinc-700 hover:border-cyan-500 bg-black/40 rounded-xl p-4 text-left transition-all">
+                    <button onclick="selectDepositNetwork('Solana', 'HN7cABqLq46Ze1BgK3NXp1RVmZ8yoaEAMmXa8s8FmX3B')" class="border border-zinc-700 hover:border-cyan-500 bg-black/40 rounded-xl p-4 text-left transition-all">
                       <div class="font-bold text-white mb-1">Solana</div>
                       <div class="text-[10px] text-zinc-500">Fast, Lowest Fees</div>
                     </button>
-                    <button onclick="selectDepositNetwork('Polygon', '0xf1e4c0ccc74bb52e8f5412cb560be974af2f3fef')" class="border border-zinc-700 hover:border-purple-500 bg-black/40 rounded-xl p-4 text-left transition-all">
+                    <button onclick="selectDepositNetwork('Polygon', '0x71C...7423_Polygon')" class="border border-zinc-700 hover:border-purple-500 bg-black/40 rounded-xl p-4 text-left transition-all">
                       <div class="font-bold text-white mb-1">Polygon (MATIC)</div>
                       <div class="text-[10px] text-zinc-500">Low Fees</div>
                     </button>
-                    <button onclick="selectDepositNetwork('Ethereum', '0xf1e4c0ccc74bb52e8f5412cb560be974af2f3fef')" class="border border-zinc-700 hover:border-blue-500 bg-black/40 rounded-xl p-4 text-left transition-all">
+                    <button onclick="selectDepositNetwork('Ethereum', '0x71C...7423_ETH')" class="border border-zinc-700 hover:border-blue-500 bg-black/40 rounded-xl p-4 text-left transition-all">
                       <div class="font-bold text-white mb-1">Ethereum (ERC20)</div>
                       <div class="text-[10px] text-zinc-500">High Security</div>
                     </button>
-                    <button onclick="selectDepositNetwork('BSC', '0xf1e4c0ccc74bb52e8f5412cb560be974af2f3fef')" class="border border-zinc-700 hover:border-yellow-500 bg-black/40 rounded-xl p-4 text-left transition-all sm:col-span-3">
+                    <button onclick="selectDepositNetwork('BSC', '0x71C...7423_BSC')" class="border border-zinc-700 hover:border-yellow-500 bg-black/40 rounded-xl p-4 text-left transition-all sm:col-span-3">
                       <div class="font-bold text-white mb-1">BNB Smart Chain (BEP20)</div>
                       <div class="text-[10px] text-zinc-500">Recommended for Binance Users</div>
                     </button>
@@ -361,7 +361,7 @@
             <div id="pv-admin" class="page-view hidden">
               <div class="glass-card p-8 rounded-3xl max-w-xl mx-auto mt-10 border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
                  <h2 class="text-2xl font-bold mb-2 text-purple-400">Admin Control Panel</h2>
-                 <p class="text-xs text-zinc-400 mb-8">Distribute manual profits to all users based on their deposit weight.</p>
+                 <p class="text-xs text-zinc-400 mb-8">Manage deposits and distribute manual profits.</p>
                  
                  <div class="grid grid-cols-2 gap-4 mb-8">
                     <div class="bg-black/50 rounded-xl p-4 border border-zinc-700">
@@ -374,13 +374,22 @@
                     </div>
                  </div>
 
-                 <div class="bg-purple-500/5 rounded-xl p-6 border border-purple-500/20">
+                 <div class="bg-purple-500/5 rounded-xl p-6 border border-purple-500/20 mb-8">
                     <label class="block text-purple-300 text-sm mb-2 font-bold">Declare Today's Total Profit (USDT)</label>
                     <p class="text-xs text-zinc-400 mb-4">Example: Enter 100. Users will get profit proportionally based on their deposits.</p>
                     <input type="number" id="adminProfitInput" placeholder="e.g. 100" class="w-full bg-black/80 border border-purple-500/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-400 font-mono mb-4 text-lg">
                     
                     <button onclick="distributeProfit()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg">Distribute to All Users</button>
                  </div>
+
+                 <!-- NEW: PENDING DEPOSITS SECTION -->
+                 <div class="bg-black/50 rounded-xl p-6 border border-zinc-700 mt-8">
+                    <h3 class="text-lg font-bold text-white mb-4">Pending Deposit Requests</h3>
+                    <div id="adminPendingList" class="space-y-3">
+                       <p class="text-xs text-zinc-500">Loading requests...</p>
+                    </div>
+                 </div>
+
               </div>
             </div>
 
@@ -394,12 +403,37 @@
              <p class="text-xs text-zinc-500">© 2026 NexaVault Technology, Inc. All rights reserved.</p>
            </div>
            <div class="flex flex-wrap justify-center items-center gap-3">
+             <button onclick="showAboutModal()" class="flex items-center gap-2 bg-zinc-800/50 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 px-4 py-2 rounded-xl transition-all text-xs font-medium">
+               About Platform
+             </button>
              <a href="https://t.me/Nexavaultmoney" target="_blank" class="flex items-center gap-2 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 px-4 py-2 rounded-xl transition-all text-xs font-medium">
                Support Telegram
              </a>
            </div>
         </div>
       </footer>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- ABOUT PLATFORM MODAL -->
+<!-- ============================================== -->
+<div id="aboutModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+  <div class="glass-card w-full max-w-lg rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.1)] transform scale-95 transition-transform duration-300 p-8 relative">
+    <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white p-2 rounded-full bg-white/5">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+      <span class="text-cyan-400">⚡</span> About NexaVault
+    </h3>
+    <div class="space-y-4 text-sm text-zinc-400 leading-relaxed">
+      <p><strong>NexaVault</strong> is a premier yield-generation platform designed to bring institutional-grade crypto strategies to everyday users.</p>
+      <p>By leveraging advanced automated compounding mechanisms across multiple secure networks (Solana, BSC, Polygon, and Ethereum), NexaVault allows your idle assets to work for you 24/7.</p>
+      <p>Our core mission is to provide a <strong>transparent, secure, and sustainable</strong> daily return ecosystem. With tier-based vault allocations, users of all portfolio sizes can participate and earn up to 5% daily ROI with complete peace of mind.</p>
+      <div class="bg-cyan-500/10 border border-cyan-500/20 rounded-xl p-4 mt-4">
+         <p class="text-cyan-400 font-medium text-xs">🔒 100% Secure & Regulated Infrastructure. Your yield, your control.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -462,7 +496,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, increment, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDLrJjs97Mry4yTno3EXn4jSpYxSoFRlq0",
@@ -537,16 +571,37 @@
             element.classList.remove('text-zinc-400');
             element.classList.add('bg-white/5', 'text-white');
         }
+    } else {
+        let fallbackEl = document.getElementById('nav-' + page);
+        if(fallbackEl) {
+            fallbackEl.classList.remove('text-zinc-400');
+            fallbackEl.classList.add('bg-white/5', 'text-white');
+        }
     }
     
     if (page === 'admin') {
         document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
+        if (window.loadPendingDeposits) window.loadPendingDeposits();
     }
     if (page === 'withdraw') {
         document.getElementById('maxWithdrawDisplay').textContent = `$${userBalance.toFixed(2)}`;
     }
     
     if (window.innerWidth < 1024) document.getElementById('sidebar').classList.add('-translate-x-full');
+  }
+
+  window.showAboutModal = function() {
+    document.getElementById('aboutModal').classList.remove('hidden');
+    setTimeout(() => {
+      document.getElementById('aboutModal').classList.remove('opacity-0');
+      document.getElementById('aboutModal').children[0].classList.remove('scale-95');
+    }, 10);
+  }
+
+  window.closeAboutModal = function() {
+    document.getElementById('aboutModal').classList.add('opacity-0');
+    document.getElementById('aboutModal').children[0].classList.add('scale-95');
+    setTimeout(() => { document.getElementById('aboutModal').classList.add('hidden'); }, 300);
   }
 
   const vaults = [
@@ -629,7 +684,6 @@
   }
 
   // FIREBASE REGISTRATION
- // FIREBASE REGISTRATION
   window.processRegister = async function() {
     let email = document.getElementById('regUsername').value.trim().toLowerCase();
     if(!email.includes('@')) email = email + "@nexavault.com"; 
@@ -646,7 +700,6 @@
       const userCredential = await createUserWithEmailAndPassword(auth, email, p1);
       const uid = userCredential.user.uid;
       
-      // Save initial data to Firestore
       await setDoc(doc(db, "users", uid), {
         email: email,
         balance: 0,
@@ -658,13 +711,13 @@
       window.toast('✅', 'Account created successfully!');
       window.closeAuthModal();
       
-      // FIX: Auto-redirect to dashboard
       setTimeout(() => { window.gp('dashboard'); }, 400);
 
     } catch (error) {
       window.toast('⚠️', error.message.replace('Firebase:', ''));
     }
   }
+
   // FIREBASE LOGIN
   window.processLogin = async function() {
     let email = document.getElementById('loginUsername').value.trim().toLowerCase(); 
@@ -680,7 +733,6 @@
       window.closeAuthModal();
       window.toast('👋', 'Welcome back to NexaVault!');
       
-      // FIX: Auto-redirect to dashboard
       setTimeout(() => { window.gp('dashboard'); }, 400);
 
     } catch (error) {
@@ -719,11 +771,11 @@
       // Check if Admin
       if(user.email === "admin@nexavault.com") {
           document.getElementById('adminMenu').classList.remove('hidden');
-          window.toast('👑', 'Admin Access Granted.');
           window.gp('admin');
       } else {
           document.getElementById('adminMenu').classList.add('hidden');
-          window.gp('dashboard');
+          const isLanding = !document.getElementById('pv-landing').classList.contains('hidden');
+          if (isLanding) window.gp('dashboard');
       }
 
       // Fetch Real Global TVL
@@ -777,7 +829,7 @@
   });
 
   // ==========================================
-  // DEPOSIT LOGIC (WRITES TO FIREBASE)
+  // DEPOSIT LOGIC (PENDING APPROVAL SYSTEM)
   // ==========================================
   let activeDepositNetwork = "";
   window.selectDepositNetwork = function(netName, address) {
@@ -805,36 +857,96 @@
     const amt = parseFloat(document.getElementById('verifyDepAmount').value);
     if(isNaN(amt) || amt <= 0) { window.toast('⚠️', 'Please enter a valid amount.'); return; }
     
-    window.toast('⏳', 'Verifying blockchain transaction securely...');
+    window.toast('⏳', 'Submitting deposit request securely...');
     
     try {
-       // Update User Balance in DB
-       await updateDoc(doc(db, "users", currentUserObj.uid), { balance: increment(amt) });
+       // Create a Pending Deposit Document
+       await addDoc(collection(db, "deposits"), {
+          uid: currentUserObj.uid,
+          email: currentUserObj.email,
+          amount: amt,
+          status: "pending",
+          timestamp: new Date().getTime()
+       });
        
-       // Update Global TVL in DB
-       const statsRef = doc(db, "system", "stats");
-       const statsSnap = await getDoc(statsRef);
-       if(statsSnap.exists()) {
-           await updateDoc(statsRef, { globalTVL: increment(amt) });
-       } else {
-           await setDoc(statsRef, { globalTVL: amt });
-       }
-       
-       userBalance += amt;
-       globalTVL += amt;
-       updateDynamicTierAndROI();
-       
-       window.toast('🎉', `Deposit of $${amt} confirmed and saved!`);
+       window.toast('🎉', `Deposit request of $${amt} sent! Awaiting Admin Approval.`);
        window.backToDepNetworks();
        window.gp('dashboard');
        
-       if(userBalance >= 30 && !cycleActive) {
-           setTimeout(() => {
-               window.toast('⏱️', 'Your Daily Yield Timer has started!');
-               startYieldCycle();
-           }, 2000);
-       }
     } catch(e) { window.toast('⚠️', 'Network error. Try again.'); }
+  }
+
+  // ==========================================
+  // ADMIN PANEL PENDING DEPOSITS LOGIC
+  // ==========================================
+  window.loadPendingDeposits = async function() {
+      if (!isLoggedIn || currentUserObj.email !== "admin@nexavault.com") return;
+      
+      const q = query(collection(db, "deposits"), where("status", "==", "pending"));
+      const snapshot = await getDocs(q);
+      
+      const listDiv = document.getElementById('adminPendingList');
+      if (snapshot.empty) {
+          listDiv.innerHTML = '<p class="text-xs text-zinc-500">No pending deposits at the moment.</p>';
+          return;
+      }
+      
+      let html = '';
+      snapshot.forEach(doc => {
+          const data = doc.data();
+          html += `
+          <div class="bg-black/60 border border-zinc-700 rounded-xl p-4 flex justify-between items-center">
+             <div>
+                <p class="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">User: <span class="text-white normal-case tracking-normal">${data.email}</span></p>
+                <p class="text-lg font-bold text-emerald-400">$${data.amount.toFixed(2)} USDT</p>
+             </div>
+             <div class="flex gap-2">
+                <button onclick="approveDeposit('${doc.id}', '${data.uid}', ${data.amount})" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black border border-emerald-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Approve</button>
+                <button onclick="rejectDeposit('${doc.id}')" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-black border border-red-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Reject</button>
+             </div>
+          </div>`;
+      });
+      listDiv.innerHTML = html;
+  }
+
+  window.approveDeposit = async function(docId, uid, amount) {
+      window.toast('⏳', 'Approving deposit...');
+      try {
+          // 1. Update deposit status
+          await updateDoc(doc(db, "deposits", docId), { status: "approved" });
+          
+          // 2. Update user balance
+          await updateDoc(doc(db, "users", uid), { balance: increment(amount) });
+          
+          // 3. Update global TVL
+          const statsRef = doc(db, "system", "stats");
+          const statsSnap = await getDoc(statsRef);
+          if(statsSnap.exists()) {
+              await updateDoc(statsRef, { globalTVL: increment(amount) });
+          } else {
+              await setDoc(statsRef, { globalTVL: amount });
+          }
+          
+          window.toast('✅', 'Deposit Approved & Balance Added!');
+          
+          // Refresh UI
+          globalTVL += amount;
+          document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
+          window.loadPendingDeposits();
+      } catch (e) {
+          window.toast('⚠️', 'Error approving deposit.');
+      }
+  }
+
+  window.rejectDeposit = async function(docId) {
+      window.toast('⏳', 'Rejecting deposit...');
+      try {
+          await updateDoc(doc(db, "deposits", docId), { status: "rejected" });
+          window.toast('✅', 'Deposit Rejected!');
+          window.loadPendingDeposits();
+      } catch (e) {
+          window.toast('⚠️', 'Error rejecting deposit.');
+      }
   }
 
   // ==========================================
@@ -892,7 +1004,7 @@
   }
 
   // ==========================================
-  // PROFIT & YIELD LOGIC (ADMIN & USER)
+  // PROFIT LOGIC (ADMIN & USER)
   // ==========================================
   window.distributeProfit = async function() {
       const declaredProfit = parseFloat(document.getElementById('adminProfitInput').value);
@@ -903,7 +1015,6 @@
           let currentTVL = globalTVL;
           if(currentTVL === 0) currentTVL = 1; // avoid error
           
-          // Get ALL users from DB and update their pending yield
           const usersSnap = await getDocs(collection(db, "users"));
           usersSnap.forEach(async (userDoc) => {
               const uData = userDoc.data();
@@ -971,7 +1082,6 @@
       try {
           window.toast('⏳', 'Claiming to database...');
           
-          // Update Firestore
           await updateDoc(doc(db, "users", currentUserObj.uid), {
              balance: increment(currentPendingYield),
              totalYieldEarned: increment(currentPendingYield),
@@ -981,7 +1091,7 @@
           
           totalYieldEarned += currentPendingYield;
           userBalance += currentPendingYield;
-          globalTVL += currentPendingYield; // Because balance increased
+          globalTVL += currentPendingYield;
           
           hasClaimedToday = true;
           currentPendingYield = 0;
@@ -1001,7 +1111,6 @@
     }
   }
 
-  // Developer Tool
   window.processMidnightRollover = async function() {
       if(isLoggedIn && currentUserObj) {
           await updateDoc(doc(db, "users", currentUserObj.uid), { hasClaimedToday: false });
