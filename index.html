@@ -18,7 +18,6 @@
 </head>
 <body class="text-white flex flex-col min-h-screen">
 
-<!-- Toast Notification -->
 <div id="toast" class="hidden fixed bottom-6 right-6 flex items-center gap-3 bg-zinc-900 border border-cyan-400 text-cyan-400 px-6 py-4 rounded-2xl z-[100] transition-opacity shadow-[0_0_20px_rgba(34,211,238,0.2)]">
   <span id="ti" class="text-xl"></span>
   <span id="tm" class="font-medium"></span>
@@ -26,7 +25,6 @@
 
 <div class="flex flex-1 h-screen overflow-hidden relative">
 
-  <!-- SIDEBAR -->
   <div id="sidebar" class="w-72 bg-[#09090b] border-r border-zinc-800/60 flex flex-col fixed lg:relative h-full z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="logo-font text-3xl font-bold text-cyan-400 px-8 pt-8 pb-10 tracking-tighter flex justify-between items-center">
       <span>NEXAVAULT</span>
@@ -39,7 +37,6 @@
         Home
       </button>
       
-      <!-- Protected Menu -->
       <div id="protectedMenu" class="hidden space-y-1 mt-2 border-t border-zinc-800/60 pt-2">
         <button onclick="gp('dashboard',this)" id="nav-dashboard" class="nav-item flex items-center gap-3 w-full text-left px-5 py-3 rounded-xl text-zinc-400 hover:bg-white/5 hover:text-white transition-all text-sm font-medium">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
@@ -59,7 +56,6 @@
         </button>
       </div>
 
-      <!-- Admin Menu -->
       <div id="adminMenu" class="hidden space-y-1 mt-2 border-t border-zinc-800/60 pt-2">
          <p class="px-5 py-2 text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Admin Panel</p>
          <button onclick="gp('admin',this)" id="nav-admin" class="nav-item flex items-center gap-3 w-full text-left px-5 py-3 rounded-xl text-purple-400 hover:bg-white/5 hover:text-purple-300 transition-all text-sm font-medium">
@@ -82,10 +78,8 @@
     </div>
   </div>
 
-  <!-- MAIN AREA -->
   <div class="flex-1 flex flex-col relative w-full h-full overflow-hidden">
 
-    <!-- HEADER -->
     <header class="h-20 shrink-0 border-b border-zinc-800/60 px-6 lg:px-8 flex items-center justify-between sticky top-0 bg-[#09090b]/80 backdrop-blur-md z-40">
       <div class="flex items-center gap-4">
         <button onclick="toggleSidebar()" class="lg:hidden text-2xl text-zinc-400 hover:text-white transition-colors">☰</button>
@@ -98,12 +92,10 @@
       </div>
     </header>
 
-    <!-- CONTENT WRAPPER -->
     <div class="flex-1 overflow-auto p-0 relative flex flex-col">
       <div class="p-4 lg:p-10 flex-1">
           <div class="max-w-7xl mx-auto w-full">
             
-            <!-- 1. LANDING PAGE VIEW -->
             <div id="pv-landing" class="page-view">
               <div class="glass-card rounded-3xl p-6 md:p-16 mb-12 text-center relative overflow-hidden">
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-cyan-500/10 blur-[100px] rounded-full z-0 pointer-events-none"></div>
@@ -154,7 +146,6 @@
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="vault-cards-container"></div>
             </div>
 
-            <!-- 2. DASHBOARD VIEW -->
             <div id="pv-dashboard" class="page-view hidden">
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
@@ -183,7 +174,6 @@
                 </div>
               </div>
 
-              <!-- Referral Dashboard Section -->
               <div class="glass-card rounded-3xl p-6 mb-10 border border-zinc-800">
                 <h3 class="text-lg font-bold mb-2 flex items-center gap-2 text-cyan-400">
                   <span>🔗</span> Your Referral Portal
@@ -208,13 +198,11 @@
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="dashboard-vaults-container"></div>
             </div>
 
-            <!-- DEPOSIT VIEW -->
             <div id="pv-deposit" class="page-view hidden">
               <div class="glass-card p-6 md:p-8 rounded-3xl max-w-2xl mx-auto mt-10">
                 <h2 class="text-2xl font-semibold mb-2 text-center">Deposit via Crypto Network</h2>
                 <p class="text-xs text-zinc-400 text-center mb-8">Send USDT from Binance, Trust Wallet, or any exchange to fund your account.</p>
                 
-                <!-- Step 1: Select Network -->
                 <div id="depStep1">
                   <label class="block text-zinc-400 text-sm mb-3 font-medium">1. Select Network to Deposit USDT</label>
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -237,14 +225,12 @@
                   </div>
                 </div>
 
-                <!-- Step 2: Show Address & QR -->
                 <div id="depStep2" class="hidden">
                   <button onclick="backToDepNetworks()" class="text-xs text-zinc-500 hover:text-white mb-4">← Back to Networks</button>
                   
                   <div class="bg-black/60 border border-zinc-700 rounded-2xl p-6 text-center mb-6">
                     <p class="text-sm text-zinc-400 mb-2">Send <span class="text-white font-bold">USDT</span> to this <span id="selectedNetDisplay" class="text-cyan-400 font-bold">Network</span> Address</p>
                     
-                    <!-- Dummy QR Code placeholder -->
                     <div class="w-48 h-48 bg-white mx-auto my-6 rounded-lg p-2 flex items-center justify-center relative">
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=GenerateDummyAddress" id="qrImage" class="w-full h-full opacity-90">
                     </div>
@@ -255,7 +241,6 @@
                     </div>
                   </div>
 
-                  <!-- Verification Form -->
                   <div class="border-t border-zinc-800 pt-6">
                     <label class="block text-zinc-400 text-sm mb-2">2. After sending from Binance, enter the exact amount sent:</label>
                     <input type="number" id="verifyDepAmount" placeholder="e.g. 150" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 font-mono mb-4">
@@ -267,13 +252,11 @@
             </div>
             
             
-            <!-- WITHDRAW VIEW -->
             <div id="pv-withdraw" class="page-view hidden">
               <div class="glass-card p-6 md:p-8 rounded-3xl max-w-lg mx-auto mt-10">
                 <h2 class="text-2xl font-semibold mb-2 text-center">Withdraw Funds</h2>
                 <p class="text-xs text-zinc-400 text-center mb-6">Withdraw USDT directly to your Binance or Crypto Wallet.</p>
                 
-                <!-- Step 1: Request -->
                 <div id="withdrawStep1" class="space-y-5">
                   
                   <div>
@@ -303,7 +286,6 @@
                   <button onclick="requestWithdraw()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-4 rounded-xl transition-all text-sm border border-zinc-700 mt-2">Proceed to Withdrawal</button>
                 </div>
                 
-                <!-- Step 1.5: Email OTP Verification -->
                 <div id="withdrawStepOTP" class="space-y-4 hidden">
                   <div class="text-center mb-4">
                     <div class="inline-block p-3 bg-cyan-500/10 rounded-full mb-2"><span class="text-2xl">📧</span></div>
@@ -317,7 +299,6 @@
                   <button onclick="cancelWithdraw()" class="w-full bg-transparent text-zinc-500 hover:text-white text-xs py-2">Cancel Withdrawal</button>
                 </div>
 
-                <!-- Step 2: Pending Status -->
                 <div id="withdrawStep3" class="space-y-4 hidden text-center py-4">
                   <div class="inline-block p-4 bg-yellow-500/10 rounded-full mb-2 animate-pulse"><span class="text-3xl">⏳</span></div>
                   <h3 class="font-bold text-yellow-400 text-lg">Withdrawal Processing</h3>
@@ -336,7 +317,6 @@
               </div>
             </div>
 
-            <!-- PROFIT / CLAIM YIELD VIEW -->
             <div id="pv-profit" class="page-view hidden">
               <div class="glass-card p-8 rounded-3xl max-w-lg mx-auto mt-10 text-center relative overflow-hidden">
                  
@@ -357,7 +337,6 @@
               </div>
             </div>
             
-            <!-- ADMIN PANEL VIEW (SECRET) -->
             <div id="pv-admin" class="page-view hidden">
               <div class="glass-card p-8 rounded-3xl max-w-xl mx-auto mt-10 border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
                  <h2 class="text-2xl font-bold mb-2 text-purple-400">Admin Control Panel</h2>
@@ -382,7 +361,6 @@
                     <button onclick="distributeProfit()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg">Distribute to All Users</button>
                  </div>
 
-                 <!-- NEW: PENDING DEPOSITS SECTION -->
                  <div class="bg-black/50 rounded-xl p-6 border border-zinc-700 mt-8">
                     <h3 class="text-lg font-bold text-white mb-4">Pending Deposit Requests</h3>
                     <div id="adminPendingList" class="space-y-3">
@@ -396,7 +374,6 @@
           </div>
       </div>
       
-      <!-- FOOTER -->
       <footer class="bg-[#09090b] border-t border-zinc-800/60 py-8 shrink-0 mt-auto">
         <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
            <div class="text-center sm:text-left">
@@ -416,9 +393,6 @@
   </div>
 </div>
 
-<!-- ============================================== -->
-<!-- ABOUT PLATFORM MODAL -->
-<!-- ============================================== -->
 <div id="aboutModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
   <div class="glass-card w-full max-w-lg rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.1)] transform scale-95 transition-transform duration-300 p-8 relative">
     <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white p-2 rounded-full bg-white/5">
@@ -438,19 +412,14 @@
   </div>
 </div>
 
-<!-- ============================================== -->
-<!-- AUTHENTICATION MODAL (LOGIN / REGISTER) -->
-<!-- ============================================== -->
 <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
   <div class="glass-card w-full max-w-md rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.1)] transform scale-95 transition-transform duration-300" id="authModalContent">
     
-    <!-- Header tabs -->
     <div class="flex border-b border-zinc-800/60">
       <button onclick="switchAuthTab('login')" id="tab-login" class="flex-1 py-4 text-sm font-bold text-white border-b-2 border-cyan-400 bg-white/5 transition-all">Sign In</button>
       <button onclick="switchAuthTab('register')" id="tab-register" class="flex-1 py-4 text-sm font-bold text-zinc-500 border-b-2 border-transparent hover:text-zinc-300 transition-all">Register</button>
     </div>
 
-    <!-- Login Form -->
     <div id="form-login" class="p-8">
       <h3 class="text-2xl font-bold text-white mb-6">Welcome Back</h3>
       <div class="space-y-4">
@@ -459,14 +428,16 @@
           <input type="text" id="loginUsername" placeholder="Enter email" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
         </div>
         <div>
-          <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Password</label>
+          <div class="flex justify-between items-center mb-1.5 px-1">
+             <label class="block text-xs text-zinc-400">Password</label>
+             <button onclick="resetPassword()" class="text-[10px] text-cyan-500 hover:text-cyan-400 transition-colors">Forgot Password?</button>
+          </div>
           <input type="password" id="loginPassword" placeholder="••••••••" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
         </div>
         <button onclick="processLogin()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg mt-4">Sign In to Dashboard</button>
       </div>
     </div>
 
-    <!-- Register Form -->
     <div id="form-register" class="p-8 hidden">
       <h3 class="text-2xl font-bold text-white mb-6">Create Account</h3>
       <div class="space-y-4">
@@ -492,10 +463,9 @@
   </div>
 </div>
 
-<!-- FIREBASE SDK & LOGIC -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, increment, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -740,6 +710,23 @@
     }
   }
 
+  // FIREBASE FORGOT PASSWORD
+  window.resetPassword = async function() {
+    let email = document.getElementById('loginUsername').value.trim().toLowerCase(); 
+    if(!email || !email.includes('@')) { 
+        window.toast('⚠️', 'Type your valid email in the Email box first!'); 
+        return; 
+    }
+    
+    window.toast('⏳', 'Sending reset link...');
+    try {
+      await sendPasswordResetEmail(auth, email);
+      window.toast('📧', 'Password reset email sent! Check your inbox.');
+    } catch (error) {
+      window.toast('⚠️', error.message.replace('Firebase:', ''));
+    }
+  }
+
   // FIREBASE LOGOUT
   window.logoutUser = async function(isAutoLogout = false) {
     if (isLoggedIn) {
@@ -880,33 +867,37 @@
   // ADMIN PANEL PENDING DEPOSITS LOGIC
   // ==========================================
   window.loadPendingDeposits = async function() {
-      if (!isLoggedIn || currentUserObj.email !== "admin@nexavault.com") return;
+      if (!isLoggedIn || currentUserObj.email !== "merajuldinrind@gmail.com") return;
       
-      const q = query(collection(db, "deposits"), where("status", "==", "pending"));
-      const snapshot = await getDocs(q);
-      
-      const listDiv = document.getElementById('adminPendingList');
-      if (snapshot.empty) {
-          listDiv.innerHTML = '<p class="text-xs text-zinc-500">No pending deposits at the moment.</p>';
-          return;
+      try {
+          const q = query(collection(db, "deposits"), where("status", "==", "pending"));
+          const snapshot = await getDocs(q);
+          
+          const listDiv = document.getElementById('adminPendingList');
+          if (snapshot.empty) {
+              listDiv.innerHTML = '<p class="text-xs text-zinc-500">No pending deposits at the moment.</p>';
+              return;
+          }
+          
+          let html = '';
+          snapshot.forEach(docSnap => {
+              const data = docSnap.data();
+              html += `
+              <div class="bg-black/60 border border-zinc-700 rounded-xl p-4 flex justify-between items-center mb-2">
+                 <div>
+                    <p class="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">User: <span class="text-white normal-case tracking-normal">${data.email}</span></p>
+                    <p class="text-lg font-bold text-emerald-400">$${data.amount.toFixed(2)} USDT</p>
+                 </div>
+                 <div class="flex gap-2">
+                    <button onclick="approveDeposit('${docSnap.id}', '${data.uid}', ${data.amount})" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black border border-emerald-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Approve</button>
+                    <button onclick="rejectDeposit('${docSnap.id}')" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-black border border-red-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Reject</button>
+                 </div>
+              </div>`;
+          });
+          listDiv.innerHTML = html;
+      } catch(e) {
+          console.error(e);
       }
-      
-      let html = '';
-      snapshot.forEach(doc => {
-          const data = doc.data();
-          html += `
-          <div class="bg-black/60 border border-zinc-700 rounded-xl p-4 flex justify-between items-center">
-             <div>
-                <p class="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">User: <span class="text-white normal-case tracking-normal">${data.email}</span></p>
-                <p class="text-lg font-bold text-emerald-400">$${data.amount.toFixed(2)} USDT</p>
-             </div>
-             <div class="flex gap-2">
-                <button onclick="approveDeposit('${doc.id}', '${data.uid}', ${data.amount})" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black border border-emerald-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Approve</button>
-                <button onclick="rejectDeposit('${doc.id}')" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-black border border-red-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Reject</button>
-             </div>
-          </div>`;
-      });
-      listDiv.innerHTML = html;
   }
 
   window.approveDeposit = async function(docId, uid, amount) {
@@ -934,7 +925,8 @@
           document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
           window.loadPendingDeposits();
       } catch (e) {
-          window.toast('⚠️', 'Error approving deposit.');
+          console.error(e);
+          window.toast('⚠️', 'Error: ' + e.message); // Will show exact error reason on screen
       }
   }
 
@@ -945,7 +937,8 @@
           window.toast('✅', 'Deposit Rejected!');
           window.loadPendingDeposits();
       } catch (e) {
-          window.toast('⚠️', 'Error rejecting deposit.');
+          console.error(e);
+          window.toast('⚠️', 'Error: ' + e.message);
       }
   }
 
@@ -1102,11 +1095,11 @@
           document.getElementById('cycleStatusBadge').textContent = "✅ Claimed for Today";
 
           const btn = document.getElementById('actionBtn');
-          btn.textContent = "Wait for tomorrow's cycle...";
+          btn.textContent = "Wait for tomorrow's cycle to begin...";
           btn.className = "w-full bg-zinc-800 text-zinc-500 font-bold py-4 rounded-xl text-sm mb-4 cursor-not-allowed";
           btn.disabled = true;
 
-          window.toast('🎉', 'Yield Claimed and Saved Permanently!');
+          window.toast('🎉', 'Yield Claimed! New cycle starts at midnight.');
       } catch(e) { window.toast('⚠️', 'Error saving claim.'); }
     }
   }
