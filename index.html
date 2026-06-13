@@ -629,8 +629,8 @@
   }
 
   // FIREBASE REGISTRATION
+ // FIREBASE REGISTRATION
   window.processRegister = async function() {
-    // Add fake email domain if user doesn't enter one (for smooth test login)
     let email = document.getElementById('regUsername').value.trim().toLowerCase();
     if(!email.includes('@')) email = email + "@nexavault.com"; 
 
@@ -648,20 +648,23 @@
       
       // Save initial data to Firestore
       await setDoc(doc(db, "users", uid), {
-        email: em
-          ail,
+        email: email,
         balance: 0,
         totalYieldEarned: 0,
         pendingYield: 0,
         hasClaimedToday: false
       });
       
+      window.toast('✅', 'Account created successfully!');
+      window.closeAuthModal();
+      
+      // FIX: Auto-redirect to dashboard
       setTimeout(() => { window.gp('dashboard'); }, 400);
+
     } catch (error) {
       window.toast('⚠️', error.message.replace('Firebase:', ''));
     }
   }
-
   // FIREBASE LOGIN
   window.processLogin = async function() {
     let email = document.getElementById('loginUsername').value.trim().toLowerCase(); 
@@ -673,7 +676,13 @@
     
     window.toast('⏳', 'Authenticating...');
     try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      window.closeAuthModal();
+      window.toast('👋', 'Welcome back to NexaVault!');
+      
+      // FIX: Auto-redirect to dashboard
       setTimeout(() => { window.gp('dashboard'); }, 400);
+
     } catch (error) {
       window.toast('❌', 'Invalid credentials or wrong password.');
     }
