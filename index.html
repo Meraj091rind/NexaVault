@@ -395,6 +395,13 @@
 
           </div>
       </div>
+      <!-- PENDING WITHDRAWALS SECTION -->
+                 <div class="bg-black/50 rounded-xl p-6 border border-zinc-700 mt-4">
+                    <h3 class="text-lg font-bold text-white mb-4">Pending Withdrawal Requests</h3>
+                    <div id="adminWithdrawList" class="space-y-3">
+                       <p class="text-xs text-zinc-500">Loading requests...</p>
+                    </div>
+                 </div>
       
       <!-- FOOTER -->
       <footer class="bg-[#09090b] border-t border-zinc-800/60 py-8 shrink-0 mt-auto">
@@ -591,9 +598,10 @@
         }
     }
     
-    if (page === 'admin') {
+   if (page === 'admin') {
         document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
         if (window.loadPendingDeposits) window.loadPendingDeposits();
+        if (window.loadPendingWithdrawals) window.loadPendingWithdrawals(); // YEH LINE ADD KARNI HAI
     }
     if (page === 'withdraw') {
         document.getElementById('maxWithdrawDisplay').textContent = `$${userBalance.toFixed(2)}`;
@@ -1019,6 +1027,67 @@
           window.toast('⚠️', 'Error: ' + e.message);
       }
   }
+  // ==========================================
+  // ADMIN PANEL PENDING WITHDRAWALS LOGIC
+  // ==========================================
+  window.loadPendingWithdrawals = function() {
+      if (!isLoggedIn || currentUserObj.email !== "merajuldinrind@gmail.com") return;
+      
+      try {
+          const q = query(collection(db, "withdrawals"), where("status", "==", "pending"));
+          
+          onSnapshot(q, (snapshot) => {
+              const listDiv = document.getElementById('adminWithdrawList');
+              if (snapshot.empty) {
+                  listDiv.innerHTML = '<p class="text-xs text-zinc-500">No pending withdrawals at the moment.</p>';
+                  return;
+              }
+              
+              let html = '';
+              snapshot.forEach(docSnap => {
+                  const data = docSnap.data();
+                  html += `
+                  <div class="bg-black/60 border border-zinc-700 rounded-xl p-4 mb-2 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                     <div class="flex justify-between items-center mb-2">
+                         <div>
+                            <p class="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">User: <span class="text-white normal-case tracking-normal">${data.email}</span></p>
+                            <p class="text-lg font-bold text-red-400">-$${data.amount.toFixed(2)} USDT</p>
+                         </div>
+                         <div class="flex gap-2">
+                            <button onclick="approveWithdrawal('${docSnap.id}')" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black border border-emerald-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Approve</button>
+                            <button onclick="rejectWithdrawal('${docSnap.id}', '${data.uid}', ${data.amount})" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-black border border-red-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Reject (Refund)</button>
+                         </div>
+                     </div>
+                     <div class="bg-black/50 p-2 rounded-lg text-[10px] text-zinc-400 font-mono break-all mt-2 border border-zinc-800">
+                         <span class="text-cyan-400 font-bold">${data.network.toUpperCase()} Address:</span><br>
+                         ${data.walletAddress}
+                     </div>
+                  </div>`;
+              });
+              listDiv.innerHTML = html;
+
+              if(snapshot.docs.length > 0) window.toast('🔔', `Attention: ${snapshot.docs.length} pending withdrawal(s)!`);
+          });
+      } catch(e) { console.error(e); }
+  }
+
+  window.approveWithdrawal = async function(docId) {
+      window.toast('⏳', 'Approving withdrawal...');
+      await updateDoc(doc(db, "withdrawals", docId), { status: "approved" });
+      window.toast('✅', 'Withdrawal Approved!');
+  }
+
+  window.rejectWithdrawal = async function(docId, uid, amount) {
+      window.toast('⏳', 'Rejecting & Refunding to user...');
+      await updateDoc(doc(db, "withdrawals", docId), { status: "rejected" });
+      
+      // Refund balance back to user
+      await updateDoc(doc(db, "users", uid), { balance: increment(amount) });
+      const statsRef = doc(db, "system", "stats");
+      await updateDoc(statsRef, { globalTVL: increment(amount) });
+      
+      window.toast('✅', 'Rejected & Refunded successfully!');
+  }
 
   // ==========================================
   // WITHDRAW LOGIC (WRITES TO FIREBASE)
@@ -1036,30 +1105,44 @@
     document.getElementById('withdrawStepOTP').classList.remove('hidden');
     window.toast('📧', 'An OTP has been sent to your registered email.');
   }
-
-  window.verifyWithdrawOTP = async function() {
+window.verifyWithdrawOTP = async function() {
     const otp = document.getElementById('withdrawOtpInput').value.trim();
     if (otp.length !== 6) { window.toast('⚠️', 'Please enter a valid 6-digit OTP code.'); return; }
     
     try {
-        window.toast('⏳', 'Processing secure withdrawal...');
+        window.toast('⏳', 'Sending withdrawal request to Admin...');
         
-        // Decrement in DB
+        const addr = document.getElementById('withdrawWalletAddress').value.trim();
+        const net = document.getElementById('withdrawNetwork').value;
+
+        // Create Withdrawal Request in DB
+        await addDoc(collection(db, "withdrawals"), {
+            uid: currentUserObj.uid,
+            email: currentUserObj.email,
+            amount: pendingWithdrawAmt,
+            walletAddress: addr,
+            network: net,
+            status: "pending",
+            timestamp: new Date().getTime()
+        });
+        
+        // Deduct balance instantly to prevent double-spending
         await updateDoc(doc(db, "users", currentUserObj.uid), { balance: increment(-pendingWithdrawAmt) });
         await updateDoc(doc(db, "system", "stats"), { globalTVL: increment(-pendingWithdrawAmt) });
         
         document.getElementById('withdrawStepOTP').classList.add('hidden');
         document.getElementById('withdrawStep3').classList.remove('hidden');
-        
         document.getElementById('pendingWithdrawAmtDisplay').textContent = `$${pendingWithdrawAmt.toFixed(2)}`;
+        document.getElementById('pendingWithdrawNetDisplay').textContent = net.toUpperCase();
+        document.getElementById('pendingWithdrawAddrDisplay').textContent = addr;
+        
         userBalance -= pendingWithdrawAmt;
         globalTVL -= pendingWithdrawAmt;
         updateDynamicTierAndROI();
         
-        window.toast('✅', 'OTP Verified! Withdrawal request is processing.');
+        window.toast('✅', 'Withdrawal Request Sent to Admin for Approval!');
     } catch(e) { window.toast('⚠️', 'Database update failed.'); }
   }
-
   window.cancelWithdraw = function() {
     document.getElementById('withdrawStepOTP').classList.add('hidden');
     document.getElementById('withdrawStep1').classList.remove('hidden');
