@@ -508,7 +508,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, increment, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+ import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, increment, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDLrJjs97Mry4yTno3EXn4jSpYxSoFRlq0",
@@ -928,43 +928,56 @@
     } catch(e) { window.toast('⚠️', 'Network error. Try again.'); }
   }
 
+ // ==========================================
+  // ADMIN PANEL PENDING DEPOSITS LOGIC (LIVE REAL-TIME)
   // ==========================================
-  // ADMIN PANEL PENDING DEPOSITS LOGIC
-  // ==========================================
-  window.loadPendingDeposits = async function() {
+  window.loadPendingDeposits = function() {
       if (!isLoggedIn || currentUserObj.email !== "merajuldinrind@gmail.com") return;
       
       try {
           const q = query(collection(db, "deposits"), where("status", "==", "pending"));
-          const snapshot = await getDocs(q);
           
-          const listDiv = document.getElementById('adminPendingList');
-          if (snapshot.empty) {
-              listDiv.innerHTML = '<p class="text-xs text-zinc-500">No pending deposits at the moment.</p>';
-              return;
-          }
-          
-          let html = '';
-          snapshot.forEach(docSnap => {
-              const data = docSnap.data();
-              html += `
-              <div class="bg-black/60 border border-zinc-700 rounded-xl p-4 flex justify-between items-center mb-2">
-                 <div>
-                    <p class="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">User: <span class="text-white normal-case tracking-normal">${data.email}</span></p>
-                    <p class="text-lg font-bold text-emerald-400">$${data.amount.toFixed(2)} USDT</p>
-                 </div>
-                 <div class="flex gap-2">
-                    <button onclick="approveDeposit('${docSnap.id}', '${data.uid}', ${data.amount})" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black border border-emerald-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Approve</button>
-                    <button onclick="rejectDeposit('${docSnap.id}')" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-black border border-red-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Reject</button>
-                 </div>
-              </div>`;
+          // onSnapshot live database ko dekhta rehta hai
+          onSnapshot(q, (snapshot) => {
+              const listDiv = document.getElementById('adminPendingList');
+              
+              if (snapshot.empty) {
+                  listDiv.innerHTML = '<p class="text-xs text-zinc-500">No pending deposits at the moment.</p>';
+                  return;
+              }
+              
+              let html = '';
+              snapshot.forEach(docSnap => {
+                  const data = docSnap.data();
+                  html += `
+                  <div class="bg-black/60 border border-zinc-700 rounded-xl p-4 flex justify-between items-center mb-2 shadow-[0_0_15px_rgba(34,211,238,0.1)]">
+                     <div>
+                        <p class="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">User: <span class="text-white normal-case tracking-normal">${data.email}</span></p>
+                        <p class="text-lg font-bold text-emerald-400">$${data.amount.toFixed(2)} USDT</p>
+                     </div>
+                     <div class="flex gap-2">
+                        <button onclick="approveDeposit('${docSnap.id}', '${data.uid}', ${data.amount})" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black border border-emerald-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Approve</button>
+                        <button onclick="rejectDeposit('${docSnap.id}')" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-black border border-red-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Reject</button>
+                     </div>
+                  </div>`;
+              });
+              listDiv.innerHTML = html;
+
+              // Admin Notification Popup
+              if(snapshot.docs.length > 0) {
+                  window.toast('🔔', `Attention: ${snapshot.docs.length} pending deposit request(s)!`);
+              }
+
+          }, (error) => {
+              console.error(error);
+              if (error.code === 'permission-denied') {
+                  window.toast('⚠️', 'Firebase Error: Rules blocked! Please update Firestore Rules.');
+              }
           });
-          listDiv.innerHTML = html;
       } catch(e) {
           console.error(e);
       }
   }
-
   window.approveDeposit = async function(docId, uid, amount) {
       window.toast('⏳', 'Approving deposit...');
       try {
