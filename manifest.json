@@ -1,0 +1,16 @@
+{
+  "name": "NexaVault",
+  "short_name": "NexaVault",
+  "description": "Smart Crypto Yield Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#22D3EE",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/6Yh9Y6Y/nexavault-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
