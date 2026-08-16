@@ -17,6 +17,24 @@
 </style>
 </head>
 <body class="text-white flex flex-col min-h-screen">
+  <!-- APP DOWNLOAD TOP POPUP -->
+<div id="appLinkPopup" class="fixed top-4 left-1/2 transform -translate-x-1/2 w-11/12 max-w-md bg-gradient-to-r from-cyan-500 to-blue-600 p-[1px] rounded-xl shadow-[0_10px_40px_-10px_rgba(34,211,238,0.5)] z-[999] transition-all duration-500">
+   <div class="bg-black/95 backdrop-blur-md rounded-[11px] px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+         <span class="text-2xl drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">📱</span>
+         <div>
+            <p class="text-white text-sm font-bold tracking-wide">NexaVault Android App</p>
+            <p class="text-[10px] text-cyan-400 font-medium mt-0.5">Download for better experience!</p>
+         </div>
+      </div>
+      <div class="flex items-center gap-2">
+         <!-- YAHAN APNA LINK DALEIN -->
+         <a href="file:///C:/Users/dell/Downloads/app-release.apk" target="_blank" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black text-xs font-bold px-4 py-2 rounded-lg transition shadow-lg">Get App</a>
+         
+         <button onclick="document.getElementById('appLinkPopup').classList.add('hidden')" class="text-zinc-500 hover:text-white p-1 ml-1 transition-colors">✕</button>
+      </div>
+   </div>
+</div>
 
 <!-- Toast Notification -->
 <div id="toast" class="hidden fixed bottom-6 right-6 flex items-center gap-3 bg-zinc-900 border border-cyan-400 text-cyan-400 px-6 py-4 rounded-2xl z-[999] transition-opacity shadow-[0_0_20px_rgba(34,211,238,0.2)]">
