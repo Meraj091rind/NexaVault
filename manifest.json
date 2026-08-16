@@ -8,22 +8,7 @@
   "theme_color": "#22D3EE",
   "icons": [
     {
-      "src": "{
-  "name": "NexaVault",
-  "short_name": "NexaVault",
-  "description": "Smart Crypto Yield Platform",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#09090b",
-  "theme_color": "#22D3EE",
-  "icons": [
-    {
-      "src": "YAHAN_APNA_RAW_LINK_PASTE_KAREIN",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}",
+      "src": "https://github.com/Meraj091rind/NexaVault/blob/ab69f29a9b715bd169e727bbc2c6a68a3cef1c75/Gemini_Generated_Image_tzowfytzowfytzow_optimized_250_1_optimized%20(1)%20(1).png",
       "sizes": "512x512",
       "type": "image/png"
     }
