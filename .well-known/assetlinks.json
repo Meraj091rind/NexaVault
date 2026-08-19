@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.nexavaultNft.app",
+        "sha256_cert_fingerprints": ["CC:0D:1A:F9:9C:E2:CC:FE:D4:4D:B2:16:AC:5A:A0:9D:CF:DC:86:7D:99:41:D9:05:49:2F:E3:52:8E:BD:8F:D9"]
+      }
+    }]
