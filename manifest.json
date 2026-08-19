@@ -1,0 +1,24 @@
+{
+  "name": "NexaVault",
+  "short_name": "NexaVault",
+  "description": "Smart Yield Platform - Institutional Yields Accessible to Everyone",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#06b6d4",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://nexavault-money.vercel.app/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://nexavault-money.vercel.app/favicon.ico",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
