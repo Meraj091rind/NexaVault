@@ -887,32 +887,39 @@
     }
   }
 
-  // --- NEW: CHECK UNREAD NOTIFICATIONS ---
+ // --- NEW: CHECK UNREAD NOTIFICATIONS (FIXED) ---
   async function checkUnreadNotifications(currentUserObj) {
     try {
+      // Firebase index error se bachne ke liye sirf UID se fetch karenge
       const q = query(
         collection(db, "notifications"), 
-        where("uid", "==", currentUserObj.uid),
-        where("read", "==", false)
+        where("uid", "==", currentUserObj.uid)
       );
       
       const querySnapshot = await getDocs(q);
-      const unreadCount = querySnapshot.size;
+      
+      // JavaScript mein unread count calculate karenge
+      let unreadCount = 0;
+      querySnapshot.forEach((doc) => {
+         if(doc.data().read === false) {
+             unreadCount++;
+         }
+      });
 
       const badge = document.getElementById("notification-badge");
       if(badge) {
         if (unreadCount > 0) {
           badge.innerText = unreadCount;
-          badge.style.display = "inline-block";
+          // .hidden class hatana zaroori hai kyunke usme !important laga hai
+          badge.classList.remove("hidden"); 
         } else {
-          badge.style.display = "none";
+          badge.classList.add("hidden");
         }
       }
     } catch(e) {
-      console.error(e);
+      console.error("Notification Error: ", e);
     }
   }
-
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       isLoggedIn = true;
