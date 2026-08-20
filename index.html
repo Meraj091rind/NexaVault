@@ -18,24 +18,6 @@
 </style>
 </head>
 <body class="text-white flex flex-col min-h-screen">
-  <!-- APP DOWNLOAD TOP POPUP -->
-<div id="appLinkPopup" class="fixed top-4 left-1/2 transform -translate-x-1/2 w-11/12 max-w-md bg-gradient-to-r from-cyan-500 to-blue-600 p-[1px] rounded-xl shadow-[0_10px_40px_-10px_rgba(34,211,238,0.5)] z-[999] transition-all duration-500">
-   <div class="bg-black/95 backdrop-blur-md rounded-[11px] px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-         <span class="text-2xl drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">📱</span>
-         <div>
-            <p class="text-white text-sm font-bold tracking-wide">NexaVault Android App</p>
-            <p class="text-[10px] text-cyan-400 font-medium mt-0.5">Download for better experience!</p>
-         </div>
-      </div>
-      <div class="flex items-center gap-2">
-         <!-- YAHAN APNA LINK DALEIN -->
-         <a href="https://raw.githubusercontent.com/Meraj091rind/NexaVault/main/NexaVaultNft.apk" target="_blank" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black text-xs font-bold px-4 py-2 rounded-lg transition shadow-lg">Get App</a>
-         
-         <button onclick="document.getElementById('appLinkPopup').classList.add('hidden')" class="text-zinc-500 hover:text-white p-1 ml-1 transition-colors">✕</button>
-      </div>
-   </div>
-</div>
 
 <!-- Toast Notification -->
 <div id="toast" class="hidden fixed bottom-6 right-6 flex items-center gap-3 bg-zinc-900 border border-cyan-400 text-cyan-400 px-6 py-4 rounded-2xl z-[999] transition-opacity shadow-[0_0_20px_rgba(34,211,238,0.2)]">
@@ -111,6 +93,13 @@
         <h1 id="tbtitle" class="text-lg lg:text-xl font-semibold text-white">Welcome to NexaVault</h1>
       </div>
       <div class="flex items-center gap-4">
+        <!-- Notification Bell -->
+        <div class="relative">
+          <button onclick="window.toast('🔔', 'No new system notifications.')" class="p-2 rounded-xl bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors relative flex items-center justify-center">
+            🔔
+            <span id="notification-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
+          </button>
+        </div>
         <div class="hidden sm:flex items-center gap-2 text-xs font-medium text-emerald-400 bg-emerald-400/10 px-3 py-1.5 rounded-full border border-emerald-400/20">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Live
         </div>
@@ -221,6 +210,29 @@
                 </div>
               </div>
 
+              <!-- TRANSACTION HISTORY SECTION -->
+              <div class="glass-card rounded-3xl p-6 mb-10 border border-zinc-800">
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-cyan-400">
+                  <span>📜</span> Transaction History
+                </h3>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr class="border-b border-zinc-800 text-zinc-500">
+                        <th class="py-3 px-3">Type</th>
+                        <th class="py-3 px-3">Amount</th>
+                        <th class="py-3 px-3">Network</th>
+                        <th class="py-3 px-3">Status</th>
+                        <th class="py-3 px-3">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody id="history-table-body" class="divide-y divide-zinc-800/50 text-zinc-300">
+                      <tr><td colspan="5" class="py-4 text-center text-zinc-500">Loading history...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-semibold text-white">Active Vault Tiers</h2>
               </div>
@@ -263,7 +275,6 @@
                   <div class="bg-black/60 border border-zinc-700 rounded-2xl p-6 text-center mb-6">
                     <p class="text-sm text-zinc-400 mb-2">Send <span class="text-white font-bold">USDT</span> to this <span id="selectedNetDisplay" class="text-cyan-400 font-bold">Network</span> Address</p>
                     
-                    <!-- Dummy QR Code placeholder -->
                     <div class="w-48 h-48 bg-white mx-auto my-6 rounded-lg p-2 flex items-center justify-center relative">
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=GenerateDummyAddress" id="qrImage" class="w-full h-full opacity-90">
                     </div>
@@ -285,7 +296,6 @@
               </div>
             </div>
             
-            
             <!-- WITHDRAW VIEW -->
             <div id="pv-withdraw" class="page-view hidden">
               <div class="glass-card p-6 md:p-8 rounded-3xl max-w-lg mx-auto mt-10">
@@ -294,7 +304,6 @@
                 
                 <!-- Step 1: Request -->
                 <div id="withdrawStep1" class="space-y-5">
-                  
                   <div>
                     <label class="block text-zinc-400 text-sm mb-2">1. Select Withdrawal Network</label>
                     <select id="withdrawNetwork" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 appearance-none">
@@ -357,24 +366,7 @@
                   <button onclick="processResetPin()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3.5 rounded-xl transition-all text-sm">Save New PIN</button>
                   <button onclick="cancelResetPin()" class="w-full bg-transparent text-zinc-500 hover:text-white text-xs py-2">Back to Withdraw</button>
                 </div>
-<!-- Step 1.7: Reset PIN -->
-                <div id="withdrawStepResetPin" class="space-y-4 hidden">
-                  <div class="text-center mb-4">
-                    <div class="inline-block p-3 bg-cyan-500/10 rounded-full mb-2"><span class="text-2xl">🔄</span></div>
-                    <h3 class="font-bold text-white">Reset Security PIN</h3>
-                    <p class="text-xs text-zinc-400">Verify your login password to create a new 6-digit PIN.</p>
-                  </div>
-                  <div>
-                    <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Current Login Password</label>
-                    <input type="password" id="resetPinPassword" placeholder="••••••••" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 text-sm">
-                  </div>
-                  <div>
-                    <label class="block text-xs text-zinc-400 mb-1.5 ml-1">New 6-Digit PIN</label>
-                    <input type="text" id="resetPinNew" placeholder="• • • • • •" maxlength="6" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 font-mono text-center tracking-[1em] text-xl">
-                  </div>
-                  <button onclick="processResetPin()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3.5 rounded-xl transition-all text-sm">Save New PIN</button>
-                  <button onclick="cancelResetPin()" class="w-full bg-transparent text-zinc-500 hover:text-white text-xs py-2">Back to Withdraw</button>
-                </div>
+
                 <!-- Step 2: Pending Status -->
                 <div id="withdrawStep3" class="space-y-4 hidden text-center py-4">
                   <div class="inline-block p-4 bg-yellow-500/10 rounded-full mb-2 animate-pulse"><span class="text-3xl">⏳</span></div>
@@ -439,14 +431,14 @@
                     
                     <button onclick="distributeProfit()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg">Distribute to All Users</button>
                  </div>
-<!-- PENDING DEPOSITS SECTION -->
+
+                 <!-- PENDING DEPOSITS SECTION -->
                  <div class="bg-black/50 rounded-xl p-6 border border-zinc-700 mt-8">
                     <h3 class="text-lg font-bold text-white mb-4">Pending Deposit Requests</h3>
                     <div id="adminPendingList" class="space-y-3">
                        <p class="text-xs text-zinc-500">Loading requests...</p>
                     </div>
                  </div>
-
 
                  <!-- PENDING WITHDRAWALS SECTION -->
                  <div class="bg-black/50 rounded-xl p-6 border border-zinc-700 mt-4">
@@ -479,9 +471,7 @@
   </div>
 </div>
 
-<!-- ============================================== -->
 <!-- ABOUT PLATFORM MODAL -->
-<!-- ============================================== -->
 <div id="aboutModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
   <div class="glass-card w-full max-w-lg rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.1)] transform scale-95 transition-transform duration-300 p-8 relative">
     <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white p-2 rounded-full bg-white/5">
@@ -501,13 +491,10 @@
   </div>
 </div>
 
-<!-- ============================================== -->
-<!-- AUTHENTICATION MODAL (LOGIN / REGISTER) -->
-<!-- ============================================== -->
+<!-- AUTHENTICATION MODAL -->
 <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
   <div class="glass-card w-full max-w-md rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.1)] transform scale-95 transition-transform duration-300" id="authModalContent">
     
-    <!-- Header tabs -->
     <div class="flex border-b border-zinc-800/60">
       <button onclick="switchAuthTab('login')" id="tab-login" class="flex-1 py-4 text-sm font-bold text-white border-b-2 border-cyan-400 bg-white/5 transition-all">Sign In</button>
       <button onclick="switchAuthTab('register')" id="tab-register" class="flex-1 py-4 text-sm font-bold text-zinc-500 border-b-2 border-transparent hover:text-zinc-300 transition-all">Register</button>
@@ -591,7 +578,6 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // Global State
   let isLoggedIn = false;
   let currentUserObj = null;
   let userBalance = 0;
@@ -599,14 +585,12 @@
   let numericDailyROI = 0;
   let globalTVL = 0;
   
-  // Yield logic
   let cycleActive = false;
   let hasClaimedToday = false; 
   let cycleEndTime = null;
   let currentPendingYield = 0;
   let timerInterval = null;
 
-  // Make functions available globally for HTML onclicks
   window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
 
   window.toast = function(icon, msg) {
@@ -661,7 +645,7 @@
    if (page === 'admin') {
         document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
         if (window.loadPendingDeposits) window.loadPendingDeposits();
-        if (window.loadPendingWithdrawals) window.loadPendingWithdrawals(); // YEH LINE ADD KARNI HAI
+        if (window.loadPendingWithdrawals) window.loadPendingWithdrawals();
     }
     if (page === 'withdraw') {
         document.getElementById('maxWithdrawDisplay').textContent = `$${userBalance.toFixed(2)}`;
@@ -763,14 +747,13 @@
     }
   }
 
-  // FIREBASE REGISTRATION
   window.processRegister = async function() {
     let email = document.getElementById('regUsername').value.trim().toLowerCase();
     if(!email.includes('@')) email = email + "@nexavault.com"; 
 
     const p1 = document.getElementById('regPass1').value;
     const p2 = document.getElementById('regPass2').value;
-    const pin = document.getElementById('regPin').value.trim(); // Naya PIN input
+    const pin = document.getElementById('regPin').value.trim();
     
     if(!email || !p1 || !pin) { window.toast('⚠️', 'Please fill all fields.'); return; }
     if(p1 !== p2) { window.toast('⚠️', 'Passwords do not match.'); return; }
@@ -788,7 +771,7 @@
         totalYieldEarned: 0,
         pendingYield: 0,
         hasClaimedToday: false,
-        withdrawPin: pin // Firebase mein PIN save ho gaya
+        withdrawPin: pin
       });
       
       window.toast('✅', 'Account created successfully!');
@@ -798,7 +781,6 @@
     } catch (error) { window.toast('⚠️', error.message.replace('Firebase:', '')); }
   }
 
-  // FIREBASE LOGIN
   window.processLogin = async function() {
     let email = document.getElementById('loginUsername').value.trim().toLowerCase(); 
     if(!email.includes('@')) email = email + "@nexavault.com";
@@ -820,7 +802,6 @@
     }
   }
 
-  // FIREBASE FORGOT PASSWORD
   window.resetPassword = async function() {
     let email = document.getElementById('loginUsername').value.trim().toLowerCase(); 
     if(!email || !email.includes('@')) { 
@@ -837,12 +818,10 @@
     }
   }
 
-  // FIREBASE LOGOUT (AND CLEAR FIELDS)
   window.logoutUser = async function(isAutoLogout = false) {
     if (isLoggedIn) {
         await signOut(auth);
         
-        // Security: Clear all password & email fields on logout
         document.getElementById('loginUsername').value = '';
         document.getElementById('loginPassword').value = '';
         document.getElementById('regUsername').value = '';
@@ -855,7 +834,6 @@
     }
   }
 
-  // SHOW/HIDE PASSWORD TOGGLE
   window.togglePassword = function(inputId) {
     const inputField = document.getElementById(inputId);
     if (inputField.type === "password") {
@@ -865,16 +843,83 @@
     }
   }
 
-  // FIREBASE AUTH LISTENER (Loads data on login/refresh)
+  // --- NEW: LOAD USER TRANSACTION HISTORY FUNCTION ---
+  async function loadUserHistory(currentUserObj) {
+    try {
+      const qDeposits = query(collection(db, "deposits"), where("uid", "==", currentUserObj.uid));
+      const depositSnap = await getDocs(qDeposits);
+      const deposits = depositSnap.docs.map(doc => ({ ...doc.data(), type: 'Deposit' }));
+
+      const qWithdrawals = query(collection(db, "withdrawals"), where("uid", "==", currentUserObj.uid));
+      const withdrawalSnap = await getDocs(qWithdrawals);
+      const withdrawals = withdrawalSnap.docs.map(doc => ({ ...doc.data(), type: 'Withdraw' }));
+
+      const allHistory = [...deposits, ...withdrawals];
+      allHistory.sort((a, b) => b.timestamp - a.timestamp); // Naya pehle aayega
+
+      const historyContainer = document.getElementById("history-table-body"); 
+      if(historyContainer) {
+        if(allHistory.length === 0) {
+          historyContainer.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-zinc-500">No transaction history found.</td></tr>`;
+          return;
+        }
+        historyContainer.innerHTML = "";
+        allHistory.forEach(item => {
+          let statusColor = "text-yellow-400";
+          if(item.status === 'approved') statusColor = "text-emerald-400";
+          if(item.status === 'rejected') statusColor = "text-red-400";
+
+          let dateStr = item.timestamp ? new Date(item.timestamp).toLocaleDateString() : 'N/A';
+
+          historyContainer.innerHTML += `
+            <tr class="hover:bg-white/5 transition-colors">
+              <td class="py-3 px-3 font-semibold ${item.type === 'Deposit' ? 'text-cyan-400' : 'text-purple-400'}">${item.type}</td>
+              <td class="py-3 px-3 font-mono">$${item.amount.toFixed(2)}</td>
+              <td class="py-3 px-3 uppercase text-zinc-400">${item.network || '-'}</td>
+              <td class="py-3 px-3 font-bold uppercase ${statusColor}">${item.status}</td>
+              <td class="py-3 px-3 text-zinc-500">${dateStr}</td>
+            </tr>
+          `;
+        });
+      }
+    } catch (error) {
+      console.error("Error loading history: ", error);
+    }
+  }
+
+  // --- NEW: CHECK UNREAD NOTIFICATIONS ---
+  async function checkUnreadNotifications(currentUserObj) {
+    try {
+      const q = query(
+        collection(db, "notifications"), 
+        where("uid", "==", currentUserObj.uid),
+        where("read", "==", false)
+      );
+      
+      const querySnapshot = await getDocs(q);
+      const unreadCount = querySnapshot.size;
+
+      const badge = document.getElementById("notification-badge");
+      if(badge) {
+        if (unreadCount > 0) {
+          badge.innerText = unreadCount;
+          badge.style.display = "inline-block";
+        } else {
+          badge.style.display = "none";
+        }
+      }
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       isLoggedIn = true;
       currentUserObj = user;
 
-      // Start global inactivity timer
       if(window.triggerInactivityTimer) window.triggerInactivityTimer();
 
-      // Update UI for logged in state
       const shortUser = user.email.split('@')[0];
       const btn = document.getElementById('accountBtn');
       btn.innerHTML = `🟢 ${shortUser}`;
@@ -889,7 +934,6 @@
       const mySiteLink = window.location.origin;
       document.getElementById('refLinkInput').value = mySiteLink + "/?ref=" + user.uid.substring(0,8).toUpperCase();
 
-      // Check if Admin
       if(user.email === "merajuldinrind@gmail.com") {
           document.getElementById('adminMenu').classList.remove('hidden');
           window.gp('admin');
@@ -899,11 +943,9 @@
           if (isLanding) window.gp('dashboard');
       }
 
-      // Fetch Real Global TVL
       const statsSnap = await getDoc(doc(db, "system", "stats"));
       if(statsSnap.exists()) globalTVL = statsSnap.data().globalTVL;
       
-      // Fetch Real User Data
       const userSnap = await getDoc(doc(db, "users", user.uid));
       if(userSnap.exists()) {
           const uData = userSnap.data();
@@ -917,13 +959,15 @@
       document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
       updateDynamicTierAndROI();
       
-      // Check Yield
+      // Load History & Notifications
+      loadUserHistory(user);
+      checkUnreadNotifications(user);
+
       if (userBalance >= 30) {
           startYieldCycle();
       }
 
     } else {
-      // User is signed out
       isLoggedIn = false;
       currentUserObj = null;
       userBalance = 0;
@@ -949,9 +993,6 @@
     }
   });
 
-  // ==========================================
-  // DEPOSIT LOGIC (PENDING APPROVAL SYSTEM)
-  // ==========================================
   let activeDepositNetwork = "";
   window.selectDepositNetwork = function(netName, address) {
     activeDepositNetwork = netName;
@@ -981,34 +1022,30 @@
     window.toast('⏳', 'Submitting deposit request securely...');
     
     try {
-       // Create a Pending Deposit Document
-   await addDoc(collection(db, "deposits"), {
-  uid: currentUserObj.uid,
-  email: currentUserObj.email,
-  amount: amt,
-  network: activeDepositNetwork,          // Network save
-  address: document.getElementById('depAddressDisplay').textContent,  // Address save
-  status: "pending",
-  timestamp: new Date().getTime()
-});
+       await addDoc(collection(db, "deposits"), {
+          uid: currentUserObj.uid,
+          email: currentUserObj.email,
+          amount: amt,
+          network: activeDepositNetwork, 
+          address: document.getElementById('depAddressDisplay').textContent, 
+          status: "pending",
+          timestamp: new Date().getTime()
+       });
        
        window.toast('🎉', `Deposit request of $${amt} sent! Awaiting Admin Approval.`);
        window.backToDepNetworks();
        window.gp('dashboard');
+       loadUserHistory(currentUserObj);
        
     } catch(e) { window.toast('⚠️', 'Network error. Try again.'); }
   }
 
- // ==========================================
-  // ADMIN PANEL PENDING DEPOSITS LOGIC (LIVE REAL-TIME)
-  // ==========================================
   window.loadPendingDeposits = function() {
       if (!isLoggedIn || currentUserObj.email !== "merajuldinrind@gmail.com") return;
       
       try {
           const q = query(collection(db, "deposits"), where("status", "==", "pending"));
           
-          // onSnapshot live database ko dekhta rehta hai
           onSnapshot(q, (snapshot) => {
               const listDiv = document.getElementById('adminPendingList');
               
@@ -1020,7 +1057,7 @@
               let html = '';
               snapshot.forEach(docSnap => {
                   const data = docSnap.data();
-               html += `
+                 html += `
 <div class="bg-black/60 border border-zinc-700 rounded-xl p-4 mb-2 shadow-[0_0_15px_rgba(34,211,238,0.1)]">
   <div class="flex justify-between items-start mb-3">
     <div>
@@ -1034,7 +1071,7 @@
         class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black border border-emerald-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">
         Approve
       </button>
-      <button onclick="rejectDeposit('${docSnap.id}')" 
+      <button onclick="rejectDeposit('${docSnap.id}', '${data.uid}')" 
         class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-black border border-red-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">
         Reject
       </button>
@@ -1050,31 +1087,20 @@
               });
               listDiv.innerHTML = html;
 
-              // Admin Notification Popup
               if(snapshot.docs.length > 0) {
                   window.toast('🔔', `Attention: ${snapshot.docs.length} pending deposit request(s)!`);
               }
 
-          }, (error) => {
-              console.error(error);
-              if (error.code === 'permission-denied') {
-                  window.toast('⚠️', 'Firebase Error: Rules blocked! Please update Firestore Rules.');
-              }
-          });
-      } catch(e) {
-          console.error(e);
-      }
+          }, (error) => { console.error(error); });
+      } catch(e) { console.error(e); }
   }
+
   window.approveDeposit = async function(docId, uid, amount) {
       window.toast('⏳', 'Approving deposit...');
       try {
-          // 1. Update deposit status
           await updateDoc(doc(db, "deposits", docId), { status: "approved" });
-          
-          // 2. Update user balance
           await updateDoc(doc(db, "users", uid), { balance: increment(amount) });
           
-          // 3. Update global TVL
           const statsRef = doc(db, "system", "stats");
           const statsSnap = await getDoc(statsRef);
           if(statsSnap.exists()) {
@@ -1082,33 +1108,47 @@
           } else {
               await setDoc(statsRef, { globalTVL: amount });
           }
+
+          // Add In-App Notification for User
+          await addDoc(collection(db, "notifications"), {  
+            uid: uid,  
+            title: "Deposit Approved",  
+            message: `Your deposit of $${amount} has been approved.`,  
+            type: "success",  
+            read: false,  
+            timestamp: Date.now()
+          });
           
-          window.toast('✅', 'Deposit Approved & Balance Added!');
-          
-          // Refresh UI
+          window.toast('✅', 'Deposit Approved & Notification Sent!');
           globalTVL += amount;
           document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
           window.loadPendingDeposits();
       } catch (e) {
-          console.error(e);
-          window.toast('⚠️', 'Error: ' + e.message); // Will show exact error reason on screen
-      }
-  }
-
-  window.rejectDeposit = async function(docId) {
-      window.toast('⏳', 'Rejecting deposit...');
-      try {
-          await updateDoc(doc(db, "deposits", docId), { status: "rejected" });
-          window.toast('✅', 'Deposit Rejected!');
-          window.loadPendingDeposits();
-      } catch (e) {
-          console.error(e);
           window.toast('⚠️', 'Error: ' + e.message);
       }
   }
-  // ==========================================
-  // ADMIN PANEL PENDING WITHDRAWALS LOGIC
-  // ==========================================
+
+  window.rejectDeposit = async function(docId, uid) {
+      window.toast('⏳', 'Rejecting deposit...');
+      try {
+          await updateDoc(doc(db, "deposits", docId), { status: "rejected" });
+          
+          await addDoc(collection(db, "notifications"), {  
+            uid: uid,  
+            title: "Deposit Rejected",  
+            message: `Your deposit request was rejected by admin.`,  
+            type: "error",  
+            read: false,  
+            timestamp: Date.now()
+          });
+
+          window.toast('✅', 'Deposit Rejected!');
+          window.loadPendingDeposits();
+      } catch (e) {
+          window.toast('⚠️', 'Error: ' + e.message);
+      }
+  }
+
   window.loadPendingWithdrawals = function() {
       if (!isLoggedIn || currentUserObj.email !== "merajuldinrind@gmail.com") return;
       
@@ -1128,14 +1168,14 @@
                   html += `
                   <div class="bg-black/60 border border-zinc-700 rounded-xl p-4 mb-2 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
                      <div class="flex justify-between items-center mb-2">
-                         <div>
-                            <p class="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">User: <span class="text-white normal-case tracking-normal">${data.email}</span></p>
-                            <p class="text-lg font-bold text-red-400">-$${data.amount.toFixed(2)} USDT</p>
-                         </div>
-                         <div class="flex gap-2">
-                            <button onclick="approveWithdrawal('${docSnap.id}')" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black border border-emerald-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Approve</button>
-                            <button onclick="rejectWithdrawal('${docSnap.id}', '${data.uid}', ${data.amount})" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-black border border-red-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Reject (Refund)</button>
-                         </div>
+                        <div>
+                           <p class="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">User: <span class="text-white normal-case tracking-normal">${data.email}</span></p>
+                           <p class="text-lg font-bold text-red-400">-$${data.amount.toFixed(2)} USDT</p>
+                        </div>
+                        <div class="flex gap-2">
+                           <button onclick="approveWithdrawal('${docSnap.id}', '${data.uid}', ${data.amount})" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black border border-emerald-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Approve</button>
+                           <button onclick="rejectWithdrawal('${docSnap.id}', '${data.uid}', ${data.amount})" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-black border border-red-500/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all">Reject (Refund)</button>
+                        </div>
                      </div>
                      <div class="bg-black/50 p-2 rounded-lg text-[10px] text-zinc-400 font-mono break-all mt-2 border border-zinc-800">
                          <span class="text-cyan-400 font-bold">${data.network.toUpperCase()} Address:</span><br>
@@ -1144,15 +1184,23 @@
                   </div>`;
               });
               listDiv.innerHTML = html;
-
-              if(snapshot.docs.length > 0) window.toast('🔔', `Attention: ${snapshot.docs.length} pending withdrawal(s)!`);
           });
       } catch(e) { console.error(e); }
   }
 
-  window.approveWithdrawal = async function(docId) {
+  window.approveWithdrawal = async function(docId, uid, amount) {
       window.toast('⏳', 'Approving withdrawal...');
       await updateDoc(doc(db, "withdrawals", docId), { status: "approved" });
+      
+      await addDoc(collection(db, "notifications"), {  
+        uid: uid,  
+        title: "Withdrawal Approved",  
+        message: `Your withdrawal of $${amount} has been processed successfully.`,  
+        type: "success",  
+        read: false,  
+        timestamp: Date.now()
+      });
+
       window.toast('✅', 'Withdrawal Approved!');
   }
 
@@ -1160,10 +1208,18 @@
       window.toast('⏳', 'Rejecting & Refunding to user...');
       await updateDoc(doc(db, "withdrawals", docId), { status: "rejected" });
       
-      // Refund balance back to user
       await updateDoc(doc(db, "users", uid), { balance: increment(amount) });
       const statsRef = doc(db, "system", "stats");
       await updateDoc(statsRef, { globalTVL: increment(amount) });
+
+      await addDoc(collection(db, "notifications"), {  
+        uid: uid,  
+        title: "Withdrawal Rejected",  
+        message: `Your withdrawal was rejected and $${amount} has been refunded.`,  
+        type: "error",  
+        read: false,  
+        timestamp: Date.now()
+      });
       
       window.toast('✅', 'Rejected & Refunded successfully!');
   }
@@ -1179,7 +1235,6 @@
     pendingWithdrawAmt = amt;
     document.getElementById('withdrawStep1').classList.add('hidden');
     document.getElementById('withdrawStepOTP').classList.remove('hidden');
-    // OTP message hata diya gaya
   }
 
   window.verifyWithdrawOTP = async function() {
@@ -1188,8 +1243,6 @@
       
       try {
           window.toast('⏳', 'Verifying Security PIN...');
-          
-          // Firebase se user ka asli PIN fetch karein
           const userSnap = await getDoc(doc(db, "users", currentUserObj.uid));
           const actualPin = userSnap.data().withdrawPin;
           
@@ -1224,10 +1277,12 @@
           userBalance -= pendingWithdrawAmt;
           globalTVL -= pendingWithdrawAmt;
           updateDynamicTierAndROI();
+          loadUserHistory(currentUserObj);
           
           window.toast('✅', 'Withdrawal Request Sent to Admin for Approval!');
       } catch(e) { window.toast('⚠️', 'Database error: ' + e.message); }
   }
+
   window.cancelWithdraw = function() {
     document.getElementById('withdrawStepOTP').classList.add('hidden');
     document.getElementById('withdrawStep1').classList.remove('hidden');
@@ -1241,9 +1296,7 @@
     document.getElementById('withdrawOtpInput').value = '';
     window.gp('dashboard');
   }
-// ==========================================
-  // RESET PIN LOGIC
-  // ==========================================
+
   window.showResetPin = function() {
     document.getElementById('withdrawStepOTP').classList.add('hidden');
     document.getElementById('withdrawStepResetPin').classList.remove('hidden');
@@ -1266,18 +1319,14 @@
     window.toast('⏳', 'Verifying password...');
     try {
         await signInWithEmailAndPassword(auth, currentUserObj.email, pass);
-        
         await updateDoc(doc(db, "users", currentUserObj.uid), { withdrawPin: newPin });
-        
         window.toast('✅', 'PIN Reset Successfully! You can now withdraw.');
         window.cancelResetPin(); 
     } catch(e) {
         window.toast('❌', 'Incorrect Password!');
     }
   }
-  // ==========================================
-  // PROFIT LOGIC (ADMIN & USER)
-  // ==========================================
+
   window.distributeProfit = async function() {
       const declaredProfit = parseFloat(document.getElementById('adminProfitInput').value);
       if(isNaN(declaredProfit) || declaredProfit <= 0) { window.toast('⚠️', 'Invalid profit amount.'); return; }
@@ -1285,7 +1334,7 @@
       window.toast('⏳', 'Distributing profit to all active users...');
       try {
           let currentTVL = globalTVL;
-          if(currentTVL === 0) currentTVL = 1; // avoid error
+          if(currentTVL === 0) currentTVL = 1;
           
           const usersSnap = await getDocs(collection(db, "users"));
           usersSnap.forEach(async (userDoc) => {
@@ -1355,10 +1404,10 @@
           window.toast('⏳', 'Claiming to database...');
           
           await updateDoc(doc(db, "users", currentUserObj.uid), {
-             balance: increment(currentPendingYield),
-             totalYieldEarned: increment(currentPendingYield),
-             pendingYield: 0,
-             hasClaimedToday: true
+              balance: increment(currentPendingYield),
+              totalYieldEarned: increment(currentPendingYield),
+              pendingYield: 0,
+              hasClaimedToday: true
           });
           
           totalYieldEarned += currentPendingYield;
@@ -1392,25 +1441,21 @@
       }
   }
 
-  // PERFECTED INACTIVITY LOGOUT TIMER (15 Minutes)
   const inactivityTime = function () {
       let time; 
       const resetTimer = () => {
           clearTimeout(time); 
           if (isLoggedIn) { 
-              // 15 mins = 15 * 60 * 1000 ms
               time = setTimeout(() => window.logoutUser(true), 15 * 60 * 1000); 
           } 
       };
       
-      // Tracking all possible user activities
       document.addEventListener('mousemove', resetTimer); 
       document.addEventListener('keypress', resetTimer); 
       document.addEventListener('click', resetTimer); 
       document.addEventListener('scroll', resetTimer);
       document.addEventListener('touchstart', resetTimer);
       
-      // Save globally so we can trigger it immediately on login
       window.triggerInactivityTimer = resetTimer;
   };
   inactivityTime();
