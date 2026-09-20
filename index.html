@@ -1359,7 +1359,7 @@
   window.requestWithdraw = function() {
     // ANTI FRAUD WITHDRAW RULE: Check if user has made at least 1 deposit
     if (!currentUserData || !currentUserData.totalDeposited || currentUserData.totalDeposited === 0) {
-        window.toast('⚠️', 'Anti-Fraud: You must make at least one deposit to unlock withdrawals.');
+        window.toast('⚠️', 'Alert: You must make at least one deposit to unlock withdrawals.');
         return;
     }
 
