@@ -95,7 +95,7 @@
       <div class="flex items-center gap-4">
         <!-- Notification Bell -->
         <div class="relative">
-          <button onclick="window.toast('🔔', 'No new system notifications.')" class="p-2 rounded-xl bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors relative flex items-center justify-center">
+          <button onclick="showNotificationsModal()" class="p-2 rounded-xl bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors relative flex items-center justify-center">
             🔔
             <span id="notification-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
           </button>
@@ -198,14 +198,18 @@
                 </h3>
                 <p class="text-sm text-zinc-400 mb-6">Share your unique link. You receive rewards instantly based on friend's fund tier.</p>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
                   <div class="md:col-span-2 flex items-center bg-black/40 border border-zinc-700 rounded-xl p-1.5 overflow-hidden">
-                    <input type="text" readonly id="refLinkInput" value="https://nexavault.io/register?ref=..." class="w-full bg-transparent text-xs font-mono text-zinc-300 px-3 focus:outline-none">
+                    <input type="text" readonly id="refLinkInput" value="..." class="w-full bg-transparent text-xs font-mono text-zinc-300 px-3 focus:outline-none">
                     <button onclick="copyRefLink()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs px-4 py-2 rounded-lg transition-all whitespace-nowrap">Copy Link</button>
                   </div>
-                  <div class="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800 text-center md:text-right">
-                    <p class="text-xs text-zinc-500">Total Referral Earnings</p>
-                    <h4 class="text-xl font-bold text-emerald-400">$0.00 USDT</h4>
+                  <div class="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800 text-center">
+                    <p class="text-xs text-zinc-500">Total Invites</p>
+                    <h4 class="text-xl font-bold text-cyan-400" id="displayRefCount">0</h4>
+                  </div>
+                  <div class="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800 text-center">
+                    <p class="text-xs text-zinc-500">Ref. Earnings</p>
+                    <h4 class="text-xl font-bold text-emerald-400">$0.00</h4>
                   </div>
                 </div>
               </div>
@@ -290,7 +294,7 @@
                     <label class="block text-zinc-400 text-sm mb-2">2. After sending from Binance, enter the exact amount sent:</label>
                     <input type="number" id="verifyDepAmount" placeholder="e.g. 150" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 font-mono mb-4">
                     
-                    <button onclick="verifyDepositAction()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3.5 rounded-xl transition-all text-sm shadow-[0_0_20px_rgba(34,211,238,0.2)]">I Have Made the Transfer (Verify)</button>
+                    <button id="depBtn" onclick="verifyDepositAction()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3.5 rounded-xl transition-all text-sm shadow-[0_0_20px_rgba(34,211,238,0.2)]">I Have Made the Transfer (Verify)</button>
                   </div>
                 </div>
               </div>
@@ -344,7 +348,7 @@
                       <button onclick="showResetPin()" class="text-[10px] text-cyan-500 hover:text-cyan-400 transition-colors">Forgot PIN?</button>
                     </div>
                   </div>
-                  <button onclick="verifyWithdrawOTP()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3.5 rounded-xl transition-all text-sm">Verify PIN & Request Transfer</button>
+                  <button id="withOtpBtn" onclick="verifyWithdrawOTP()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3.5 rounded-xl transition-all text-sm">Verify PIN & Request Transfer</button>
                   <button onclick="cancelWithdraw()" class="w-full bg-transparent text-zinc-500 hover:text-white text-xs py-2">Cancel</button>
                 </div>
 
@@ -389,11 +393,8 @@
             <!-- PROFIT / CLAIM YIELD VIEW -->
             <div id="pv-profit" class="page-view hidden">
               <div class="glass-card p-8 rounded-3xl max-w-lg mx-auto mt-10 text-center relative overflow-hidden">
-                 
                  <div id="cycleStatusBadge" class="inline-block px-3 py-1 bg-zinc-800 text-xs font-bold rounded text-white mb-4">No Active Cycle</div>
-                 
                  <h2 class="text-2xl font-semibold mb-2">Daily Yield Reservation</h2>
-                 
                  <p class="text-5xl font-bold text-emerald-400 my-6" id="availableYieldDisplay">0.00 <span class="text-2xl">USDT</span></p>
                  
                  <div class="bg-black/40 border border-zinc-700 rounded-xl p-4 mb-6">
@@ -403,15 +404,14 @@
                  </div>
 
                  <button id="actionBtn" onclick="handleYieldAction()" class="w-full bg-zinc-800 text-zinc-500 cursor-not-allowed font-bold py-4 rounded-xl transition-all text-sm shadow-lg mb-4" disabled>Deposit Assets to Start</button>
-
               </div>
             </div>
             
             <!-- ADMIN PANEL VIEW (SECRET) -->
             <div id="pv-admin" class="page-view hidden">
-              <div class="glass-card p-8 rounded-3xl max-w-xl mx-auto mt-10 border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+              <div class="glass-card p-8 rounded-3xl max-w-2xl mx-auto mt-10 border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
                  <h2 class="text-2xl font-bold mb-2 text-purple-400">Admin Control Panel</h2>
-                 <p class="text-xs text-zinc-400 mb-8">Manage deposits and distribute manual profits.</p>
+                 <p class="text-xs text-zinc-400 mb-8">Manage deposits, withdrawals and track users.</p>
                  
                  <div class="grid grid-cols-2 gap-4 mb-8">
                     <div class="bg-black/50 rounded-xl p-4 border border-zinc-700">
@@ -420,7 +420,7 @@
                     </div>
                     <div class="bg-black/50 rounded-xl p-4 border border-zinc-700">
                        <p class="text-xs text-zinc-500">Total Users in Pool</p>
-                       <p class="text-xl font-bold text-white">Active</p>
+                       <p class="text-xl font-bold text-white" id="adminTotalUsers">Loading...</p>
                     </div>
                  </div>
 
@@ -430,6 +430,14 @@
                     <input type="number" id="adminProfitInput" placeholder="e.g. 100" class="w-full bg-black/80 border border-purple-500/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-400 font-mono mb-4 text-lg">
                     
                     <button onclick="distributeProfit()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg">Distribute to All Users</button>
+                 </div>
+
+                 <!-- USERS DIRECTORY SECTION -->
+                 <div class="bg-black/50 rounded-xl p-6 border border-zinc-700 mt-4">
+                    <h3 class="text-lg font-bold text-white mb-4">All Registered Users</h3>
+                    <div id="adminUsersList" class="space-y-2 max-h-60 overflow-y-auto pr-2">
+                       <p class="text-xs text-zinc-500">Loading users...</p>
+                    </div>
                  </div>
 
                  <!-- PENDING DEPOSITS SECTION -->
@@ -472,7 +480,7 @@
 </div>
 
 <!-- ABOUT PLATFORM MODAL -->
-<div id="aboutModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+<div id="aboutModal" onclick="if(event.target === this) closeAboutModal()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
   <div class="glass-card w-full max-w-lg rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.1)] transform scale-95 transition-transform duration-300 p-8 relative">
     <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white p-2 rounded-full bg-white/5">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -492,7 +500,7 @@
 </div>
 
 <!-- AUTHENTICATION MODAL -->
-<div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+<div id="authModal" onclick="if(event.target === this) closeAuthModal()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
   <div class="glass-card w-full max-w-md rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.1)] transform scale-95 transition-transform duration-300" id="authModalContent">
     
     <div class="flex border-b border-zinc-800/60">
@@ -518,7 +526,7 @@
              <button onclick="togglePassword('loginPassword')" type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-lg text-zinc-400 hover:text-cyan-400 transition-colors">👁️</button>
           </div>
         </div>
-        <button onclick="processLogin()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg mt-4">Sign In to Dashboard</button>
+        <button id="loginBtn" onclick="processLogin()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg mt-4">Sign In to Dashboard</button>
       </div>
     </div>
 
@@ -548,13 +556,28 @@
           <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Create 6-Digit Withdrawal PIN</label>
           <input type="text" id="regPin" placeholder="e.g. 123456" maxlength="6" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-cyan-500 font-mono tracking-widest transition-colors text-sm text-center">
         </div>
-        <button onclick="processRegister()" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg mt-4">Complete Registration</button>
+        <button id="regBtn" onclick="processRegister()" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg mt-4">Complete Registration</button>
       </div>
     </div>
 
     <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white p-2 rounded-full bg-white/5">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS MODAL -->
+<div id="notificationsModal" onclick="if(event.target === this) closeNotificationsModal()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[150] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+  <div class="glass-card w-full max-w-md rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(34,211,238,0.1)] transform scale-95 transition-transform duration-300 p-6 relative">
+    <button onclick="closeNotificationsModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white p-2 rounded-full bg-white/5">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+      <span class="text-cyan-400">🔔</span> Your Notifications
+    </h3>
+    <div id="notificationsList" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+      <p class="text-xs text-zinc-500 text-center py-4">Loading...</p>
+    </div>
   </div>
 </div>
 
@@ -580,6 +603,7 @@
 
   let isLoggedIn = false;
   let currentUserObj = null;
+  let currentUserData = null; // New global variable to track user document data
   let userBalance = 0;
   let totalYieldEarned = 0;
   let numericDailyROI = 0;
@@ -607,7 +631,7 @@
   }
 
   window.copyRefLink = function() {
-    const dummyUrl = isLoggedIn ? document.getElementById('refLinkInput').value : "https://nexavault.io";
+    const dummyUrl = document.getElementById('refLinkInput').value;
     navigator.clipboard.writeText(dummyUrl);
     window.toast('🚀', 'Link copied to clipboard! Share it anywhere.');
   }
@@ -646,6 +670,7 @@
         document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
         if (window.loadPendingDeposits) window.loadPendingDeposits();
         if (window.loadPendingWithdrawals) window.loadPendingWithdrawals();
+        if (window.loadAllUsers) window.loadAllUsers();
     }
     if (page === 'withdraw') {
         document.getElementById('maxWithdrawDisplay').textContent = `$${userBalance.toFixed(2)}`;
@@ -747,6 +772,10 @@
     }
   }
 
+  // Check for Referral Link in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const refParam = urlParams.get('ref');
+
   window.processRegister = async function() {
     let email = document.getElementById('regUsername').value.trim().toLowerCase();
     if(!email.includes('@')) email = email + "@nexavault.com"; 
@@ -760,25 +789,52 @@
     if(p1.length < 6) { window.toast('⚠️', 'Password must be at least 6 characters.'); return; }
     if(pin.length !== 6 || isNaN(pin)) { window.toast('⚠️', 'Withdrawal PIN must be exactly 6 numbers.'); return; }
     
+    const btn = document.getElementById('regBtn');
+    btn.disabled = true;
+    btn.textContent = "Creating Account...";
     window.toast('⏳', 'Creating account securely...');
+    
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, p1);
       const uid = userCredential.user.uid;
+      const myRefCode = uid.substring(0,8).toUpperCase();
       
+      let parentUid = null;
+      // Agar kisi ne invite link se join kiya hai toh us user ka data fetch kar ke referral count barhayen
+      if(refParam) {
+          const q = query(collection(db, "users"), where("myRefCode", "==", refParam));
+          const snap = await getDocs(q);
+          if(!snap.empty) {
+              parentUid = snap.docs[0].id;
+              await updateDoc(doc(db, "users", parentUid), {
+                  referralCount: increment(1)
+              });
+          }
+      }
+
       await setDoc(doc(db, "users", uid), {
         email: email,
         balance: 0,
         totalYieldEarned: 0,
         pendingYield: 0,
         hasClaimedToday: false,
-        withdrawPin: pin
+        withdrawPin: pin,
+        myRefCode: myRefCode,
+        referredBy: parentUid,
+        referralCount: 0,
+        totalDeposited: 0 // Withdraw karne ke liye yeh 0 se bara hona zaroori hai
       });
       
       window.toast('✅', 'Account created successfully!');
       window.closeAuthModal();
       setTimeout(() => { window.gp('dashboard'); }, 400);
 
-    } catch (error) { window.toast('⚠️', error.message.replace('Firebase:', '')); }
+    } catch (error) { 
+        window.toast('⚠️', error.message.replace('Firebase:', '')); 
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Complete Registration";
+    }
   }
 
   window.processLogin = async function() {
@@ -786,19 +842,23 @@
     if(!email.includes('@')) email = email + "@nexavault.com";
 
     const pass = document.getElementById('loginPassword').value;
-    
     if(!email || !pass) { window.toast('⚠️', 'Please enter email and password.'); return; }
     
+    const btn = document.getElementById('loginBtn');
+    btn.disabled = true;
+    btn.textContent = "Authenticating...";
     window.toast('⏳', 'Authenticating...');
+    
     try {
       await signInWithEmailAndPassword(auth, email, pass);
       window.closeAuthModal();
       window.toast('👋', 'Welcome back to NexaVault!');
-      
       setTimeout(() => { window.gp('dashboard'); }, 400);
-
     } catch (error) {
       window.toast('❌', 'Invalid credentials or wrong password.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Sign In to Dashboard";
     }
   }
 
@@ -808,7 +868,6 @@
         window.toast('⚠️', 'Type your valid email in the Email box first!'); 
         return; 
     }
-    
     window.toast('⏳', 'Sending reset link...');
     try {
       await sendPasswordResetEmail(auth, email);
@@ -843,7 +902,6 @@
     }
   }
 
-  // --- NEW: LOAD USER TRANSACTION HISTORY FUNCTION ---
   async function loadUserHistory(currentUserObj) {
     try {
       const qDeposits = query(collection(db, "deposits"), where("uid", "==", currentUserObj.uid));
@@ -855,7 +913,7 @@
       const withdrawals = withdrawalSnap.docs.map(doc => ({ ...doc.data(), type: 'Withdraw' }));
 
       const allHistory = [...deposits, ...withdrawals];
-      allHistory.sort((a, b) => b.timestamp - a.timestamp); // Naya pehle aayega
+      allHistory.sort((a, b) => b.timestamp - a.timestamp);
 
       const historyContainer = document.getElementById("history-table-body"); 
       if(historyContainer) {
@@ -868,7 +926,6 @@
           let statusColor = "text-yellow-400";
           if(item.status === 'approved') statusColor = "text-emerald-400";
           if(item.status === 'rejected') statusColor = "text-red-400";
-
           let dateStr = item.timestamp ? new Date(item.timestamp).toLocaleDateString() : 'N/A';
 
           historyContainer.innerHTML += `
@@ -887,39 +944,113 @@
     }
   }
 
- // --- NEW: CHECK UNREAD NOTIFICATIONS (FIXED) ---
   async function checkUnreadNotifications(currentUserObj) {
     try {
-      // Firebase index error se bachne ke liye sirf UID se fetch karenge
-      const q = query(
-        collection(db, "notifications"), 
-        where("uid", "==", currentUserObj.uid)
-      );
-      
+      const q = query(collection(db, "notifications"), where("uid", "==", currentUserObj.uid));
       const querySnapshot = await getDocs(q);
       
-      // JavaScript mein unread count calculate karenge
       let unreadCount = 0;
       querySnapshot.forEach((doc) => {
-         if(doc.data().read === false) {
-             unreadCount++;
-         }
+         if(doc.data().read === false) unreadCount++;
       });
 
       const badge = document.getElementById("notification-badge");
       if(badge) {
         if (unreadCount > 0) {
           badge.innerText = unreadCount;
-          // .hidden class hatana zaroori hai kyunke usme !important laga hai
           badge.classList.remove("hidden"); 
         } else {
           badge.classList.add("hidden");
         }
       }
+    } catch(e) { console.error("Notification Error: ", e); }
+  }
+
+  window.showNotificationsModal = async function() {
+    document.getElementById('notificationsModal').classList.remove('hidden');
+    setTimeout(() => {
+      document.getElementById('notificationsModal').classList.remove('opacity-0');
+      document.getElementById('notificationsModal').children[0].classList.remove('scale-95');
+    }, 10);
+
+    const listDiv = document.getElementById('notificationsList');
+    listDiv.innerHTML = '<p class="text-xs text-zinc-500 text-center py-4">Loading...</p>';
+
+    if(!isLoggedIn || !currentUserObj) return;
+
+    try {
+      const q = query(collection(db, "notifications"), where("uid", "==", currentUserObj.uid));
+      const querySnapshot = await getDocs(q);
+      
+      let notifs = [];
+      querySnapshot.forEach(doc => { notifs.push({ id: doc.id, ...doc.data() }); });
+      notifs.sort((a, b) => b.timestamp - a.timestamp);
+
+      if(notifs.length === 0) {
+          listDiv.innerHTML = '<p class="text-xs text-zinc-500 text-center py-4">No notifications yet.</p>';
+          return;
+      }
+
+      let html = '';
+      notifs.forEach(n => {
+          let color = n.type === 'success' ? 'text-emerald-400' : 'text-red-400';
+          let bg = n.read ? 'bg-black/30' : 'bg-zinc-800/60 border border-zinc-700'; 
+          let dateStr = n.timestamp ? new Date(n.timestamp).toLocaleString() : 'Just now';
+          
+          html += `
+          <div class="${bg} rounded-xl p-4 transition-colors mb-2">
+            <h4 class="text-sm font-bold ${color} mb-1">${n.title}</h4>
+            <p class="text-xs text-zinc-300 mb-2">${n.message}</p>
+            <p class="text-[9px] text-zinc-500">${dateStr}</p>
+          </div>
+          `;
+          if(n.read === false) updateDoc(doc(db, "notifications", n.id), { read: true });
+      });
+      
+      listDiv.innerHTML = html;
+      const badge = document.getElementById("notification-badge");
+      if(badge) badge.classList.add("hidden");
+
     } catch(e) {
-      console.error("Notification Error: ", e);
+      listDiv.innerHTML = '<p class="text-xs text-red-500 text-center py-4">Error loading notifications.</p>';
     }
   }
+
+  window.closeNotificationsModal = function() {
+    document.getElementById('notificationsModal').classList.add('opacity-0');
+    document.getElementById('notificationsModal').children[0].classList.add('scale-95');
+    setTimeout(() => { document.getElementById('notificationsModal').classList.add('hidden'); }, 300);
+  }
+
+  // Load Admin All Users Data
+  window.loadAllUsers = async function() {
+      if (!isLoggedIn || currentUserObj.email !== "merajuldinrind@gmail.com") return;
+      try {
+          const usersSnap = await getDocs(collection(db, "users"));
+          let html = '';
+          let activeCount = 0;
+          
+          usersSnap.forEach(d => {
+              const u = d.data();
+              if(u.balance > 0) activeCount++;
+              html += `<div class="bg-black/40 p-3 rounded-xl border border-zinc-800 flex justify-between items-center mb-2">
+                  <div>
+                      <p class="text-xs text-white">${u.email}</p>
+                      <p class="text-[10px] text-zinc-500">Balance: $${(u.balance||0).toFixed(2)}</p>
+                  </div>
+                  <div class="text-right">
+                      <p class="text-xs text-cyan-400 font-bold">${u.referralCount || 0} Invites</p>
+                  </div>
+              </div>`;
+          });
+          
+          document.getElementById('adminTotalUsers').textContent = usersSnap.size + " (" + activeCount + " Active)";
+          document.getElementById('adminUsersList').innerHTML = html;
+      } catch (e) {
+          console.error(e);
+      }
+  }
+
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       isLoggedIn = true;
@@ -938,9 +1069,6 @@
       document.getElementById('protectedMenu').classList.remove('hidden');
       document.getElementById('logoutBtn').classList.remove('hidden');
       
-      const mySiteLink = window.location.origin;
-      document.getElementById('refLinkInput').value = mySiteLink + "/?ref=" + user.uid.substring(0,8).toUpperCase();
-
       if(user.email === "merajuldinrind@gmail.com") {
           document.getElementById('adminMenu').classList.remove('hidden');
           window.gp('admin');
@@ -956,17 +1084,22 @@
       const userSnap = await getDoc(doc(db, "users", user.uid));
       if(userSnap.exists()) {
           const uData = userSnap.data();
+          currentUserData = uData; // Save globally
           userBalance = uData.balance || 0;
           totalYieldEarned = uData.totalYieldEarned || 0;
           currentPendingYield = uData.pendingYield || 0;
           hasClaimedToday = uData.hasClaimedToday || false;
+          
+          // Set Referral Code and Count on UI
+          const mySiteLink = window.location.origin;
+          document.getElementById('refLinkInput').value = mySiteLink + "/?ref=" + (uData.myRefCode || user.uid.substring(0,8).toUpperCase());
+          document.getElementById('displayRefCount').textContent = (uData.referralCount || 0);
       }
       
       document.getElementById('vault-cards-container').innerHTML = getVaultHTML(false);
       document.getElementById('dashboard-vaults-container').innerHTML = getVaultHTML(true);
       updateDynamicTierAndROI();
       
-      // Load History & Notifications
       loadUserHistory(user);
       checkUnreadNotifications(user);
 
@@ -977,6 +1110,7 @@
     } else {
       isLoggedIn = false;
       currentUserObj = null;
+      currentUserData = null;
       userBalance = 0;
       totalYieldEarned = 0;
       currentPendingYield = 0;
@@ -1026,6 +1160,8 @@
     const amt = parseFloat(document.getElementById('verifyDepAmount').value);
     if(isNaN(amt) || amt <= 0) { window.toast('⚠️', 'Please enter a valid amount.'); return; }
     
+    const btn = document.getElementById('depBtn');
+    btn.disabled = true; btn.textContent = "Submitting...";
     window.toast('⏳', 'Submitting deposit request securely...');
     
     try {
@@ -1044,23 +1180,23 @@
        window.gp('dashboard');
        loadUserHistory(currentUserObj);
        
-    } catch(e) { window.toast('⚠️', 'Network error. Try again.'); }
+    } catch(e) { 
+        window.toast('⚠️', 'Network error. Try again.'); 
+    } finally {
+        btn.disabled = false; btn.textContent = "I Have Made the Transfer (Verify)";
+    }
   }
 
   window.loadPendingDeposits = function() {
       if (!isLoggedIn || currentUserObj.email !== "merajuldinrind@gmail.com") return;
-      
       try {
           const q = query(collection(db, "deposits"), where("status", "==", "pending"));
-          
           onSnapshot(q, (snapshot) => {
               const listDiv = document.getElementById('adminPendingList');
-              
               if (snapshot.empty) {
                   listDiv.innerHTML = '<p class="text-xs text-zinc-500">No pending deposits at the moment.</p>';
                   return;
               }
-              
               let html = '';
               snapshot.forEach(docSnap => {
                   const data = docSnap.data();
@@ -1084,7 +1220,6 @@
       </button>
     </div>
   </div>
-
   <div class="bg-black/50 p-3 rounded-lg text-[11px] text-zinc-400 space-y-1 border border-zinc-800">
     <div><span class="text-cyan-400 font-bold">Network:</span> ${data.network || 'N/A'}</div>
     <div class="break-all"><span class="text-cyan-400 font-bold">Address:</span> ${data.address || 'N/A'}</div>
@@ -1093,11 +1228,7 @@
 </div>`;
               });
               listDiv.innerHTML = html;
-
-              if(snapshot.docs.length > 0) {
-                  window.toast('🔔', `Attention: ${snapshot.docs.length} pending deposit request(s)!`);
-              }
-
+              if(snapshot.docs.length > 0) window.toast('🔔', `Attention: ${snapshot.docs.length} pending deposit request(s)!`);
           }, (error) => { console.error(error); });
       } catch(e) { console.error(e); }
   }
@@ -1106,7 +1237,12 @@
       window.toast('⏳', 'Approving deposit...');
       try {
           await updateDoc(doc(db, "deposits", docId), { status: "approved" });
-          await updateDoc(doc(db, "users", uid), { balance: increment(amount) });
+          
+          // User ka balance aur total deposited amount dono barhayein (To unlock withdrawal)
+          await updateDoc(doc(db, "users", uid), { 
+              balance: increment(amount),
+              totalDeposited: increment(amount) 
+          });
           
           const statsRef = doc(db, "system", "stats");
           const statsSnap = await getDoc(statsRef);
@@ -1116,7 +1252,6 @@
               await setDoc(statsRef, { globalTVL: amount });
           }
 
-          // Add In-App Notification for User
           await addDoc(collection(db, "notifications"), {  
             uid: uid,  
             title: "Deposit Approved",  
@@ -1126,7 +1261,7 @@
             timestamp: Date.now()
           });
           
-          window.toast('✅', 'Deposit Approved & Notification Sent!');
+          window.toast('✅', 'Deposit Approved!');
           globalTVL += amount;
           document.getElementById('adminGlobalTVL').textContent = `$${globalTVL.toFixed(2)}`;
           window.loadPendingDeposits();
@@ -1139,7 +1274,6 @@
       window.toast('⏳', 'Rejecting deposit...');
       try {
           await updateDoc(doc(db, "deposits", docId), { status: "rejected" });
-          
           await addDoc(collection(db, "notifications"), {  
             uid: uid,  
             title: "Deposit Rejected",  
@@ -1148,27 +1282,21 @@
             read: false,  
             timestamp: Date.now()
           });
-
           window.toast('✅', 'Deposit Rejected!');
           window.loadPendingDeposits();
-      } catch (e) {
-          window.toast('⚠️', 'Error: ' + e.message);
-      }
+      } catch (e) { window.toast('⚠️', 'Error: ' + e.message); }
   }
 
   window.loadPendingWithdrawals = function() {
       if (!isLoggedIn || currentUserObj.email !== "merajuldinrind@gmail.com") return;
-      
       try {
           const q = query(collection(db, "withdrawals"), where("status", "==", "pending"));
-          
           onSnapshot(q, (snapshot) => {
               const listDiv = document.getElementById('adminWithdrawList');
               if (snapshot.empty) {
                   listDiv.innerHTML = '<p class="text-xs text-zinc-500">No pending withdrawals at the moment.</p>';
                   return;
               }
-              
               let html = '';
               snapshot.forEach(docSnap => {
                   const data = docSnap.data();
@@ -1198,7 +1326,6 @@
   window.approveWithdrawal = async function(docId, uid, amount) {
       window.toast('⏳', 'Approving withdrawal...');
       await updateDoc(doc(db, "withdrawals", docId), { status: "approved" });
-      
       await addDoc(collection(db, "notifications"), {  
         uid: uid,  
         title: "Withdrawal Approved",  
@@ -1207,14 +1334,12 @@
         read: false,  
         timestamp: Date.now()
       });
-
       window.toast('✅', 'Withdrawal Approved!');
   }
 
   window.rejectWithdrawal = async function(docId, uid, amount) {
-      window.toast('⏳', 'Rejecting & Refunding to user...');
+      window.toast('⏳', 'Rejecting & Refunding...');
       await updateDoc(doc(db, "withdrawals", docId), { status: "rejected" });
-      
       await updateDoc(doc(db, "users", uid), { balance: increment(amount) });
       const statsRef = doc(db, "system", "stats");
       await updateDoc(statsRef, { globalTVL: increment(amount) });
@@ -1227,12 +1352,17 @@
         read: false,  
         timestamp: Date.now()
       });
-      
       window.toast('✅', 'Rejected & Refunded successfully!');
   }
 
   let pendingWithdrawAmt = 0;
   window.requestWithdraw = function() {
+    // ANTI FRAUD WITHDRAW RULE: Check if user has made at least 1 deposit
+    if (!currentUserData || !currentUserData.totalDeposited || currentUserData.totalDeposited === 0) {
+        window.toast('⚠️', 'Anti-Fraud: You must make at least one deposit to unlock withdrawals.');
+        return;
+    }
+
     const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
     const addr = document.getElementById('withdrawWalletAddress').value.trim();
     if (!addr) { window.toast('⚠️', 'Please paste your receiving wallet address.'); return; }
@@ -1248,6 +1378,9 @@
       const inputPin = document.getElementById('withdrawOtpInput').value.trim();
       if (inputPin.length !== 6) { window.toast('⚠️', 'Please enter your 6-digit PIN.'); return; }
       
+      const btn = document.getElementById('withOtpBtn');
+      btn.disabled = true; btn.textContent = "Verifying...";
+
       try {
           window.toast('⏳', 'Verifying Security PIN...');
           const userSnap = await getDoc(doc(db, "users", currentUserObj.uid));
@@ -1255,6 +1388,7 @@
           
           if (inputPin !== actualPin) {
              window.toast('❌', 'Incorrect Security PIN!');
+             btn.disabled = false; btn.textContent = "Verify PIN & Request Transfer";
              return;
           }
 
@@ -1286,8 +1420,12 @@
           updateDynamicTierAndROI();
           loadUserHistory(currentUserObj);
           
-          window.toast('✅', 'Withdrawal Request Sent to Admin for Approval!');
-      } catch(e) { window.toast('⚠️', 'Database error: ' + e.message); }
+          window.toast('✅', 'Withdrawal Request Sent to Admin!');
+      } catch(e) { 
+          window.toast('⚠️', 'Database error: ' + e.message); 
+      } finally {
+          btn.disabled = false; btn.textContent = "Verify PIN & Request Transfer";
+      }
   }
 
   window.cancelWithdraw = function() {
@@ -1327,7 +1465,7 @@
     try {
         await signInWithEmailAndPassword(auth, currentUserObj.email, pass);
         await updateDoc(doc(db, "users", currentUserObj.uid), { withdrawPin: newPin });
-        window.toast('✅', 'PIN Reset Successfully! You can now withdraw.');
+        window.toast('✅', 'PIN Reset Successfully!');
         window.cancelResetPin(); 
     } catch(e) {
         window.toast('❌', 'Incorrect Password!');
@@ -1340,8 +1478,7 @@
       
       window.toast('⏳', 'Distributing profit to all active users...');
       try {
-          let currentTVL = globalTVL;
-          if(currentTVL === 0) currentTVL = 1;
+          let currentTVL = Math.max(1, globalTVL);
           
           const usersSnap = await getDocs(collection(db, "users"));
           usersSnap.forEach(async (userDoc) => {
@@ -1370,6 +1507,8 @@
   function startYieldCycle() {
     cycleActive = true;
     cycleEndTime = getLocalMidnight();
+    
+    if(currentPendingYield < 0) currentPendingYield = 0;
 
     document.getElementById('cycleStatusBadge').className = "inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded mb-4 border border-emerald-500/30";
     document.getElementById('cycleStatusBadge').textContent = "🟢 Active Daily Cycle";
@@ -1409,7 +1548,6 @@
     if(cycleActive && !hasClaimedToday && currentPendingYield > 0) {
       try {
           window.toast('⏳', 'Claiming to database...');
-          
           await updateDoc(doc(db, "users", currentUserObj.uid), {
               balance: increment(currentPendingYield),
               totalYieldEarned: increment(currentPendingYield),
@@ -1456,13 +1594,10 @@
               time = setTimeout(() => window.logoutUser(true), 15 * 60 * 1000); 
           } 
       };
-      
-      document.addEventListener('mousemove', resetTimer); 
+      document.addEventListener('mousedown', resetTimer); 
       document.addEventListener('keypress', resetTimer); 
-      document.addEventListener('click', resetTimer); 
       document.addEventListener('scroll', resetTimer);
       document.addEventListener('touchstart', resetTimer);
-      
       window.triggerInactivityTimer = resetTimer;
   };
   inactivityTime();
