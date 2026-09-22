@@ -15,6 +15,19 @@
   .vault-card:hover { transform: translateY(-4px); }
   .hidden { display: none !important; }
   .input-field { w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 font-mono transition-colors }
+  
+  /* Modern UI Animations */
+  @keyframes floatOrb {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.6; }
+  }
+  .animate-orb { animation: floatOrb 6s ease-in-out infinite; }
+  
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; }
 </style>
 </head>
 <body class="text-white flex flex-col min-h-screen">
@@ -113,8 +126,8 @@
             
             <!-- 1. LANDING PAGE VIEW -->
             <div id="pv-landing" class="page-view">
-              <div class="glass-card rounded-3xl p-6 md:p-16 mb-12 text-center relative overflow-hidden">
-                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-cyan-500/10 blur-[100px] rounded-full z-0 pointer-events-none"></div>
+              <div class="glass-card rounded-3xl p-6 md:p-16 mb-8 text-center relative overflow-hidden">
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-cyan-500/10 blur-[100px] rounded-full z-0 pointer-events-none animate-orb"></div>
                 <div class="relative z-10">
                   <div class="inline-flex items-center gap-2 text-xs font-medium text-cyan-400 bg-cyan-400/10 px-3 py-1.5 rounded-full border border-cyan-400/20 mb-6">
                     🛡️ Global Crypto Yield Generation
@@ -125,8 +138,19 @@
                   <div class="flex justify-center gap-4">
                     <button onclick="showAuthModal()" class="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-bold py-3.5 px-8 md:px-10 rounded-xl hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] transition-all text-base md:text-lg">Create Free Account</button>
                   </div>
+
+                  <!-- Trust Badges (Improvement 1) -->
+                  <div class="mt-8">
+                    <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-semibold mb-3">Secured & Supported Networks</p>
+                    <div class="flex justify-center gap-4 sm:gap-8 opacity-50 grayscale">
+                      <span class="font-bold text-zinc-300 tracking-wider">BINANCE</span>
+                      <span class="font-bold text-zinc-300 tracking-wider">SOLANA</span>
+                      <span class="font-bold text-zinc-300 tracking-wider">POLYGON</span>
+                      <span class="font-bold text-zinc-300 tracking-wider">ETHEREUM</span>
+                    </div>
+                  </div>
                   
-                  <div class="grid grid-cols-3 gap-4 mt-16 pt-10 border-t border-zinc-800/50">
+                  <div class="grid grid-cols-3 gap-4 mt-12 pt-10 border-t border-zinc-800/50">
                     <div>
                       <h4 class="text-xl md:text-3xl font-bold text-white" id="landingTotalDep">$0.00</h4>
                       <p class="text-[10px] md:text-sm text-zinc-500">Total Deposits</p>
@@ -140,6 +164,25 @@
                       <p class="text-[10px] md:text-sm text-zinc-500">Supported Networks</p>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <!-- Live Action Ticker (Improvement 3) -->
+              <div class="w-full bg-cyan-500/5 border-y border-cyan-500/10 py-3 mb-12 overflow-hidden flex whitespace-nowrap">
+                <div class="animate-marquee font-mono text-[11px] sm:text-xs text-cyan-400/80">
+                  <span class="mx-6">🟢 User 0x7A... deposited $150</span>
+                  <span class="mx-6">🟢 User 0x2B... claimed $12.50</span>
+                  <span class="mx-6">🟢 User 0xF1... upgraded to Gold Tier</span>
+                  <span class="mx-6">🟢 User 0x99... withdrew $340</span>
+                  <span class="mx-6">🟢 User 0x4C... deposited $500</span>
+                  <span class="mx-6">🟢 User 0x1E... joined NexaVault</span>
+                  <!-- Duplicate elements to ensure smooth continuous loop -->
+                  <span class="mx-6">🟢 User 0x7A... deposited $150</span>
+                  <span class="mx-6">🟢 User 0x2B... claimed $12.50</span>
+                  <span class="mx-6">🟢 User 0xF1... upgraded to Gold Tier</span>
+                  <span class="mx-6">🟢 User 0x99... withdrew $340</span>
+                  <span class="mx-6">🟢 User 0x4C... deposited $500</span>
+                  <span class="mx-6">🟢 User 0x1E... joined NexaVault</span>
                 </div>
               </div>
 
@@ -160,6 +203,25 @@
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="vault-cards-container"></div>
+
+              <!-- FAQ Section (Improvement 5) -->
+              <div class="mt-24 mb-10 text-left max-w-4xl mx-auto">
+                <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center text-white">Frequently Asked Questions</h2>
+                <div class="space-y-4">
+                  <div class="bg-black/40 border border-zinc-800 rounded-xl p-6 hover:border-cyan-500/30 transition-colors">
+                    <h4 class="font-bold text-white mb-2 text-sm md:text-base">What is the minimum amount to start?</h4>
+                    <p class="text-xs md:text-sm text-zinc-400">You can activate your first yielding vault (Bronze Tier) with a minimum deposit of just $50.</p>
+                  </div>
+                  <div class="bg-black/40 border border-zinc-800 rounded-xl p-6 hover:border-cyan-500/30 transition-colors">
+                    <h4 class="font-bold text-white mb-2 text-sm md:text-base">When and how can I withdraw my funds?</h4>
+                    <p class="text-xs md:text-sm text-zinc-400">You can withdraw your accumulated profits directly to your registered Web3 wallet or Binance account at any time, provided you meet the $50 minimum withdrawal limit.</p>
+                  </div>
+                  <div class="bg-black/40 border border-zinc-800 rounded-xl p-6 hover:border-cyan-500/30 transition-colors">
+                    <h4 class="font-bold text-white mb-2 text-sm md:text-base">How does the automated referral system work?</h4>
+                    <p class="text-xs md:text-sm text-zinc-400">Simply share your unique referral link. Once your friend completes a deposit, our smart system automatically calculates your commission (up to 5% based on your active vault tier) and adds it directly to your withdrawable balance.</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- 2. DASHBOARD VIEW -->
@@ -1282,10 +1344,9 @@
     window.toast('📋', 'Deposit address copied! Paste in Binance.');
   }
 
- window.verifyDepositAction = async function() {
+  window.verifyDepositAction = async function() {
     const amt = parseFloat(document.getElementById('verifyDepAmount').value);
     
-    // Yahan humne 50$ ki limit aur aapka custom message laga diya hai
     if(isNaN(amt) || amt < 50) { 
         window.toast('⚠️', 'MIN 50$ OF AMOUNT IS ALLOWED'); 
         return; 
@@ -1377,7 +1438,6 @@
               totalDeposited: increment(amount) 
           });
           
-          // Auto Referral Commission Magic
           if(depositorData.referredBy) {
               const inviterSnap = await getDoc(doc(db, "users", depositorData.referredBy));
               if(inviterSnap.exists()) {
