@@ -1282,9 +1282,14 @@
     window.toast('📋', 'Deposit address copied! Paste in Binance.');
   }
 
-  window.verifyDepositAction = async function() {
+ window.verifyDepositAction = async function() {
     const amt = parseFloat(document.getElementById('verifyDepAmount').value);
-    if(isNaN(amt) || amt <= 0) { window.toast('⚠️', 'Please enter a valid amount.'); return; }
+    
+    // Yahan humne 50$ ki limit aur aapka custom message laga diya hai
+    if(isNaN(amt) || amt < 50) { 
+        window.toast('⚠️', 'MIN 50$ OF AMOUNT IS ALLOWED'); 
+        return; 
+    }
     
     const btn = document.getElementById('depBtn');
     btn.disabled = true; btn.textContent = "Submitting...";
