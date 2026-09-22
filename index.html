@@ -11,8 +11,8 @@
   body { font-family: 'Inter', system-ui, sans-serif; background-color: #09090b; min-height: 100vh; }
   .logo-font { font-family: 'Space Grotesk', sans-serif; }
   .glass-card { background: linear-gradient(180deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.4) 100%); backdrop-filter: blur(12px); border: 1px solid rgba(63, 63, 70, 0.4); }
-  .vault-card { transition: all 0.3s ease; }
-  .vault-card:hover { transform: translateY(-4px); border-color: rgba(34, 211, 238, 0.4); box-shadow: 0 10px 40px -10px rgba(34, 211, 238, 0.1); }
+  .vault-card { transition: all 0.4s ease; }
+  .vault-card:hover { transform: translateY(-4px); }
   .hidden { display: none !important; }
   .input-field { w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 font-mono transition-colors }
 </style>
@@ -120,7 +120,7 @@
                     🛡️ Global Crypto Yield Generation
                   </div>
                   <h1 class="text-3xl md:text-6xl font-bold mb-6 tracking-tight leading-tight">Institutional Yields,<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Accessible to Everyone.</span></h1>
-                  <p class="text-sm md:text-lg text-zinc-400 max-w-2xl mx-auto mb-10">Join over 12,000+ users earning sustainable daily profits. Deposit via Binance or any crypto wallet. Start with as little as $30.</p>
+                  <p class="text-sm md:text-lg text-zinc-400 max-w-2xl mx-auto mb-10">Join over 12,000+ users earning sustainable daily profits. Deposit via Binance or any crypto wallet. Start with as little as $50.</p>
                   
                   <div class="flex justify-center gap-4">
                     <button onclick="showAuthModal()" class="bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-bold py-3.5 px-8 md:px-10 rounded-xl hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] transition-all text-base md:text-lg">Create Free Account</button>
@@ -148,7 +148,7 @@
                   <div class="text-3xl">🎁</div>
                   <div>
                     <h3 class="text-lg font-bold text-white">Referral Reward Program Active</h3>
-                    <p class="text-sm text-zinc-400">Invite friends and earn <span class="text-cyan-400 font-bold">1% to 4% commission</span> directly from their deposit funds!</p>
+                    <p class="text-sm text-zinc-400">Invite friends and earn <span class="text-cyan-400 font-bold">up to 5% auto-commission</span> directly from their deposit funds!</p>
                   </div>
                 </div>
                 <button onclick="if(isLoggedIn){ gp('dashboard'); toast('🔗', 'Copy your link from here!'); } else { showAuthModal(); }" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-2 px-6 rounded-lg text-sm transition-all whitespace-nowrap">Get Invite Link</button>
@@ -159,7 +159,7 @@
                 <p class="text-sm text-zinc-400">Tailored vault levels designed to match your portfolio size.</p>
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="vault-cards-container"></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="vault-cards-container"></div>
             </div>
 
             <!-- 2. DASHBOARD VIEW -->
@@ -175,7 +175,7 @@
                   <div class="absolute -right-10 -top-10 w-24 h-24 bg-purple-500/10 blur-2xl rounded-full"></div>
                   <p class="text-xs font-medium text-zinc-400 mb-1">Current Tier Level</p>
                   <h3 id="displayTier" class="text-2xl font-bold text-cyan-400 mb-1">No Active Level</h3>
-                  <p id="displayTierLimits" class="text-[10px] text-zinc-500">Deposit min $30 to unlock</p>
+                  <p id="displayTierLimits" class="text-[10px] text-zinc-500">Deposit min $50 to unlock</p>
                 </div>
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                   <div class="absolute -right-10 -top-10 w-24 h-24 bg-emerald-500/10 blur-2xl rounded-full"></div>
@@ -209,7 +209,7 @@
                   </div>
                   <div class="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800 text-center">
                     <p class="text-xs text-zinc-500">Ref. Earnings</p>
-                    <h4 class="text-xl font-bold text-emerald-400">$0.00</h4>
+                    <h4 class="text-xl font-bold text-emerald-400" id="displayRefEarn">Auto Added</h4>
                   </div>
                 </div>
               </div>
@@ -240,7 +240,7 @@
               <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-semibold text-white">Active Vault Tiers</h2>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="dashboard-vaults-container"></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="dashboard-vaults-container"></div>
             </div>
 
             <!-- DEPOSIT VIEW -->
@@ -327,7 +327,7 @@
                     <label class="block text-zinc-400 text-sm mb-2">3. Amount to Withdraw (USDT)</label>
                     <input type="number" id="withdrawAmountInput" placeholder="e.g. 100" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 font-mono">
                     <div class="flex justify-between mt-2 px-1">
-                      <p class="text-[10px] text-zinc-500">Min: $30</p>
+                      <p class="text-[10px] text-zinc-500">Min: $50</p>
                       <p class="text-[10px] text-zinc-500">Available: <span id="maxWithdrawDisplay" class="text-emerald-400 font-bold">$0.00</span></p>
                     </div>
                   </div>
@@ -512,6 +512,19 @@
     <div id="form-login" class="p-8">
       <h3 class="text-2xl font-bold text-white mb-6">Welcome Back</h3>
       <div class="space-y-4">
+        
+        <!-- Google Sign-In Button -->
+        <button type="button" onclick="processGoogleLogin()" class="w-full bg-white hover:bg-zinc-200 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-3">
+          <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+        
+        <div class="flex items-center gap-3 my-4">
+            <div class="h-px bg-zinc-800 flex-1"></div>
+            <span class="text-[10px] text-zinc-500 uppercase tracking-widest">or sign in with email</span>
+            <div class="h-px bg-zinc-800 flex-1"></div>
+        </div>
+
         <div>
           <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Email / Username</label>
           <input type="text" id="loginUsername" placeholder="Enter email" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
@@ -534,6 +547,19 @@
     <div id="form-register" class="p-8 hidden">
       <h3 class="text-2xl font-bold text-white mb-6">Create Account</h3>
       <div class="space-y-4">
+        
+        <!-- Google Sign-Up Button -->
+        <button type="button" onclick="processGoogleLogin()" class="w-full bg-white hover:bg-zinc-200 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-3">
+          <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+
+        <div class="flex items-center gap-3 my-4">
+            <div class="h-px bg-zinc-800 flex-1"></div>
+            <span class="text-[10px] text-zinc-500 uppercase tracking-widest">or sign up with email</span>
+            <div class="h-px bg-zinc-800 flex-1"></div>
+        </div>
+
         <div>
           <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Email / Username</label>
           <input type="text" id="regUsername" placeholder="e.g. user@email.com" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
@@ -541,9 +567,14 @@
         <div>
           <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Create Password</label>
           <div class="relative">
-             <input type="password" id="regPass1" placeholder="••••••••" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 pr-10 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
+             <input type="password" id="regPass1" oninput="checkPasswordStrength()" placeholder="••••••••" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-3.5 pr-10 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm">
              <button onclick="togglePassword('regPass1')" type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-lg text-zinc-400 hover:text-cyan-400 transition-colors">👁️</button>
           </div>
+          <!-- Live Password Strength Meter -->
+          <div class="h-1.5 w-full bg-zinc-800 rounded mt-2 overflow-hidden">
+             <div id="passStrengthBar" class="h-full w-0 transition-all duration-300"></div>
+          </div>
+          <p id="passStrengthText" class="text-[10px] mt-1 ml-1 text-zinc-500">Strength: Too short</p>
         </div>
         <div>
           <label class="block text-xs text-zinc-400 mb-1.5 ml-1">Confirm Password</label>
@@ -584,7 +615,7 @@
 <!-- FIREBASE SDK & LOGIC -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
  import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, increment, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -603,7 +634,7 @@
 
   let isLoggedIn = false;
   let currentUserObj = null;
-  let currentUserData = null; // New global variable to track user document data
+  let currentUserData = null; 
   let userBalance = 0;
   let totalYieldEarned = 0;
   let numericDailyROI = 0;
@@ -693,18 +724,36 @@
     setTimeout(() => { document.getElementById('aboutModal').classList.add('hidden'); }, 300);
   }
 
+  // --- VAULTS CONFIGURATION (MIN $50 & OPTION 2 THEME) ---
   const vaults = [
-    { level: 'L1', title: 'Starter Vault', min: 30, max: 100, dailyYield: '0.5% - 5%', refBonus: '1%', risk: 'Low' },
-    { level: 'L2', title: 'Growth Vault', min: 101, max: 400, dailyYield: '0.5% - 5%', refBonus: '2%', risk: 'Medium' },
-    { level: 'L3', title: 'Pro Vault', min: 401, max: 'Unlimited', dailyYield: '0.5% - 5%', refBonus: '4%', risk: 'High' }
+    { level: 'Bronze', title: 'Starter Vault', min: 50, max: 149, dailyYield: '1.5%', refBonus: '2%', color: 'emerald' },
+    { level: 'Silver', title: 'Advanced Vault', min: 150, max: 499, dailyYield: '2.5%', refBonus: '3%', color: 'zinc' },
+    { level: 'Gold', title: 'Pro Vault', min: 500, max: 999, dailyYield: '4.0%', refBonus: '4%', color: 'yellow' },
+    { level: 'VIP', title: 'Elite Vault', min: 1000, max: 'Unlimited', dailyYield: '5.0%', refBonus: '5%', color: 'purple' }
   ];
 
   function getVaultHTML(isLoggedInStatus) {
-    return vaults.map(v => `
-      <div class="glass-card vault-card rounded-2xl p-6 relative overflow-hidden flex flex-col">
+    return vaults.map(v => {
+      const isMaxUnlimited = v.max === 'Unlimited';
+      const isActive = isLoggedInStatus && userBalance >= v.min && (isMaxUnlimited || userBalance <= v.max);
+      const isLocked = isLoggedInStatus && userBalance < v.min;
+      
+      let cardClasses = "glass-card vault-card rounded-2xl p-6 relative overflow-hidden flex flex-col transition-all duration-300";
+      let badgeHTML = `<div class="inline-block px-2 py-1 bg-zinc-800 text-xs font-bold rounded text-white mb-2">${v.level} TIER</div>`;
+      
+      if (isActive) {
+          cardClasses += ` ring-2 ring-${v.color}-500 shadow-[0_0_30px_rgba(52,211,153,0.15)] transform scale-[1.02]`;
+          badgeHTML = `<div class="inline-block px-2 py-1 bg-${v.color}-500/20 text-${v.color}-400 border border-${v.color}-500/30 text-xs font-bold rounded mb-2 animate-pulse">🟢 ACTIVE VAULT</div>`;
+      } else if (isLocked) {
+          cardClasses += " opacity-60 grayscale-[50%] blur-[0.5px]";
+          badgeHTML = `<div class="inline-block px-2 py-1 bg-zinc-900 text-xs font-bold rounded text-zinc-500 mb-2">🔒 LOCKED TIER</div>`;
+      }
+
+      return `
+      <div class="${cardClasses}">
         <div class="flex justify-between items-start mb-6">
           <div>
-            <div class="inline-block px-2 py-1 bg-zinc-800 text-xs font-bold rounded text-white mb-2">${v.level} TIER</div>
+            ${badgeHTML}
             <h3 class="font-bold text-white text-lg leading-tight">${v.title}</h3>
           </div>
           <div class="text-right">
@@ -715,25 +764,30 @@
         <div class="space-y-3 mb-6 bg-black/20 rounded-xl p-4 border border-zinc-800/50 flex-1">
           <div class="flex justify-between items-center text-sm">
             <span class="text-zinc-500 font-medium">Deposit Range</span>
-            <span class="font-mono text-white text-xs">$${v.min} - ${v.max === 'Unlimited' ? 'Max' : '$'+v.max}</span>
+            <span class="font-mono text-white text-xs">$${v.min} - ${isMaxUnlimited ? 'Max' : '$'+v.max}</span>
+          </div>
+          <div class="flex justify-between items-center text-sm border-t border-zinc-800/50 pt-2">
+            <span class="text-zinc-500 font-medium">Ref. Bonus</span>
+            <span class="font-mono text-emerald-400 text-xs">${v.refBonus}</span>
           </div>
         </div>
         ${isLoggedInStatus 
-          ? `<button onclick="gp('deposit')" class="w-full bg-cyan-500/10 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/30 py-3 rounded-xl transition-all font-semibold text-sm">Deposit to ${v.level}</button>`
+          ? `<button onclick="gp('deposit')" class="w-full ${isActive ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/50' : 'bg-cyan-500/5 text-cyan-500 border-cyan-500/10'} hover:bg-cyan-500/30 border py-3 rounded-xl transition-all font-semibold text-sm">Deposit to ${isActive ? 'Add Funds' : 'Unlock'}</button>`
           : `<button onclick="showAuthModal()" class="w-full bg-zinc-800/80 hover:bg-zinc-700 text-white border border-zinc-700/50 py-3 rounded-xl transition-all font-semibold text-sm">Sign In to Deposit</button>`
         }
       </div>
-    `).join('');
+    `}).join('');
   }
 
   function updateDynamicTierAndROI() {
     let tierName = "No Active Level";
-    let limitsText = "Deposit min $30 to unlock";
+    let limitsText = "Deposit min $50 to unlock";
     let dailyROI = "0.00%";
     
-    if (userBalance >= 30 && userBalance <= 100) { tierName = "L1 TIER"; limitsText = "Starter Vault ($30 - $100)"; dailyROI = "1.5%"; numericDailyROI = 0.015; } 
-    else if (userBalance >= 101 && userBalance <= 400) { tierName = "L2 TIER"; limitsText = "Growth Vault ($101 - $400)"; dailyROI = "2.5%"; numericDailyROI = 0.025; } 
-    else if (userBalance >= 401) { tierName = "L3 TIER"; limitsText = "Pro Vault ($401+)"; dailyROI = "4.0%"; numericDailyROI = 0.040; }
+    if (userBalance >= 50 && userBalance <= 149) { tierName = "BRONZE TIER"; limitsText = "Starter Vault ($50 - $149)"; dailyROI = "1.5%"; numericDailyROI = 0.015; } 
+    else if (userBalance >= 150 && userBalance <= 499) { tierName = "SILVER TIER"; limitsText = "Advanced Vault ($150 - $499)"; dailyROI = "2.5%"; numericDailyROI = 0.025; } 
+    else if (userBalance >= 500 && userBalance <= 999) { tierName = "GOLD TIER"; limitsText = "Pro Vault ($500 - $999)"; dailyROI = "4.0%"; numericDailyROI = 0.040; }
+    else if (userBalance >= 1000) { tierName = "VIP ELITE TIER"; limitsText = "Elite Vault ($1000+)"; dailyROI = "5.0%"; numericDailyROI = 0.050; }
     else { numericDailyROI = 0; }
 
     document.getElementById('displayBalance').textContent = `$${userBalance.toFixed(2)}`;
@@ -772,6 +826,35 @@
     }
   }
 
+  window.checkPasswordStrength = function() {
+      const pass = document.getElementById('regPass1').value;
+      const bar = document.getElementById('passStrengthBar');
+      const txt = document.getElementById('passStrengthText');
+      let strength = 0;
+      
+      if(pass.length >= 6) strength += 25;
+      if(pass.length >= 8) strength += 25;
+      if(/[A-Z]/.test(pass)) strength += 25;
+      if(/[0-9]/.test(pass) || /[^A-Za-z0-9]/.test(pass)) strength += 25;
+      
+      bar.style.width = strength + '%';
+      if(strength < 50) { 
+          bar.className = "h-full transition-all duration-300 bg-red-500"; 
+          txt.textContent = "Strength: Weak"; 
+          txt.className = "text-[10px] mt-1 ml-1 text-red-500"; 
+      }
+      else if(strength < 75) { 
+          bar.className = "h-full transition-all duration-300 bg-yellow-500"; 
+          txt.textContent = "Strength: Medium"; 
+          txt.className = "text-[10px] mt-1 ml-1 text-yellow-500"; 
+      }
+      else { 
+          bar.className = "h-full transition-all duration-300 bg-emerald-500"; 
+          txt.textContent = "Strength: Strong"; 
+          txt.className = "text-[10px] mt-1 ml-1 text-emerald-500"; 
+      }
+  }
+
   // Check for Referral Link in URL
   const urlParams = new URLSearchParams(window.location.search);
   const refParam = urlParams.get('ref');
@@ -800,7 +883,6 @@
       const myRefCode = uid.substring(0,8).toUpperCase();
       
       let parentUid = null;
-      // Agar kisi ne invite link se join kiya hai toh us user ka data fetch kar ke referral count barhayen
       if(refParam) {
           const q = query(collection(db, "users"), where("myRefCode", "==", refParam));
           const snap = await getDocs(q);
@@ -822,7 +904,7 @@
         myRefCode: myRefCode,
         referredBy: parentUid,
         referralCount: 0,
-        totalDeposited: 0 // Withdraw karne ke liye yeh 0 se bara hona zaroori hai
+        totalDeposited: 0 
       });
       
       window.toast('✅', 'Account created successfully!');
@@ -860,6 +942,50 @@
       btn.disabled = false;
       btn.textContent = "Sign In to Dashboard";
     }
+  }
+
+  // --- GOOGLE ONE-TAP LOGIN ---
+  window.processGoogleLogin = async function() {
+      const provider = new GoogleAuthProvider();
+      window.toast('⏳', 'Opening Google Sign-In...');
+      try {
+          const result = await signInWithPopup(auth, provider);
+          const user = result.user;
+          const uid = user.uid;
+          
+          const userSnap = await getDoc(doc(db, "users", uid));
+          if (!userSnap.exists()) {
+              const myRefCode = uid.substring(0,8).toUpperCase();
+              let parentUid = null;
+              if(refParam) {
+                  const q = query(collection(db, "users"), where("myRefCode", "==", refParam));
+                  const snap = await getDocs(q);
+                  if(!snap.empty) {
+                      parentUid = snap.docs[0].id;
+                      await updateDoc(doc(db, "users", parentUid), { referralCount: increment(1) });
+                  }
+              }
+              await setDoc(doc(db, "users", uid), {
+                  email: user.email,
+                  balance: 0,
+                  totalYieldEarned: 0,
+                  pendingYield: 0,
+                  hasClaimedToday: false,
+                  withdrawPin: "000000", // Default
+                  myRefCode: myRefCode,
+                  referredBy: parentUid,
+                  referralCount: 0,
+                  totalDeposited: 0
+              });
+              window.toast('✅', 'Google Account Registered! Default PIN is 000000.');
+          } else {
+              window.toast('👋', 'Welcome back to NexaVault!');
+          }
+          window.closeAuthModal();
+          setTimeout(() => { window.gp('dashboard'); }, 400);
+      } catch (error) {
+          window.toast('❌', 'Google Sign-In Cancelled or Failed.');
+      }
   }
 
   window.resetPassword = async function() {
@@ -1103,7 +1229,7 @@
       loadUserHistory(user);
       checkUnreadNotifications(user);
 
-      if (userBalance >= 30) {
+      if (userBalance >= 50) {
           startYieldCycle();
       }
 
@@ -1238,11 +1364,39 @@
       try {
           await updateDoc(doc(db, "deposits", docId), { status: "approved" });
           
-          // User ka balance aur total deposited amount dono barhayein (To unlock withdrawal)
+          const depositorSnap = await getDoc(doc(db, "users", uid));
+          const depositorData = depositorSnap.data();
+
           await updateDoc(doc(db, "users", uid), { 
               balance: increment(amount),
               totalDeposited: increment(amount) 
           });
+          
+          // Auto Referral Commission Magic
+          if(depositorData.referredBy) {
+              const inviterSnap = await getDoc(doc(db, "users", depositorData.referredBy));
+              if(inviterSnap.exists()) {
+                  const inviterData = inviterSnap.data();
+                  let refPercent = 0.02; // Bronze Default
+                  
+                  if (inviterData.balance >= 150 && inviterData.balance <= 499) refPercent = 0.03; // Silver
+                  else if (inviterData.balance >= 500 && inviterData.balance <= 999) refPercent = 0.04; // Gold
+                  else if (inviterData.balance >= 1000) refPercent = 0.05; // VIP Elite
+
+                  const bonusAmt = amount * refPercent;
+                  
+                  await updateDoc(doc(db, "users", depositorData.referredBy), {
+                     balance: increment(bonusAmt)
+                  });
+                  
+                  await addDoc(collection(db, "notifications"), {
+                     uid: depositorData.referredBy,
+                     title: "Referral Bonus Earned! 🎁",
+                     message: `You just earned $${bonusAmt.toFixed(2)} from your referral's deposit!`,
+                     type: "success", read: false, timestamp: Date.now()
+                  });
+              }
+          }
           
           const statsRef = doc(db, "system", "stats");
           const statsSnap = await getDoc(statsRef);
@@ -1357,7 +1511,6 @@
 
   let pendingWithdrawAmt = 0;
   window.requestWithdraw = function() {
-    // ANTI FRAUD WITHDRAW RULE: Check if user has made at least 1 deposit
     if (!currentUserData || !currentUserData.totalDeposited || currentUserData.totalDeposited === 0) {
         window.toast('⚠️', 'Alert: You must make at least one deposit to unlock withdrawals.');
         return;
@@ -1366,7 +1519,7 @@
     const amt = parseFloat(document.getElementById('withdrawAmountInput').value);
     const addr = document.getElementById('withdrawWalletAddress').value.trim();
     if (!addr) { window.toast('⚠️', 'Please paste your receiving wallet address.'); return; }
-    if (isNaN(amt) || amt < 30) { window.toast('⚠️', 'Minimum withdrawal amount is $30.'); return; }
+    if (isNaN(amt) || amt < 50) { window.toast('⚠️', 'Minimum withdrawal amount is $50.'); return; }
     if (amt > userBalance) { window.toast('⚠️', 'Insufficient available balance.'); return; }
     
     pendingWithdrawAmt = amt;
@@ -1472,13 +1625,15 @@
     }
   }
 
+  // --- MANUAL PROFIT WITH PROPORTIONAL % DISTRIBUTION ---
   window.distributeProfit = async function() {
       const declaredProfit = parseFloat(document.getElementById('adminProfitInput').value);
       if(isNaN(declaredProfit) || declaredProfit <= 0) { window.toast('⚠️', 'Invalid profit amount.'); return; }
       
-      window.toast('⏳', 'Distributing profit to all active users...');
+      window.toast('⏳', 'Distributing profit proportionally to all active users...');
       try {
           let currentTVL = Math.max(1, globalTVL);
+          let count = 0;
           
           const usersSnap = await getDocs(collection(db, "users"));
           usersSnap.forEach(async (userDoc) => {
@@ -1489,11 +1644,12 @@
                       pendingYield: share,
                       hasClaimedToday: false
                   });
+                  count++;
               }
           });
           
           document.getElementById('adminProfitInput').value = "";
-          window.toast('🚀', `$${declaredProfit} successfully distributed via database!`);
+          window.toast('🚀', `$${declaredProfit} successfully distributed proportionally to ${count} users!`);
       } catch (e) {
           window.toast('⚠️', 'Error distributing profit.');
       }
